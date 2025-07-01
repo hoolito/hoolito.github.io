@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>女巫的毒药 - 神秘对决</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #e6e6e6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 0, 139, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(0, 100, 0, 0.15) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M20,20 Q40,5 60,20 T100,20 M20,50 Q40,35 60,50 T100,50 M20,80 Q40,65 60,80 T100,80" stroke="rgba(139,0,139,0.1)" stroke-width="0.5" fill="none"/></svg>');
+            z-index: -1;
+        }
+        
+        .header {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 2px solid #8a2be2;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            color: #ff6b6b;
+            text-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            position: relative;
+        }
+        
+        h1::after {
+            content: "🧙‍♀️";
+            position: absolute;
+            top: -25px;
+            left: 50px;
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        h1::before {
+            content: "🧪";
+            position: absolute;
+            top: -20px;
+            right: 50px;
+            font-size: 2rem;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #9a86cf;
+            max-width: 700px;
+            margin: 10px auto;
+            line-height: 1.6;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .grid-container {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 3px solid #6a5acd;
+            width: 500px;
+        }
+        
+        .grid-title {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 0 auto;
+        }
+        
+        .cell {
+            width: 70px;
+            height: 70px;
+            background: rgba(40, 44, 52, 0.8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #4b0082;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cell::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            z-index: 1;
+        }
+        
+        .cell:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            background: rgba(60, 64, 72, 0.9);
+            z-index: 2;
+        }
+        
+        /* 死法标记 - 红色边框 */
+        .cell.death-selected {
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+        }
+        
+        /* 尸检报告标记 - 紫色边框 */
+        .cell.autopsy-selected {
+            border: 3px solid #9370db;
+            box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+        }
+        
+        /* 玩家行动标记 */
+        .cell.player-move {
+            background: rgba(70, 130, 180, 0.7);
+        }
+        
+        .cell.player-move::after {
+            content: "P";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+        
+        /* 系统行动标记 */
+        .cell.system-move {
+            background: rgba(178, 34, 34, 0.7);
+        }
+        
+        .cell.system-move::after {
+            content: "S";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+        
+        .cell.revealed {
+            cursor: default;
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls-container {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 3px solid #6a5acd;
+            width: 400px;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        label {
+            font-size: 1.1rem;
+            color: #9a86cf;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        label i {
+            color: #ff6b6b;
+        }
+        
+        input, textarea, select {
+            padding: 14px;
+            border-radius: 10px;
+            border: 2px solid #4b0082;
+            background: rgba(40, 44, 52, 0.8);
+            color: #e6e6e6;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8a2be2;
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #6a5acd, #8a2be2);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #8a2be2, #9370db);
+        }
+        
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .game-status {
+            font-size: 1.4rem;
+            text-align: center;
+            padding: 15px;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 15px;
+            border: 2px solid #6a5acd;
+            width: 100%;
+            max-width: 900px;
+            margin: 20px 0;
+            color: #ffd700;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .log-container {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 3px solid #6a5acd;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 20px;
+        }
+        
+        .log {
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .log-title {
+            color: #9a86cf;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .log-entry {
+            margin: 12px 0;
+            padding: 12px;
+            border-left: 4px solid #8a2be2;
+            background: rgba(40, 44, 52, 0.5);
+            border-radius: 0 10px 10px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .player-log {
+            border-left-color: #4682b4;
+        }
+        
+        .system-log {
+            border-left-color: #b22222;
+        }
+        
+        .autopsy-log {
+            border-left-color: #ffd700;
+            background: rgba(40, 44, 52, 0.7);
+        }
+        
+        .death-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .death-content {
+            background: rgba(26, 26, 46, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            border: 3px solid #8a2be2;
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.7);
+        }
+        
+        .death-message {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+        
+        .death-reason {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: #ffd700;
+            line-height: 1.6;
+        }
+        
+        .instructions {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            border: 3px solid #6a5acd;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .instructions h2 {
+            color: #9a86cf;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        
+        .emoji-preview {
+            font-size: 1.5rem;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        
+        .example-container {
+            background: rgba(40, 44, 52, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .example {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(50, 54, 62, 0.7);
+            border-radius: 10px;
+            border-left: 4px solid #8a2be2;
+        }
+        
+        .player-name {
+            color: #4682b4;
+            font-weight: bold;
+        }
+        
+        .opponent-name {
+            color: #b22222;
+            font-weight: bold;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @media (max-width: 900px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .grid-container, .controls-container {
+                width: 100%;
+                max-width: 600px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .cell {
+                width: 55px;
+                height: 55px;
+                font-size: 28px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .death-message {
+                font-size: 2.5rem;
+            }
+            
+            .death-reason {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>女巫的毒药 🧪</h1>
+        <p class="subtitle">在这场神秘的对决中，隐藏你的死法，寻找对手的致命配方！小心每一步，死亡可能就在下一个emoji...</p>
+    </div>
+    
+    <div class="game-status" id="gameStatus">选择你的死法和尸检报告位置...</div>
+    
+    <!-- 日志容器移动到提示框和材料库之间 -->
+    <div class="log-container">
+        <h3 class="log-title"><i class="fas fa-scroll"></i> 女巫的魔法日志</h3>
+        <div class="log" id="logEntries"></div>
+    </div>
+    
+    <div class="game-container">
+        <div class="grid-container">
+            <div class="grid-title">神秘材料库</div>
+            <div class="grid" id="grid"></div>
+        </div>
+        
+        <div class="controls-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="deathEmoji"><i class="fas fa-skull"></i> 你的死法位置:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="deathEmoji" style="flex: 1;"></select>
+                        <input type="text" id="deathDesc" placeholder="描述死亡场景" style="flex: 3;">
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="autopsyEmoji"><i class="fas fa-file-medical"></i> 尸检报告位置:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="autopsyEmoji" style="flex: 1;"></select>
+                        <input type="text" id="autopsyDesc" placeholder="描述致死原因" style="flex: 3;">
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="startBtn"><i class="fas fa-play"></i> 开始游戏</button>
+                    <button id="resetBtn"><i class="fas fa-redo"></i> 重新开始</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="instructions">
+        <h2><i class="fas fa-book"></i> 游戏规则与示例</h2>
+        
+        <div class="example-container">
+            <h3><i class="fas fa-lightbulb"></i> 剧本示例：</h3>
+            
+            <div class="example">
+                <p><span class="player-name">小明</span>为<span class="opponent-name">小绿</span>安排的剧本：</p>
+                <p><strong>死法🐡：</strong>去饭馆吃河豚，死于河豚中毒</p>
+                <p><strong>尸检报告♟：</strong>死者死于摄入致命物质</p>
+            </div>
+            
+            <div class="example">
+                <p><span class="player-name">小绿</span>为<span class="opponent-name">小明</span>安排的剧本：</p>
+                <p><strong>死法🧻：</strong>上厕所时踩到地上的湿纸巾摔死</p>
+                <p><strong>尸检报告🧬：</strong>死者死于摔倒后头部着地</p>
+            </div>
+        </div>
+        
+        <div class="example-container">
+            <h3><i class="fas fa-gamepad"></i> 游戏过程示例：</h3>
+            
+            <div class="example">
+                <p><span class="player-name">小明</span>选择<span class="emoji-preview">♟</span>：今天去下棋了，输了</p>
+                <p>→ <span class="player-name">小明</span>获得尸检报告一份：死者死于摔倒后头部着地</p>
+            </div>
+            
+            <div class="example">
+                <p><span class="opponent-name">小绿</span>选择<span class="emoji-preview">🥮</span>：今天吃了个月饼，味道还不错</p>
+                <p>→ 无事发生</p>
+            </div>
+            
+            <div class="example">
+                <p><span class="player-name">小明</span>选择<span class="emoji-preview">🧻</span>：憋不住了，要去厕所！</p>
+                <p>→ 倒霉的<span class="player-name">小明</span>上厕所时踩到地上的湿纸巾摔死，下辈子注意点吧</p>
+                <p><strong>本局游戏<span class="opponent-name">小绿</span>胜出</strong></p>
+            </div>
+        </div>
+        
+        <ul>
+            <li>游戏开始时，会展示5x5网格的随机神秘材料（emoji）<span class="emoji-preview">🧪🔮🍄🌿🐍</span></li>
+            <li>玩家和系统需要各秘密选择两个emoji：一个作为"死法"，一个作为"尸检报告"的隐藏地点</li>
+            <li>玩家确认选择后，点击"开始游戏"按钮</li>
+            <li>游戏开始后，玩家和系统轮流点击格子</li>
+            <li>点击后的格子会显示行动标记（P=玩家，S=系统）</li>
+            <li>当玩家点击到系统的死法时，将会死亡并输掉游戏</li>
+            <li>当系统点击到玩家的死法时，系统死亡，玩家获胜</li>
+            <li>点击到"尸检报告"时会揭示隐藏的致死原因</li>
+            <li><strong>注意：游戏过程中不要透露自己的选择！</strong></li>
+        </ul>
+    </div>
+    
+    <div class="death-screen" id="deathScreen">
+        <div class="death-content">
+            <div class="death-message" id="deathMessage">你死了！</div>
+            <div class="death-reason" id="deathReason"></div>
+            <button id="playAgainBtn"><i class="fas fa-undo"></i> 再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏配置 - 确保所有emoji都是唯一的
+        const GRID_SIZE = 5;
+        const UNIQUE_EMOJIS = [
+            '🏦', '🔮', '⛩', '🚲', '♟', 
+            '🎮', '🎱', '🥮', '❄', '🐡', 
+            '🦋', '👙', '📚', '🛏', '🛁', 
+            '🧻', '🧬', '🔫', '💿', '📷', 
+            '🖥', '🏖', '🧊', '🎻', '🍷',
+            '🧪', '☠️', '🕷️', '🦇', '🍎',
+            '🍄', '🌿', '🐍', '🕯️', '⚗️',
+            '🧫', '🥀', '🌑', '🔥', '💧',
+            '🌪️', '☣️', '☢️', '🧭', '🗝️'
+        ];
+        
+        // 游戏状态变量
+        let gameState = 'setup'; // setup, playing, ended
+        let playerDeath = null;
+        let playerAutopsy = null;
+        let systemDeath = null;
+        let systemAutopsy = null;
+        let playerTurn = true;
+        let cells = [];
+        let logEntries = [];
+        let emojiMap = {};
+        
+        // DOM元素
+        const gridElement = document.getElementById('grid');
+        const gameStatusElement = document.getElementById('gameStatus');
+        const deathEmojiElement = document.getElementById('deathEmoji');
+        const deathDescElement = document.getElementById('deathDesc');
+        const autopsyEmojiElement = document.getElementById('autopsyEmoji');
+        const autopsyDescElement = document.getElementById('autopsyDesc');
+        const startBtnElement = document.getElementById('startBtn');
+        const resetBtnElement = document.getElementById('resetBtn');
+        const logEntriesElement = document.getElementById('logEntries');
+        const deathScreenElement = document.getElementById('deathScreen');
+        const deathMessageElement = document.getElementById('deathMessage');
+        const deathReasonElement = document.getElementById('deathReason');
+        const playAgainBtnElement = document.getElementById('playAgainBtn');
+        
+        // 初始化游戏
+        function initGame() {
+            createGrid();
+            populateSelects();
+            gameState = 'setup';
+            playerDeath = null;
+            playerAutopsy = null;
+            systemDeath = null;
+            systemAutopsy = null;
+            playerTurn = true;
+            logEntries = [];
+            updateLog();
+            gameStatusElement.textContent = "选择你的死法和尸检报告位置...";
+            deathDescElement.value = "";
+            autopsyDescElement.value = "";
+            deathScreenElement.style.display = "none";
+            startBtnElement.disabled = true;
+            
+            addLog("游戏初始化完成！请选择你的死法和尸检报告位置。", "system-log");
+        }
+        
+        // 填充选择框
+        function populateSelects() {
+            deathEmojiElement.innerHTML = '';
+            autopsyEmojiElement.innerHTML = '';
+            
+            // 添加默认选项
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '-- 选择 --';
+            deathEmojiElement.appendChild(defaultOption.cloneNode(true));
+            autopsyEmojiElement.appendChild(defaultOption.cloneNode(true));
+            
+            // 添加所有emoji选项
+            Object.entries(emojiMap).forEach(([index, emoji]) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = emoji;
+                
+                deathEmojiElement.appendChild(option.cloneNode(true));
+                autopsyEmojiElement.appendChild(option);
+            });
+            
+            // 添加事件监听器
+            deathEmojiElement.addEventListener('change', function() {
+                updateCellSelections();
+            });
+            
+            autopsyEmojiElement.addEventListener('change', function() {
+                updateCellSelections();
+            });
+        }
+        
+        // 更新格子选择状态
+        function updateCellSelections() {
+            // 清除之前的选择标记
+            cells.forEach(cell => {
+                cell.element.classList.remove('death-selected', 'autopsy-selected');
+            });
+            
+            // 更新死法选择
+            if (deathEmojiElement.value) {
+                const deathIndex = parseInt(deathEmojiElement.value);
+                cells[deathIndex].element.classList.add('death-selected');
+            }
+            
+            // 更新尸检报告选择
+            if (autopsyEmojiElement.value) {
+                const autopsyIndex = parseInt(autopsyEmojiElement.value);
+                cells[autopsyIndex].element.classList.add('autopsy-selected');
+            }
+        }
+        
+        // 创建网格
+        function createGrid() {
+            gridElement.innerHTML = '';
+            cells = [];
+            
+            // 随机选择25个唯一的emoji
+            const shuffledEmojis = [...UNIQUE_EMOJIS]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, GRID_SIZE * GRID_SIZE);
+            
+            emojiMap = {};
+            
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                cell.textContent = shuffledEmojis[i];
+                
+                cell.addEventListener('click', () => handleCellClick(i));
+                
+                gridElement.appendChild(cell);
+                cells.push({
+                    element: cell,
+                    index: i,
+                    emoji: cell.textContent,
+                    revealed: false,
+                    revealedBy: null
+                });
+                
+                // 添加到emoji映射
+                emojiMap[i] = cell.textContent;
+            }
+        }
+        
+        // 处理格子点击
+        function handleCellClick(index) {
+            const cell = cells[index];
+            
+            if (gameState === 'ended' || cell.revealed) return;
+            
+            if (gameState === 'setup') {
+                // 在设置阶段选择死法和尸检位置
+                if (!playerDeath) {
+                    // 选择死法
+                    playerDeath = index;
+                    deathEmojiElement.value = index;
+                    cell.element.classList.add('death-selected');
+                    gameStatusElement.textContent = `已选择死法: ${cell.emoji}，现在选择尸检报告位置`;
+                    addLog(`你选择了死法位置 ${cell.emoji}`, 'player-log');
+                } else if (!playerAutopsy && index !== playerDeath) {
+                    // 选择尸检报告位置
+                    playerAutopsy = index;
+                    autopsyEmojiElement.value = index;
+                    cell.element.classList.add('autopsy-selected');
+                    gameStatusElement.textContent = "准备就绪，点击开始游戏";
+                    startBtnElement.disabled = false;
+                    addLog(`你选择了尸检报告位置 ${cell.emoji}`, 'player-log');
+                }
+            } else if (gameState === 'playing' && playerTurn) {
+                // 玩家回合
+                revealCell(index, 'player');
+                playerTurn = false;
+                
+                // 生成玩家行动描述
+                const action = getPlayerAction(cell.emoji);
+                addLog(action, 'player-log');
+                
+                // 检查游戏状态
+                if (index === systemDeath) {
+                    endGame(false, `你发现了系统的死法${cell.emoji}，但不幸身亡！死法：${getSystemDeathDesc(cell.emoji)}`);
+                    return;
+                } else if (index === systemAutopsy) {
+                    addLog(`你发现了系统的尸检报告${cell.emoji}！致死原因：${getSystemAutopsyDesc(cell.emoji)}`, 'autopsy-log');
+                } else if (index === playerAutopsy) {
+                    addLog(`你发现了自己的尸检报告${cell.emoji}！致死原因：${autopsyDescElement.value}`, 'autopsy-log');
+                }
+                
+                // 系统回合（延迟执行）
+                if (gameState === 'playing') {
+                    gameStatusElement.textContent = "系统正在思考...";
+                    setTimeout(systemTurn, 2000);
+                }
+            }
+        }
+        
+        // 系统回合
+        function systemTurn() {
+            if (gameState !== 'playing') return;
+            
+            // 找到所有未揭示的格子
+            const availableCells = cells.filter(cell => 
+                !cell.revealed && 
+                cell.index !== systemDeath && 
+                cell.index !== systemAutopsy
+            );
+            
+            if (availableCells.length === 0) {
+                endGame(true, "所有材料都已检查完毕，无人中毒！");
+                return;
+            }
+            
+            // 随机选择一个格子
+            const randomIndex = Math.floor(Math.random() * availableCells.length);
+            const cellIndex = availableCells[randomIndex].index;
+            const cell = cells[cellIndex];
+            
+            revealCell(cellIndex, 'system');
+            playerTurn = true;
+            gameStatusElement.textContent = "轮到你了，小心选择...";
+            
+            // 生成系统行动描述
+            const action = getSystemAction(cell.emoji);
+            addLog(action, 'system-log');
+            
+            // 检查系统选择的格子
+            if (cellIndex === playerDeath) {
+                endGame(true, `系统误触了你的死法${cell.emoji}，你获得了胜利！死法：${deathDescElement.value}`);
+            } else if (cellIndex === playerAutopsy) {
+                addLog(`系统发现了你的尸检报告${cell.emoji}！致死原因：${autopsyDescElement.value}`, 'autopsy-log');
+            } else if (cellIndex === systemAutopsy) {
+                addLog(`系统发现了自己的尸检报告${cell.emoji}！致死原因：${getSystemAutopsyDesc(cell.emoji)}`, 'autopsy-log');
+            }
+        }
+        
+        // 揭示格子
+        function revealCell(index, by) {
+            const cell = cells[index];
+            cell.revealed = true;
+            cell.revealedBy = by;
+            cell.element.classList.add('revealed');
+            
+            // 移除选择标记
+            cell.element.classList.remove('death-selected', 'autopsy-selected');
+            
+            // 添加行动标记
+            if (by === 'player') {
+                cell.element.classList.add('player-move');
+            } else {
+                cell.element.classList.add('system-move');
+            }
+            
+            cell.element.style.cursor = 'default';
+        }
+        
+        // 玩家行动描述生成
+        function getPlayerAction(emoji) {
+            const actions = {
+                '🏦': "走进银行准备取钱，突然想起钱包忘带了...",
+                '🔮': "凝视水晶球，看到自己中了彩票大奖！",
+                '⛩': "在神社许愿：希望明天不要下雨！",
+                '🚲': "骑上自行车，准备来一场说走就走的旅行！",
+                '♟': "今天去下棋了，输了",
+                '🎮': "夏天来了，我想玩种菜游戏呢，哈哈哈哈",
+                '🎱': "教练！我想打台球！！！",
+                '🥮': "今天吃了个月饼，味道还不错～",
+                '❄': "堆个雪人吧！胡萝卜当鼻子最合适了！",
+                '🐡': "河豚刺身看起来很美味，但会不会有毒呢？",
+                '🦋': "好漂亮的蝴蝶！我要把它做成标本！",
+                '👙': "这件泳装真好看，但价格也太贵了吧！",
+                '📚': "这本书真厚，什么时候才能读完啊？",
+                '🛏': "这张床好舒服，真想再睡五分钟...",
+                '🛁': "泡个热水澡，放点玫瑰花瓣～",
+                '🧻': "憋不住了，要去厕所！",
+                '🧬': "研究DNA结构，发现一个有趣的现象！",
+                '🔫': "水枪大战开始！看我的厉害！",
+                '💿': "拿出了一张亮闪闪的光盘，发现我的电脑没有光驱～～～",
+                '📷': "自拍时间！找个好角度～",
+                '🖥': "又写了一天代码，眼睛好酸...",
+                '🏖': "阳光、沙滩、海浪～完美假期！",
+                '🧊': "冰块加可乐，夏天的绝配！",
+                '🎻': "练习小提琴，邻居又来敲门了...",
+                '🍷': "红酒配电影，完美的夜晚！",
+                '🧪': "调制神秘药水，希望不要爆炸...",
+                '☠️': "骷髅头项链，戴上它显得很酷！",
+                '🕷️': "蜘蛛侠！我也想拥有超能力！",
+                '🦇': "蝙蝠侠的装备真帅，我也想要！",
+                '🍎': "白雪公主的毒苹果？看起来很好吃！",
+                '🍄': "这个蘑菇好漂亮，但不知道能不能吃...",
+                '🌿': "这些草药能治感冒吗？试试看！",
+                '🐍': "蛇的移动方式真神奇！",
+                '🕯️': "烛光晚餐，气氛满分！",
+                '⚗️': "化学实验，希望不要出事故..."
+            };
+            
+            return actions[emoji] || `你仔细研究了${emoji}，发现了一些有趣的东西...`;
+        }
+        
+        // 系统行动描述生成
+        function getSystemAction(emoji) {
+            const actions = {
+                '🏦': "系统正在分析银行安全系统...",
+                '🔮': "系统预测明天的天气会是晴天！",
+                '⛩': "系统评估神社建筑结构的稳定性...",
+                '🚲': "系统计算自行车的最佳行驶路线...",
+                '♟': "系统思考棋局，准备下一步将军！",
+                '🎮': "系统启动游戏程序，准备大杀四方！",
+                '🎱': "系统计算台球的角度和力度...",
+                '🥮': "系统分析月饼的营养成分...",
+                '❄': "系统测量雪的温度和密度...",
+                '🐡': "系统检测河豚的毒性等级...",
+                '🦋': "系统记录蝴蝶的飞行轨迹...",
+                '👙': "系统评估泳装的材料和设计...",
+                '📚': "系统扫描书籍内容，建立索引...",
+                '🛏': "系统测试床垫的舒适度...",
+                '🛁': "系统调节水温至最佳泡澡温度...",
+                '🧻': "系统计算厕纸的使用寿命...",
+                '🧬': "系统解码DNA序列...",
+                '🔫': "系统校准水枪的射程...",
+                '💿': "系统读取光盘数据，进度50%...",
+                '📷': "系统调整相机参数，准备拍照...",
+                '🖥': "系统优化代码，提升运行效率...",
+                '🏖': "系统监测紫外线强度，建议使用防晒霜...",
+                '🧊': "系统计算冰块的融化速度...",
+                '🎻': "系统调音，准备演奏小夜曲...",
+                '🍷': "系统分析红酒的年份和产地...",
+                '🧪': "系统混合化学试剂，反应中...",
+                '☠️': "系统分析骷髅头的结构...",
+                '🕷️': "系统研究蜘蛛的结网模式...",
+                '🦇': "系统追踪蝙蝠的声波信号...",
+                '🍎': "系统检测苹果的农药残留...",
+                '🍄': "系统分类蘑菇种类，有毒/无毒...",
+                '🌿': "系统提取草药中的有效成分...",
+                '🐍': "系统研究蛇的运动模式...",
+                '🕯️': "系统测量蜡烛的燃烧速度...",
+                '⚗️': "系统进行化学实验，生成报告..."
+            };
+            
+            return actions[emoji] || `系统正在研究${emoji}...`;
+        }
+        
+        // 系统死法描述生成（基于emoji）
+        function getSystemDeathDesc(emoji) {
+            const descriptions = {
+                '🏦': "去银行取钱时遇到抢劫，被劫匪当作人质，最后被警察误伤。",
+                '🔮': "偷看女巫的水晶球时，被未来的自己吓到心脏病发作。",
+                '⛩': "在神社祈福时，被掉落的许愿牌砸中头部。",
+                '🚲': "骑自行车下坡时刹车失灵，撞上冰淇淋车。",
+                '♟': "参加国际象棋锦标赛时，被对手用棋子击中太阳穴。",
+                '🎮': "连续游戏72小时后，被虚拟怪物吓到心脏骤停。",
+                '🎱': "在台球比赛中，被对手用八号球击中要害。",
+                '🥮': "吃月饼时被里面的金块卡住喉咙窒息。",
+                '❄': "在雪地堆雪人时，被雪崩掩埋。",
+                '🐡': "尝试吃河豚刺身，厨师处理不当导致中毒。",
+                '🦋': "追逐稀有蝴蝶时，掉下悬崖。",
+                '👙': "在海边穿比基尼时，被大浪卷走。",
+                '📚': "在图书馆看书时，被倒塌的书架砸中。",
+                '🛏': "在床上跳蹦床时，撞上天花板吊灯。",
+                '🛁': "泡澡时睡着，淹死在浴缸里。",
+                '🧻': "上厕所时踩到地上的湿纸巾摔死。",
+                '🧬': "做DNA实验时，被突变细菌感染。",
+                '🔫': "玩水枪时，被误认为是真枪而遭射击。",
+                '💿': "听CD时被飞出的光盘划伤动脉。",
+                '📷': "自拍时被闪电击中。",
+                '🖥': "用电脑时被黑客入侵心脏起搏器。",
+                '🏖': "在沙滩晒太阳时被寄居蟹钻进耳朵。",
+                '🧊': "吃冰块时被冻住舌头窒息。",
+                '🎻': "拉小提琴时琴弦断裂割喉。",
+                '🍷': "喝红酒时被酒瓶塞子噎住。",
+                '🧪': "调制魔药时发生爆炸，被绿色液体溶解。",
+                '☠️': "戴着骷髅头项链睡觉，被诅咒而死。",
+                '🕷️': "被剧毒蜘蛛咬伤，全身溃烂而亡。",
+                '🦇': "被吸血蝙蝠群袭击，失血过多。",
+                '🍎': "吃了一口毒苹果，像白雪公主一样长眠不醒。",
+                '🍄': "误食毒蘑菇，产生幻觉跳下悬崖。",
+                '🌿': "吃草药过量，变成了一株植物。",
+                '🐍': "被毒蛇咬伤，毒发身亡。",
+                '🕯️': "在烛光晚餐时，头发被点燃。",
+                '⚗️': "化学实验出错，被紫色烟雾毒死。"
+            };
+            
+            return descriptions[emoji] || `在使用${emoji}时发生了意外，不幸身亡。`;
+        }
+        
+        // 系统尸检报告描述生成（基于emoji）
+        function getSystemAutopsyDesc(emoji) {
+            const descriptions = {
+                '🏦': "死者死于多处枪伤。",
+                '🔮': "死者死于心脏病发作。",
+                '⛩': "死者死于颅脑损伤。",
+                '🚲': "死者死于多处骨折和内脏破裂。",
+                '♟': "死者死于太阳穴受到重击。",
+                '🎮': "死者死于心脏骤停。",
+                '🎱': "死者死于钝器击打要害。",
+                '🥮': "死者死于呼吸道阻塞。",
+                '❄': "死者死于窒息和低温症。",
+                '🐡': "死者死于河豚毒素。",
+                '🦋': "死者死于高处坠落。",
+                '👙': "死者死于溺水。",
+                '📚': "死者死于颅脑损伤和颈椎断裂。",
+                '🛏': "死者死于电击伤。",
+                '🛁': "死者死于溺水。",
+                '🧻': "死者死于摔倒后头部着地。",
+                '🧬': "死者死于细菌感染。",
+                '🔫': "死者死于枪伤。",
+                '💿': "死者死于动脉破裂。",
+                '📷': "死者死于电击伤。",
+                '🖥': "死者死于心脏起搏器故障。",
+                '🏖': "死者死于脑部寄生虫感染。",
+                '🧊': "死者死于窒息。",
+                '🎻': "死者死于颈动脉破裂。",
+                '🍷': "死者死于呼吸道阻塞。",
+                '🧪': "死者死于化学中毒。",
+                '☠️': "死者死于不明诅咒。",
+                '🕷️': "死者死于神经毒素。",
+                '🦇': "死者死于失血过多。",
+                '🍎': "死者死于氰化物中毒。",
+                '🍄': "死者死于幻觉导致的自伤。",
+                '🌿': "死者死于植物毒素。",
+                '🐍': "死者死于蛇毒。",
+                '🕯️': "死者死于烧伤。",
+                '⚗️': "死者死于化学中毒。"
+            };
+            
+            return descriptions[emoji] || `死者在使用${emoji}时发生意外身亡。`;
+        }
+        
+        // 添加日志
+        function addLog(message, className) {
+            logEntries.push({ message, className });
+            if (logEntries.length > 20) logEntries.shift();
+            updateLog();
+        }
+        
+        // 更新日志
+        function updateLog() {
+            logEntriesElement.innerHTML = '';
+            logEntries.forEach(entry => {
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${entry.className}`;
+                
+                const icon = document.createElement('span');
+                icon.style.marginRight = '10px';
+                
+                if (entry.className === 'player-log') {
+                    icon.innerHTML = '<i class="fas fa-user"></i>';
+                } else if (entry.className === 'system-log') {
+                    icon.innerHTML = '<i class="fas fa-robot"></i>';
+                } else {
+                    icon.innerHTML = '<i class="fas fa-file-medical"></i>';
+                }
+                
+                logEntry.appendChild(icon);
+                logEntry.appendChild(document.createTextNode(entry.message));
+                logEntriesElement.appendChild(logEntry);
+            });
+            logEntriesElement.scrollTop = logEntriesElement.scrollHeight;
+        }
+        
+        // 结束游戏
+        function endGame(isWin, message) {
+            gameState = 'ended';
+            
+            if (isWin) {
+                deathMessageElement.textContent = "你赢了！🎉";
+                deathMessageElement.style.color = "#4caf50";
+            } else {
+                deathMessageElement.textContent = "你死了！💀";
+                deathMessageElement.style.color = "#ff6b6b";
+            }
+            
+            deathReasonElement.textContent = message;
+            deathScreenElement.style.display = "flex";
+            
+            // 揭示所有系统选择
+            if (systemDeath !== null) {
+                revealCell(systemDeath, 'system');
+            }
+            if (systemAutopsy !== null) {
+                revealCell(systemAutopsy, 'system');
+            }
+        }
+        
+        // 系统随机选择位置
+        function makeSystemSelections() {
+            // 系统选择死法位置（避开玩家选择）
+            let availableCells = cells
+                .map((_, i) => i)
+                .filter(i => i !== playerDeath && i !== playerAutopsy);
+            
+            systemDeath = availableCells[Math.floor(Math.random() * availableCells.length)];
+            availableCells = availableCells.filter(i => i !== systemDeath);
+            systemAutopsy = availableCells[Math.floor(Math.random() * availableCells.length)];
+            
+            addLog("系统已秘密布置好死法和尸检报告位置...", 'system-log');
+            addLog("游戏开始！轮到你行动，小心选择...", 'system-log');
+        }
+        
+        // 事件监听器
+        startBtnElement.addEventListener('click', () => {
+            if (!deathEmojiElement.value || !autopsyEmojiElement.value) {
+                alert("请选择死法和尸检报告位置！");
+                return;
+            }
+            
+            playerDeath = parseInt(deathEmojiElement.value);
+            playerAutopsy = parseInt(autopsyEmojiElement.value);
+            
+            if (!deathDescElement.value || !autopsyDescElement.value) {
+                alert("请填写死亡场景和尸检报告描述！");
+                return;
+            }
+            
+            if (playerDeath === playerAutopsy) {
+                alert("死法和尸检报告位置不能相同！");
+                return;
+            }
+            
+            gameState = 'playing';
+            makeSystemSelections();
+            gameStatusElement.textContent = "游戏开始！轮到你行动...";
+            startBtnElement.disabled = true;
+            
+            // 标记玩家选择的位置
+            cells[playerDeath].element.classList.add('death-selected');
+            cells[playerAutopsy].element.classList.add('autopsy-selected');
+        });
+        
+        resetBtnElement.addEventListener('click', initGame);
+        playAgainBtnElement.addEventListener('click', initGame);
+        
+        // 初始化游戏
+        initGame();
+    </script>
+</body>
+</html>
