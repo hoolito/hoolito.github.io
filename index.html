@@ -231,7 +231,7 @@
             flex-wrap: wrap;
             justify-content: center;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 30px auto;
             gap: 15px;
         }
         
@@ -259,7 +259,14 @@
         .info-text {
             text-align: center;
             color: #586069;
-            margin-top: 20px;
+            font-size: 15px;
+        }
+        
+        /* 增加上方文字与网格的间距 */
+        .intro-text {
+            text-align: center;
+            color: #586069;
+            margin-bottom: 30px; /* 增加与网格的间距 */
             font-size: 15px;
         }
         
@@ -297,6 +304,11 @@
             /* 在手机上调整游戏网格间距 */
             .games-grid {
                 gap: 10px;
+                margin: 20px auto; /* 调整移动端网格间距 */
+            }
+            
+            .intro-text {
+                margin-bottom: 20px; /* 移动端间距调整 */
             }
         }
         
@@ -390,7 +402,8 @@
                 <i class="fas fa-wand-magic-sparkles"></i> 
                 更多游戏正在开发中
             </h2>
-            <p class="info-text">
+            <!-- 增加上方文字与网格的间距 -->
+            <p class="intro-text">
                 我们正在努力开发更多有趣的游戏，目标达到1001款！以下是我们计划中的部分游戏类型：
             </p>
             
@@ -437,10 +450,12 @@
             icons.forEach(icon => {
                 icon.addEventListener('mouseenter', () => {
                     icon.style.transform = 'scale(1.1) rotate(5deg)';
+                    icon.style.backgroundColor = '#e0eeff';
                 });
                 
                 icon.addEventListener('mouseleave', () => {
                     icon.style.transform = 'scale(1) rotate(0)';
+                    icon.style.backgroundColor = '#f6f8fa';
                 });
             });
         });
