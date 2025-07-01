@@ -47,8 +47,7 @@
             padding: 15px;
             border-bottom: 2px solid #8a2be2;
             width: 100%;
-            max-width: 100%;
-            position: relative;
+            max-width: 1020px;
         }
         
         h1 {
@@ -57,7 +56,6 @@
             text-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
             margin-bottom: 10px;
             letter-spacing: 2px;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -73,9 +71,90 @@
         .subtitle {
             font-size: 1.1rem;
             color: #9a86cf;
-            max-width: 100%;
+            max-width: 800px;
             margin: 10px auto;
             line-height: 1.6;
+            text-align: center;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1020px;
+            margin: 0 auto;
+        }
+        
+        .game-status {
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 12px;
+            border: 2px solid #6a5acd;
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            color: #ffd700;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .log-container {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid #6a5acd;
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+        }
+        
+        .log-title {
+            color: #9a86cf;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .log {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        
+        .log-entry {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #8a2be2;
+            background: rgba(40, 44, 52, 0.5);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            animation: fadeIn 0.5s ease;
+            font-size: 0.95rem;
+        }
+        
+        .player-log {
+            border-left-color: #4682b4;
+        }
+        
+        .system-log {
+            border-left-color: #b22222;
+        }
+        
+        .autopsy-log {
+            border-left-color: #ffd700;
+            background: rgba(40, 44, 52, 0.7);
         }
         
         .game-container {
@@ -84,24 +163,26 @@
             justify-content: center;
             gap: 20px;
             width: 100%;
-            max-width: 100%;
-            margin-top: 15px;
+            max-width: 1020px;
+            margin: 15px auto;
         }
         
         .grid-container {
             background: rgba(26, 26, 46, 0.8);
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
             border: 2px solid #6a5acd;
             width: 100%;
             max-width: 500px;
+            flex: 1;
+            min-width: 300px;
         }
         
         .grid-title {
             text-align: center;
             color: #ff6b6b;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 1.5rem;
             text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
             display: flex;
@@ -113,13 +194,14 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin: 0 auto;
+            justify-content: center;
         }
         
         .cell {
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             background: rgba(40, 44, 52, 0.8);
             border-radius: 10px;
             display: flex;
@@ -214,31 +296,38 @@
             border: 2px solid #6a5acd;
             width: 100%;
             max-width: 500px;
+            flex: 1;
+            min-width: 300px;
         }
         
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
         
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
         
-        label {
-            font-size: 1rem;
-            color: #9a86cf;
-            font-weight: bold;
+        .control-header {
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            color: #ff6b6b;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
         }
         
-        label i {
-            color: #ff6b6b;
+        .form-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
         
         input, textarea, select {
@@ -265,14 +354,14 @@
         
         .buttons {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             justify-content: center;
             margin-top: 10px;
             flex-wrap: wrap;
         }
         
         button {
-            padding: 12px 25px;
+            padding: 14px 28px;
             border: none;
             border-radius: 8px;
             background: linear-gradient(45deg, #6a5acd, #8a2be2);
@@ -286,7 +375,7 @@
             align-items: center;
             gap: 8px;
             flex: 1;
-            min-width: 140px;
+            min-width: 160px;
             justify-content: center;
         }
         
@@ -302,77 +391,6 @@
             transform: none;
             box-shadow: none;
             opacity: 0.7;
-        }
-        
-        .game-status {
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 12px;
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 12px;
-            border: 2px solid #6a5acd;
-            width: 100%;
-            max-width: 100%;
-            margin: 15px 0;
-            color: #ffd700;
-            font-weight: bold;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .log-container {
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-            border: 2px solid #6a5acd;
-            width: 100%;
-            max-width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .log {
-            width: 100%;
-            max-height: 150px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-        
-        .log-title {
-            color: #9a86cf;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .log-entry {
-            margin: 10px 0;
-            padding: 10px;
-            border-left: 3px solid #8a2be2;
-            background: rgba(40, 44, 52, 0.5);
-            border-radius: 0 8px 8px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            animation: fadeIn 0.5s ease;
-            font-size: 0.95rem;
-        }
-        
-        .player-log {
-            border-left-color: #4682b4;
-        }
-        
-        .system-log {
-            border-left-color: #b22222;
-        }
-        
-        .autopsy-log {
-            border-left-color: #ffd700;
-            background: rgba(40, 44, 52, 0.7);
         }
         
         .death-screen {
@@ -417,9 +435,9 @@
         }
         
         .instructions {
-            max-width: 100%;
+            max-width: 1020px;
             margin: 20px auto;
-            padding: 20px;
+            padding: 25px;
             background: rgba(26, 26, 46, 0.8);
             border-radius: 15px;
             border: 2px solid #6a5acd;
@@ -429,7 +447,7 @@
         
         .instructions h2 {
             color: #9a86cf;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
             font-size: 1.6rem;
             display: flex;
@@ -441,6 +459,10 @@
         .instructions ul {
             padding-left: 20px;
             margin: 15px 0;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .instructions li {
@@ -457,16 +479,18 @@
         .example-container {
             background: rgba(40, 44, 52, 0.6);
             border-radius: 12px;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
         }
         
         .example {
-            margin: 12px 0;
-            padding: 12px;
+            margin: 15px 0;
+            padding: 15px;
             background: rgba(50, 54, 62, 0.7);
             border-radius: 8px;
             border-left: 3px solid #8a2be2;
+            text-align: left;
         }
         
         .player-name {
@@ -490,15 +514,39 @@
             to { opacity: 1; transform: translateX(0); }
         }
         
+        @media (min-width: 768px) {
+            .game-container {
+                flex-wrap: nowrap;
+            }
+            
+            .grid-container {
+                margin-right: 0;
+            }
+            
+            .controls-container {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .game-container {
+                flex-direction: column;
+            }
+            
+            .grid-container, .controls-container {
+                margin: 0 auto;
+            }
+        }
+        
         @media (max-width: 600px) {
             h1 {
                 font-size: 2rem;
             }
             
             .cell {
-                width: 45px;
-                height: 45px;
-                font-size: 22px;
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
             }
             
             .death-message {
@@ -510,16 +558,13 @@
             }
             
             button {
-                padding: 10px 15px;
+                padding: 12px 20px;
                 font-size: 0.95rem;
+                min-width: 140px;
             }
             
-            .control-group > div {
+            .form-row {
                 flex-direction: column;
-            }
-            
-            .control-group > div > * {
-                width: 100%;
             }
         }
         
@@ -529,8 +574,8 @@
             }
             
             .cell {
-                width: 38px;
-                height: 38px;
+                width: 42px;
+                height: 42px;
                 font-size: 20px;
             }
             
@@ -545,6 +590,11 @@
             .instructions h2 {
                 font-size: 1.4rem;
             }
+            
+            button {
+                min-width: 120px;
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
@@ -558,102 +608,110 @@
         <p class="subtitle">在这场神秘的对决中，隐藏你的死亡陷阱，寻找对手的致命配方！小心每一步，危险可能就在下一个表情符号...</p>
     </div>
     
-    <div class="game-status" id="gameStatus">选择你的死法和尸检报告位置...</div>
-    
-    <div class="log-container">
-        <h3 class="log-title"><i class="fas fa-scroll"></i> 魔法日志</h3>
-        <div class="log" id="logEntries"></div>
-    </div>
-    
-    <div class="game-container">
-        <div class="grid-container">
-            <div class="grid-title">神秘材料库</div>
-            <div class="grid" id="grid"></div>
+    <div class="main-content">
+        <div class="game-status" id="gameStatus">选择你的死法和尸检报告位置...</div>
+        
+        <div class="log-container">
+            <h3 class="log-title"><i class="fas fa-scroll"></i> 魔法日志</h3>
+            <div class="log" id="logEntries"></div>
         </div>
         
-        <div class="controls-container">
-            <div class="controls">
-                <div class="control-group">
-                    <label for="deathEmoji"><i class="fas fa-skull"></i> 你的死法位置:</label>
-                    <div style="display: flex; gap: 10px;">
-                        <select id="deathEmoji" style="flex: 1;"></select>
-                        <input type="text" id="deathDesc" placeholder="描述死亡场景" style="flex: 3;">
+        <div class="game-container">
+            <div class="grid-container">
+                <div class="grid-title"><i class="fas fa-flask"></i> 神秘材料库</div>
+                <div class="grid" id="grid"></div>
+            </div>
+            
+            <div class="controls-container">
+                <div class="controls">
+                    <div class="control-group">
+                        <div class="control-header">
+                            <i class="fas fa-skull"></i>
+                            <span>你的死法位置</span>
+                        </div>
+                        <div class="form-row">
+                            <select id="deathEmoji"></select>
+                            <input type="text" id="deathDesc" placeholder="描述死亡场景">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-header">
+                            <i class="fas fa-file-medical"></i>
+                            <span>尸检报告位置</span>
+                        </div>
+                        <div class="form-row">
+                            <select id="autopsyEmoji"></select>
+                            <input type="text" id="autopsyDesc" placeholder="描述致死原因">
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="startBtn"><i class="fas fa-play"></i> 开始游戏</button>
+                        <button id="resetBtn"><i class="fas fa-redo"></i> 重新开始</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2><i class="fas fa-book"></i> 游戏规则与示例</h2>
+            
+            <div class="example-container">
+                <h3><i class="fas fa-lightbulb"></i> 剧本示例：</h3>
                 
-                <div class="control-group">
-                    <label for="autopsyEmoji"><i class="fas fa-file-medical"></i> 尸检报告位置:</label>
-                    <div style="display: flex; gap: 10px;">
-                        <select id="autopsyEmoji" style="flex: 1;"></select>
-                        <input type="text" id="autopsyDesc" placeholder="描述致死原因" style="flex: 3;">
-                    </div>
+                <div class="example">
+                    <p><span class="player-name">小明</span>为<span class="opponent-name">小绿</span>安排的剧本：</p>
+                    <p><strong>死法🐡：</strong>去饭馆吃河豚，死于河豚中毒</p>
+                    <p><strong>尸检报告♟：</strong>死者死于摄入致命物质</p>
                 </div>
                 
-                <div class="buttons">
-                    <button id="startBtn"><i class="fas fa-play"></i> 开始游戏</button>
-                    <button id="resetBtn"><i class="fas fa-redo"></i> 重新开始</button>
+                <div class="example">
+                    <p><span class="player-name">小绿</span>为<span class="opponent-name">小明</span>安排的剧本：</p>
+                    <p><strong>死法🧻：</strong>上厕所时踩到地上的湿纸巾摔死</p>
+                    <p><strong>尸检报告🧬：</strong>死者死于摔倒后头部着地</p>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="instructions">
-        <h2><i class="fas fa-book"></i> 游戏规则与示例</h2>
-        
-        <div class="example-container">
-            <h3><i class="fas fa-lightbulb"></i> 剧本示例：</h3>
             
-            <div class="example">
-                <p><span class="player-name">小明</span>为<span class="opponent-name">小绿</span>安排的剧本：</p>
-                <p><strong>死法🐡：</strong>去饭馆吃河豚，死于河豚中毒</p>
-                <p><strong>尸检报告♟：</strong>死者死于摄入致命物质</p>
+            <div class="example-container">
+                <h3><i class="fas fa-gamepad"></i> 游戏过程示例：</h3>
+                
+                <div class="example">
+                    <p><span class="player-name">小明</span>选择<span class="emoji-preview">♟</span>：今天去下棋了，输了</p>
+                    <p>→ <span class="player-name">小明</span>获得尸检报告一份：死者死于摔倒后头部着地</p>
+                </div>
+                
+                <div class="example">
+                    <p><span class="opponent-name">小绿</span>选择<span class="emoji-preview">🥮</span>：今天吃了个月饼，味道还不错</p>
+                    <p>→ 无事发生</p>
+                </div>
+                
+                <div class="example">
+                    <p><span class="player-name">小明</span>选择<span class="emoji-preview">🧻</span>：憋不住了，要去厕所！</p>
+                    <p>→ 倒霉的<span class="player-name">小明</span>上厕所时踩到地上的湿纸巾摔死，下辈子注意点吧</p>
+                    <p><strong>本局游戏<span class="opponent-name">小绿</span>胜出</strong></p>
+                </div>
             </div>
             
-            <div class="example">
-                <p><span class="player-name">小绿</span>为<span class="opponent-name">小明</span>安排的剧本：</p>
-                <p><strong>死法🧻：</strong>上厕所时踩到地上的湿纸巾摔死</p>
-                <p><strong>尸检报告🧬：</strong>死者死于摔倒后头部着地</p>
-            </div>
-        </div>
-        
-        <div class="example-container">
-            <h3><i class="fas fa-gamepad"></i> 游戏过程示例：</h3>
-            
-            <div class="example">
-                <p><span class="player-name">小明</span>选择<span class="emoji-preview">♟</span>：今天去下棋了，输了</p>
-                <p>→ <span class="player-name">小明</span>获得尸检报告一份：死者死于摔倒后头部着地</p>
-            </div>
-            
-            <div class="example">
-                <p><span class="opponent-name">小绿</span>选择<span class="emoji-preview">🥮</span>：今天吃了个月饼，味道还不错</p>
-                <p>→ 无事发生</p>
-            </div>
-            
-            <div class="example">
-                <p><span class="player-name">小明</span>选择<span class="emoji-preview">🧻</span>：憋不住了，要去厕所！</p>
-                <p>→ 倒霉的<span class="player-name">小明</span>上厕所时踩到地上的湿纸巾摔死，下辈子注意点吧</p>
-                <p><strong>本局游戏<span class="opponent-name">小绿</span>胜出</strong></p>
-            </div>
+            <ul>
+                <li>游戏开始时，会展示5x5网格的随机神秘材料（表情符号）<span class="emoji-preview">🧪🔮🍄🌿🐍</span></li>
+                <li>玩家和系统需要各秘密选择两个位置：一个作为"死法"，一个作为"尸检报告"</li>
+                <li>玩家确认选择后，点击"开始游戏"按钮</li>
+                <li>游戏开始后，玩家和系统轮流点击格子</li>
+                <li>点击后的格子会显示行动标记（P=玩家，S=系统）</li>
+                <li>当玩家点击到系统的死法时，将会死亡并输掉游戏</li>
+                <li>当系统点击到玩家的死法时，系统死亡，玩家获胜</li>
+                <li>点击到"尸检报告"时会揭示隐藏的致死原因</li>
+                <li><strong>注意：游戏过程中不要透露自己的选择！</strong></li>
+            </ul>
         </div>
         
-        <ul>
-            <li>游戏开始时，会展示5x5网格的随机神秘材料（表情符号）<span class="emoji-preview">🧪🔮🍄🌿🐍</span></li>
-            <li>玩家和系统需要各秘密选择两个位置：一个作为"死法"，一个作为"尸检报告"</li>
-            <li>玩家确认选择后，点击"开始游戏"按钮</li>
-            <li>游戏开始后，玩家和系统轮流点击格子</li>
-            <li>点击后的格子会显示行动标记（P=玩家，S=系统）</li>
-            <li>当玩家点击到系统的死法时，将会死亡并输掉游戏</li>
-            <li>当系统点击到玩家的死法时，系统死亡，玩家获胜</li>
-            <li>点击到"尸检报告"时会揭示隐藏的致死原因</li>
-            <li><strong>注意：游戏过程中不要透露自己的选择！</strong></li>
-        </ul>
-    </div>
-    
-    <div class="death-screen" id="deathScreen">
-        <div class="death-content">
-            <div class="death-message" id="deathMessage">你死了！</div>
-            <div class="death-reason" id="deathReason"></div>
-            <button id="playAgainBtn"><i class="fas fa-undo"></i> 再玩一次</button>
+        <div class="death-screen" id="deathScreen">
+            <div class="death-content">
+                <div class="death-message" id="deathMessage">你死了！</div>
+                <div class="death-reason" id="deathReason"></div>
+                <button id="playAgainBtn"><i class="fas fa-undo"></i> 再玩一次</button>
+            </div>
         </div>
     </div>
 
