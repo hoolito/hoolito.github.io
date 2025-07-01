@@ -1,7 +1,428 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摸鱼游戏大厅</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f6f8fa;
+            color: #24292e;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e1e4e8;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #24292e;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #337fc7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #24292e;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: #337fc7;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 50px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e1e4e8;
+        }
+        
+        .hero h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: #24292e;
+        }
+        
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #586069;
+            font-size: 18px;
+        }
+        
+        .counter {
+            background-color: #f3f6f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .counter strong {
+            color: #337fc7;
+        }
+        
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e1e4e8;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-color: #d1d5da;
+        }
+        
+        .game-image {
+            height: 180px;
+            background: linear-gradient(135deg, #337fc7, rgba(51, 127, 199, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #337fc7;
+        }
+        
+        .game-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #24292e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .game-title i {
+            color: #337fc7;
+        }
+        
+        .game-description {
+            color: #586069;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .play-btn {
+            padding: 10px 16px;
+            background: #337fc7;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .play-btn:hover {
+            background-color: #2a67ad;
+        }
+        
+        .coming-soon {
+            background: white;
+            padding: 40px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e1e4e8;
+            margin-bottom: 40px;
+        }
+        
+        .coming-soon h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #24292e;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        
+        .game-cell {
+            height: 70px;
+            background: #f6f8fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #337fc7;
+            border: 1px solid #e1e4e8;
+            transition: all 0.2s ease;
+        }
+        
+        .game-cell:hover {
+            background: #eef5ff;
+            transform: scale(1.05);
+            border-color: #337fc7;
+        }
+        
+        .info-text {
+            text-align: center;
+            color: #586069;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: #586069;
+            font-size: 14px;
+            border-top: 1px solid #e1e4e8;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero h2 {
+                font-size: 26px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .games-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .coming-soon {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with HOOLITO.</p>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h1>摸鱼游戏大厅</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> 首页</a></li>
+                    <li><a href="#"><i class="fas fa-gamepad"></i> 所有游戏</a></li>
+                    <li><a href="#"><i class="fas fa-info-circle"></i> 关于</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> 联系</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <section class="hero">
+            <h2>Hello World</h2>
+            <p>欢迎来到狐狸头的摸鱼游戏大厅～在这里，你可以尽情享受各种有趣的小游戏，放松心情，释放压力。我们的目标是收集1001个精品小游戏，打造最有趣的摸鱼平台！</p>
+            <div class="counter">
+                <i class="fas fa-trophy"></i> 
+                已上线游戏: <strong>2</strong> 款 | 目标: <strong>1001</strong> 款
+            </div>
+        </section>
+        
+        <section class="games-container">
+            <div class="game-card">
+                <div class="game-image">
+                    <div class="game-icon">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">
+                        <i class="fas fa-flask"></i> 
+                        女巫的毒药-果蔬大战
+                    </h3>
+                    <p class="game-description">
+                        在女巫的魔法厨房中，帮助她调配神奇的药水！混合各种果蔬，创造出具有魔力的神奇药水。
+                    </p>
+                    <a href="https://hoolito.github.io/Potion/" class="play-btn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </a>
+                </div>
+            </div>
+            
+            <div class="game-card">
+                <div class="game-image">
+                    <div class="game-icon">
+                        <i class="fas fa-skull"></i>
+                    </div>
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">
+                        <i class="fas fa-hourglass-half"></i> 
+                        女巫的毒药-死神来了
+                    </h3>
+                    <p class="game-description">
+                        与死神进行一场智慧的较量！躲避死神的追捕，在有限的时间内完成挑战，证明你的生存能力。
+                    </p>
+                    <a href="https://hoolito.github.io/Emorticon/" class="play-btn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="coming-soon">
+            <h2>
+                <i class="fas fa-wand-magic-sparkles"></i> 
+                更多游戏正在开发中
+            </h2>
+            <p class="info-text">
+                我们正在努力开发更多有趣的游戏，目标达到1001款！以下是我们计划中的部分游戏类型：
+            </p>
+            
+            <div class="games-grid">
+                <div class="game-cell"><i class="fas fa-chess"></i></div>
+                <div class="game-cell"><i class="fas fa-dice"></i></div>
+                <div class="game-cell"><i class="fas fa-puzzle-piece"></i></div>
+                <div class="game-cell"><i class="fas fa-running"></i></div>
+                <div class="game-cell"><i class="fas fa-music"></i></div>
+                <div class="game-cell"><i class="fas fa-brain"></i></div>
+                <div class="game-cell"><i class="fas fa-car"></i></div>
+                <div class="game-cell"><i class="fas fa-basketball-ball"></i></div>
+                <div class="game-cell"><i class="fas fa-ghost"></i></div>
+                <div class="game-cell"><i class="fas fa-futbol"></i></div>
+                <div class="game-cell"><i class="fas fa-heart"></i></div>
+                <div class="game-cell"><i class="fas fa-infinity"></i></div>
+            </div>
+            
+            <p class="info-text">
+                敬请期待，我们将不断更新游戏库！
+            </p>
+        </section>
+        
+        <footer>
+            <p>© 2025 摸鱼游戏大厅 | 让每一刻闲暇都充满乐趣</p>
+            <p>I'm hosted with HOOLITO & GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 简单的动态效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 卡片悬停效果
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+                });
+            });
+            
+            // 动态更新游戏数量（模拟）
+            const counter = document.querySelector('.counter strong');
+            let count = 2;
+            setInterval(() => {
+                if (count < 1001) {
+                    count++;
+                    counter.textContent = count;
+                }
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
