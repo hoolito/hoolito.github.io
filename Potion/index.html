@@ -34,28 +34,41 @@
         
         header {
             text-align: center;
-            padding: 15px;
+            padding: 25px 15px; /* 增加垂直内边距 */
             width: 100%;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
             border: 2px solid #8a4fff;
+            display: flex; /* 添加flex布局 */
+            flex-direction: column; /* 垂直方向排列 */
+            align-items: center; /* 水平居中 */
         }
         
         h1 {
             font-size: 2.8rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px; /* 增加下边距 */
             color: #ff6ec7;
             text-shadow: 0 0 10px rgba(255, 110, 199, 0.7);
             letter-spacing: 1px;
+            width: 100%; /* 确保宽度100% */
         }
         
         .game-info {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1.3rem;
+            margin: 10px 0;
             color: #a5d8ff;
             max-width: 600px;
             line-height: 1.6;
+            text-align: center;
+            padding: 15px 20px; /* 增加内边距 */
+            background: rgba(40, 20, 80, 0.3);
+            border-radius: 12px;
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
         
         .status-bar {
@@ -266,7 +279,9 @@
             }
             
             .game-info {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                min-height: 70px;
+                padding: 10px 15px;
             }
             
             .grid-cell {
