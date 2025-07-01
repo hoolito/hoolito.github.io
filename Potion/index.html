@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>女巫的毒药</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial Rounded MT Bold', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border: 2px solid #8a4fff;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #ff6ec7;
+            text-shadow: 0 0 10px rgba(255, 110, 199, 0.7);
+            letter-spacing: 1px;
+        }
+        
+        .game-info {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #a5d8ff;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: rgba(40, 20, 80, 0.7);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid #5e35b1;
+        }
+        
+        .turn-indicator {
+            color: #ffd166;
+            text-shadow: 0 0 8px rgba(255, 209, 102, 0.6);
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .grid-cell {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #5e35b1;
+            user-select: none;
+            position: relative;
+        }
+        
+        .grid-cell:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* 毒药标记 - 始终显示 */
+        .poison-marker {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1.4rem;
+            color: #00ff00;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+            z-index: 10;
+            animation: glow 1.5s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(0, 255, 0, 1), 0 0 20px rgba(0, 255, 0, 1);
+            }
+        }
+        
+        /* 玩家点击后的样式 */
+        .grid-cell.player-selected::after {
+            content: "✕";
+            position: absolute;
+            font-size: 3.5rem;
+            color: #ff5252;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 82, 82, 0.8);
+            z-index: 2;
+        }
+        
+        /* 系统点击后的样式 */
+        .grid-cell.computer-selected::after {
+            content: "✕";
+            position: absolute;
+            font-size: 3.5rem;
+            color: #42a5f5;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(66, 165, 245, 0.8);
+            z-index: 2;
+        }
+        
+        .grid-cell.poisoned {
+            animation: poisonPulse 1.5s infinite;
+            background: rgba(255, 0, 0, 0.3);
+        }
+        
+        .grid-cell.poisoned::after {
+            content: "☠️";
+            position: absolute;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+            z-index: 3;
+        }
+        
+        @keyframes poisonPulse {
+            0% { 
+                transform: scale(1); 
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            }
+            100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 14px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        #start-btn {
+            background: linear-gradient(to right, #ff6ec7, #8a4fff);
+            color: white;
+        }
+        
+        #start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(138, 79, 255, 0.4);
+        }
+        
+        #reset-btn {
+            background: linear-gradient(to right, #42a5f5, #26c6da);
+            color: white;
+        }
+        
+        #reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(66, 165, 245, 0.4);
+        }
+        
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .result-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            border: 3px solid #8a4fff;
+            box-shadow: 0 0 30px rgba(138, 79, 255, 0.6);
+        }
+        
+        .modal-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff6ec7;
+        }
+        
+        .modal-content p {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .game-info {
+                font-size: 1rem;
+            }
+            
+            .grid-cell {
+                font-size: 1.8rem;
+            }
+            
+            .poison-marker {
+                font-size: 1.2rem;
+            }
+            
+            .grid-cell.player-selected::after,
+            .grid-cell.computer-selected::after {
+                font-size: 2.8rem;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .modal-content {
+                padding: 25px;
+            }
+            
+            .modal-content h2 {
+                font-size: 2rem;
+            }
+            
+            .modal-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧙 女巫的毒药 🧪</h1>
+            <p class="game-info">选择一个Emoji下毒（显示🧪标记），然后与系统轮流点击格子，点击到有毒格子的一方将中毒！</p>
+        </header>
+        
+        <div class="status-bar">
+            <div class="player-info">玩家毒药: <span id="player-poison">未选择</span></div>
+            <div class="turn-indicator" id="turn-indicator">准备阶段: 请选择一个Emoji下毒</div>
+            <div class="computer-info">系统毒药: 已选择</div>
+        </div>
+        
+        <div class="game-grid" id="game-grid">
+            <!-- 网格将通过JS动态生成 -->
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">开始游戏</button>
+            <button id="reset-btn">重新开始</button>
+        </div>
+    </div>
+    
+    <div class="result-modal" id="result-modal">
+        <div class="modal-content">
+            <h2 id="result-title">游戏结束</h2>
+            <p id="result-message"></p>
+            <button id="play-again-btn">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 游戏常量
+            const EMOJIS = [
+                '🍏', '🍌', '🍈', '🥥', '🌾', '🫑',
+                '🍎', '🍉', '🍒', '🥝', '🥦', '🌽',
+                '🍐', '🍇', '🍑', '🍅', '🥬', '🥕',
+                '🍊', '🍓', '🥭', '🍆', '🥒', '🫒',
+                '🍋', '🫐', '🍍', '🥑', '🌶️', '🧄'
+            ];
+            const GRID_SIZE = 5;
+            const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
+            
+            // DOM 元素
+            const gameGrid = document.getElementById('game-grid');
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const turnIndicator = document.getElementById('turn-indicator');
+            const playerPoisonDisplay = document.getElementById('player-poison');
+            const resultModal = document.getElementById('result-modal');
+            const resultTitle = document.getElementById('result-title');
+            const resultMessage = document.getElementById('result-message');
+            
+            // 游戏状态变量
+            let gridCells = [];
+            let playerPoisonIndex = -1;
+            let computerPoisonIndex = -1;
+            let playerTurn = true;
+            let gameStarted = false;
+            let gameOver = false;
+            let selectedCells = new Set();
+            let poisonMarker = null;
+            
+            // 初始化游戏
+            function initGame() {
+                // 重置游戏状态
+                gameGrid.innerHTML = '';
+                gridCells = [];
+                playerPoisonIndex = -1;
+                computerPoisonIndex = -1;
+                playerTurn = true;
+                gameStarted = false;
+                gameOver = false;
+                selectedCells.clear();
+                
+                // 移除现有毒药标记
+                if (poisonMarker) {
+                    poisonMarker.remove();
+                    poisonMarker = null;
+                }
+                
+                // 更新UI
+                turnIndicator.textContent = '准备阶段: 请选择一个Emoji下毒';
+                playerPoisonDisplay.textContent = '未选择';
+                startBtn.disabled = false;
+                
+                // 创建网格 - 使用不重复的emoji
+                const shuffledEmojis = [...EMOJIS].sort(() => Math.random() - 0.5).slice(0, TOTAL_CELLS);
+                
+                for (let i = 0; i < TOTAL_CELLS; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.index = i;
+                    
+                    // 分配随机不重复的emoji
+                    cell.textContent = shuffledEmojis[i];
+                    
+                    // 添加点击事件（准备阶段）
+                    cell.addEventListener('click', () => {
+                        if (!gameStarted && !gameOver) {
+                            // 移除之前选择的毒药标记
+                            if (poisonMarker) {
+                                poisonMarker.remove();
+                            }
+                            
+                            playerPoisonIndex = parseInt(cell.dataset.index);
+                            playerPoisonDisplay.textContent = cell.textContent;
+                            
+                            // 添加毒药标记
+                            poisonMarker = document.createElement('div');
+                            poisonMarker.className = 'poison-marker';
+                            poisonMarker.textContent = '🧪';
+                            cell.appendChild(poisonMarker);
+                        }
+                    });
+                    
+                    gameGrid.appendChild(cell);
+                    gridCells.push(cell);
+                }
+                
+                // 系统随机选择一个毒药位置（不与玩家相同）
+                selectComputerPoison();
+            }
+            
+            // 系统选择毒药位置
+            function selectComputerPoison() {
+                let computerIndex;
+                do {
+                    computerIndex = Math.floor(Math.random() * TOTAL_CELLS);
+                } while (computerIndex === playerPoisonIndex);
+                
+                computerPoisonIndex = computerIndex;
+            }
+            
+            // 开始游戏
+            function startGame() {
+                if (playerPoisonIndex === -1) {
+                    alert('请先选择一个Emoji下毒！');
+                    return;
+                }
+                
+                gameStarted = true;
+                startBtn.disabled = true;
+                
+                // 更新状态
+                turnIndicator.textContent = '轮到: 玩家';
+                
+                // 绑定点击事件
+                gridCells.forEach(cell => {
+                    cell.addEventListener('click', handleCellClick);
+                });
+                
+                // 如果是系统先手，则系统自动走一步
+                if (!playerTurn) {
+                    setTimeout(computerMove, 800);
+                }
+            }
+            
+            // 处理格子点击
+            function handleCellClick(event) {
+                if (!playerTurn || gameOver) return;
+                
+                const cell = event.target;
+                const index = parseInt(cell.dataset.index);
+                
+                // 如果格子已被选择，则忽略
+                if (selectedCells.has(index)) return;
+                
+                // 标记格子已被选择
+                selectedCells.add(index);
+                
+                // 检查是否中毒
+                if (index === playerPoisonIndex || index === computerPoisonIndex) {
+                    cell.classList.add('poisoned');
+                    endGame('player', index);
+                    return;
+                }
+                
+                // 标记玩家选择的格子
+                cell.classList.add('player-selected');
+                
+                // 切换到系统回合
+                playerTurn = false;
+                turnIndicator.textContent = '轮到: 系统';
+                
+                // 系统移动
+                setTimeout(computerMove, 800);
+            }
+            
+            // 系统移动
+            function computerMove() {
+                if (gameOver) return;
+                
+                // 找出所有未选择的格子
+                const availableCells = [];
+                for (let i = 0; i < TOTAL_CELLS; i++) {
+                    if (!selectedCells.has(i)) {
+                        availableCells.push(i);
+                    }
+                }
+                
+                // 随机选择一个格子
+                const randomIndex = Math.floor(Math.random() * availableCells.length);
+                const selectedIndex = availableCells[randomIndex];
+                const cell = gridCells[selectedIndex];
+                
+                // 标记格子已被选择
+                selectedCells.add(selectedIndex);
+                
+                // 检查是否中毒
+                if (selectedIndex === playerPoisonIndex || selectedIndex === computerPoisonIndex) {
+                    cell.classList.add('poisoned');
+                    endGame('computer', selectedIndex);
+                    return;
+                }
+                
+                // 标记系统选择的格子
+                cell.classList.add('computer-selected');
+                
+                // 切换到玩家回合
+                playerTurn = true;
+                turnIndicator.textContent = '轮到: 玩家';
+            }
+            
+            // 结束游戏
+            function endGame(loser, poisonedIndex) {
+                gameOver = true;
+                
+                if (loser === 'player') {
+                    resultTitle.textContent = '游戏结束！';
+                    resultMessage.innerHTML = `你中毒了！💀<br>你点击了有毒的 ${gridCells[poisonedIndex].textContent}`;
+                } else {
+                    resultTitle.textContent = '恭喜！';
+                    resultMessage.innerHTML = `系统中毒了！🎉<br>系统点击了有毒的 ${gridCells[poisonedIndex].textContent}`;
+                }
+                
+                // 显示结果弹窗
+                resultModal.classList.add('active');
+            }
+            
+            // 重新开始游戏
+            function restartGame() {
+                resultModal.classList.remove('active');
+                initGame();
+            }
+            
+            // 事件监听
+            startBtn.addEventListener('click', startGame);
+            resetBtn.addEventListener('click', initGame);
+            playAgainBtn.addEventListener('click', restartGame);
+            
+            // 初始化游戏
+            initGame();
+        });
+    </script>
+</body>
+</html>
