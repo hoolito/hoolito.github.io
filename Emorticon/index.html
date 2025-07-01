@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>女巫的毒药 - 神秘对决</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -20,9 +21,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             position: relative;
             overflow-x: hidden;
+            touch-action: manipulation;
         }
         
         body::before {
@@ -41,45 +43,37 @@
         
         .header {
             text-align: center;
-            margin: 20px 0;
-            padding: 20px;
+            margin: 15px 0;
+            padding: 15px;
             border-bottom: 2px solid #8a2be2;
             width: 100%;
-            max-width: 900px;
+            max-width: 100%;
             position: relative;
         }
         
         h1 {
-            font-size: 3.2rem;
+            font-size: 2.4rem;
             color: #ff6b6b;
             text-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
             margin-bottom: 10px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
-        h1::after {
-            content: "🧙‍♀️";
-            position: absolute;
-            top: -25px;
-            left: 50px;
-            font-size: 2.5rem;
+        .title-emoji {
             animation: float 3s ease-in-out infinite;
-        }
-        
-        h1::before {
-            content: "🧪";
-            position: absolute;
-            top: -20px;
-            right: 50px;
-            font-size: 2rem;
-            animation: float 4s ease-in-out infinite;
+            display: inline-block;
         }
         
         .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: #9a86cf;
-            max-width: 700px;
+            max-width: 100%;
             margin: 10px auto;
             line-height: 1.6;
         }
@@ -88,49 +82,54 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            max-width: 1000px;
+            gap: 20px;
             width: 100%;
-            margin-top: 20px;
+            max-width: 100%;
+            margin-top: 15px;
         }
         
         .grid-container {
             background: rgba(26, 26, 46, 0.8);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 3px solid #6a5acd;
-            width: 500px;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid #6a5acd;
+            width: 100%;
+            max-width: 500px;
         }
         
         .grid-title {
             text-align: center;
             color: #ff6b6b;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
             text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+            gap: 10px;
             margin: 0 auto;
         }
         
         .cell {
-            width: 70px;
-            height: 70px;
+            width: 55px;
+            height: 55px;
             background: rgba(40, 44, 52, 0.8);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
+            font-size: 28px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid #4b0082;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
         }
@@ -146,9 +145,9 @@
             z-index: 1;
         }
         
-        .cell:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        .cell:hover, .cell:active {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
             background: rgba(60, 64, 72, 0.9);
             z-index: 2;
         }
@@ -156,13 +155,13 @@
         /* 死法标记 - 红色边框 */
         .cell.death-selected {
             border: 3px solid #ff6b6b;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+            box-shadow: 0 0 12px rgba(255, 107, 107, 0.5);
         }
         
         /* 尸检报告标记 - 紫色边框 */
         .cell.autopsy-selected {
             border: 3px solid #9370db;
-            box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+            box-shadow: 0 0 12px rgba(147, 112, 219, 0.5);
         }
         
         /* 玩家行动标记 */
@@ -176,11 +175,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.8);
             z-index: 2;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
         }
         
         /* 系统行动标记 */
@@ -194,11 +193,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.8);
             z-index: 2;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
         }
         
         .cell.revealed {
@@ -209,32 +208,33 @@
         
         .controls-container {
             background: rgba(26, 26, 46, 0.8);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 3px solid #6a5acd;
-            width: 400px;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid #6a5acd;
+            width: 100%;
+            max-width: 500px;
         }
         
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         
         label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #9a86cf;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         label i {
@@ -242,13 +242,14 @@
         }
         
         input, textarea, select {
-            padding: 14px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             border: 2px solid #4b0082;
             background: rgba(40, 44, 52, 0.8);
             color: #e6e6e6;
             font-size: 1rem;
             transition: all 0.3s;
+            width: 100%;
         }
         
         input:focus, textarea:focus, select:focus {
@@ -258,36 +259,40 @@
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
         
         .buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
         
         button {
-            padding: 14px 30px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             background: linear-gradient(45deg, #6a5acd, #8a2be2);
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             gap: 8px;
+            flex: 1;
+            min-width: 140px;
+            justify-content: center;
         }
         
-        button:hover {
+        button:hover, button:active {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
             background: linear-gradient(45deg, #8a2be2, #9370db);
         }
         
@@ -300,60 +305,61 @@
         }
         
         .game-status {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: rgba(26, 26, 46, 0.8);
-            border-radius: 15px;
+            border-radius: 12px;
             border: 2px solid #6a5acd;
             width: 100%;
-            max-width: 900px;
-            margin: 20px 0;
+            max-width: 100%;
+            margin: 15px 0;
             color: #ffd700;
             font-weight: bold;
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         
         .log-container {
             background: rgba(26, 26, 46, 0.8);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 3px solid #6a5acd;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid #6a5acd;
             width: 100%;
-            max-width: 900px;
-            margin-bottom: 20px;
+            max-width: 100%;
+            margin-bottom: 15px;
         }
         
         .log {
             width: 100%;
-            max-height: 200px;
+            max-height: 150px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 8px;
         }
         
         .log-title {
             color: #9a86cf;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .log-entry {
-            margin: 12px 0;
-            padding: 12px;
-            border-left: 4px solid #8a2be2;
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #8a2be2;
             background: rgba(40, 44, 52, 0.5);
-            border-radius: 0 10px 10px 0;
+            border-radius: 0 8px 8px 0;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 8px;
             animation: fadeIn 0.5s ease;
+            font-size: 0.95rem;
         }
         
         .player-log {
@@ -389,79 +395,78 @@
         
         .death-content {
             background: rgba(26, 26, 46, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 800px;
+            border-radius: 15px;
+            padding: 30px;
             width: 90%;
+            max-width: 500px;
             border: 3px solid #8a2be2;
-            box-shadow: 0 0 40px rgba(138, 43, 226, 0.7);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
         }
         
         .death-message {
-            font-size: 4rem;
-            margin-bottom: 30px;
-            color: #ff6b6b;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
         }
         
         .death-reason {
-            font-size: 1.8rem;
-            margin-bottom: 40px;
+            font-size: 1.4rem;
+            margin-bottom: 30px;
             color: #ffd700;
             line-height: 1.6;
         }
         
         .instructions {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 25px;
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 20px;
             background: rgba(26, 26, 46, 0.8);
-            border-radius: 20px;
-            border: 3px solid #6a5acd;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            border: 2px solid #6a5acd;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            font-size: 0.95rem;
         }
         
         .instructions h2 {
             color: #9a86cf;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.6rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .instructions ul {
-            padding-left: 30px;
-            margin: 20px 0;
+            padding-left: 20px;
+            margin: 15px 0;
         }
         
         .instructions li {
-            margin-bottom: 15px;
-            line-height: 1.7;
-            font-size: 1.1rem;
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
         
         .emoji-preview {
-            font-size: 1.5rem;
-            margin-left: 5px;
+            font-size: 1.3rem;
+            margin-left: 4px;
             vertical-align: middle;
         }
         
         .example-container {
             background: rgba(40, 44, 52, 0.6);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
         }
         
         .example {
-            margin: 15px 0;
-            padding: 15px;
+            margin: 12px 0;
+            padding: 12px;
             background: rgba(50, 54, 62, 0.7);
-            border-radius: 10px;
-            border-left: 4px solid #8a2be2;
+            border-radius: 8px;
+            border-left: 3px solid #8a2be2;
         }
         
         .player-name {
@@ -476,7 +481,7 @@
         
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
         
@@ -485,54 +490,78 @@
             to { opacity: 1; transform: translateX(0); }
         }
         
-        @media (max-width: 900px) {
-            .game-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .grid-container, .controls-container {
-                width: 100%;
-                max-width: 600px;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-        }
-        
         @media (max-width: 600px) {
-            .cell {
-                width: 55px;
-                height: 55px;
-                font-size: 28px;
-            }
-            
             h1 {
                 font-size: 2rem;
             }
             
+            .cell {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+            }
+            
             .death-message {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
             .death-reason {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
+            }
+            
+            button {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+            }
+            
+            .control-group > div {
+                flex-direction: column;
+            }
+            
+            .control-group > div > * {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .cell {
+                width: 38px;
+                height: 38px;
+                font-size: 20px;
+            }
+            
+            .grid {
+                gap: 8px;
+            }
+            
+            .instructions {
+                padding: 15px;
+            }
+            
+            .instructions h2 {
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>女巫的毒药 🧪</h1>
-        <p class="subtitle">在这场神秘的对决中，藏好你设下的死亡陷阱，寻找对手的致命配方！小心每一步，死亡可能就发生在下一个emoji...</p>
+        <h1>
+            <span class="title-emoji">🧙‍♀️</span>
+            女巫的毒药 
+            <span class="title-emoji">🧪</span>
+        </h1>
+        <p class="subtitle">在这场神秘的对决中，隐藏你的死亡陷阱，寻找对手的致命配方！小心每一步，危险可能就在下一个表情符号...</p>
     </div>
     
     <div class="game-status" id="gameStatus">选择你的死法和尸检报告位置...</div>
     
-    <!-- 日志容器移动到提示框和材料库之间 -->
     <div class="log-container">
-        <h3 class="log-title"><i class="fas fa-scroll"></i> 女巫的魔法日志</h3>
+        <h3 class="log-title"><i class="fas fa-scroll"></i> 魔法日志</h3>
         <div class="log" id="logEntries"></div>
     </div>
     
@@ -608,8 +637,8 @@
         </div>
         
         <ul>
-            <li>游戏开始时，会展示5x5网格的随机神秘材料（emoji）<span class="emoji-preview">🧪🔮🍄🌿🐍</span></li>
-            <li>玩家和系统需要各秘密选择两个emoji：一个作为"死法"，一个作为"尸检报告"的隐藏地点</li>
+            <li>游戏开始时，会展示5x5网格的随机神秘材料（表情符号）<span class="emoji-preview">🧪🔮🍄🌿🐍</span></li>
+            <li>玩家和系统需要各秘密选择两个位置：一个作为"死法"，一个作为"尸检报告"</li>
             <li>玩家确认选择后，点击"开始游戏"按钮</li>
             <li>游戏开始后，玩家和系统轮流点击格子</li>
             <li>点击后的格子会显示行动标记（P=玩家，S=系统）</li>
@@ -822,7 +851,7 @@
                 // 系统回合（延迟执行）
                 if (gameState === 'playing') {
                     gameStatusElement.textContent = "系统正在思考...";
-                    setTimeout(systemTurn, 2000);
+                    setTimeout(systemTurn, 1500);
                 }
             }
         }
