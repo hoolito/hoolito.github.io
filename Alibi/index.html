@@ -84,6 +84,7 @@
         .difficulty-screen {
             text-align: center;
             padding: 20px;
+            width: 100%;
         }
         
         .difficulty-title {
@@ -94,9 +95,12 @@
         
         .difficulty-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(1, 1fr);
             gap: 20px;
             margin-top: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .difficulty-card {
@@ -125,6 +129,14 @@
             font-size: 0.9rem;
             color: #b0b0d0;
             margin-bottom: 10px;
+        }
+        
+        /* 电脑端布局：每行两个难度选项 */
+        @media (min-width: 769px) {
+            .difficulty-options {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 900px;
+            }
         }
         
         /* 故事背景 */
