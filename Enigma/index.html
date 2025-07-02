@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海龟汤谜题游戏</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --secondary-bg: #1e293b;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-accent: #cbd5e1;
+            --accent-color: #31a8ff;
+            --accent-hover: #1e8fd1;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --ready-color: #99e83f;
+            --ready-bg: rgba(153, 232, 63, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 41, 59, 0.5) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(30, 41, 59, 0.5) 0%, transparent 20%);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--secondary-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--accent-color);
+            z-index: 10;
+        }
+        
+        .screen {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.8rem;
+            position: relative;
+            padding-bottom: 20px;
+            background: linear-gradient(to right, var(--accent-color), #8bc6ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(49, 168, 255, 0.2);
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            margin: 20px 0 15px;
+            font-size: 1.8rem;
+            color: var(--text-accent);
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 24px;
+            width: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-accent);
+            font-size: 1.1rem;
+        }
+        
+        input, select, button {
+            padding: 14px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--font-main);
+            transition: var(--transition);
+        }
+        
+        input, select {
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(49, 168, 255, 0.2);
+        }
+        
+        button {
+            background: #001e36; /* 深蓝背景 */
+            color: var(--text-accent); /* 浅灰文字 */
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 1px solid rgba(49, 168, 255, 0.3);
+            width: 100%;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(49, 168, 255, 0.1);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        button:hover::after {
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(49, 168, 255, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* 重要按钮样式 - 保持蓝色 */
+        .btn-primary {
+            background: linear-gradient(135deg, #001e36, #00335d);
+            color: var(--accent-color);
+            border: 1px solid rgba(49, 168, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00294d, #004a8a);
+            box-shadow: 0 7px 15px rgba(49, 168, 255, 0.3);
+        }
+        
+        /* 准备按钮样式 - 深绿背景，绿色文字 */
+        .btn-green {
+            background: #1e3001;
+            color: #99e83f;
+            border: 1px solid rgba(153, 232, 63, 0.3);
+        }
+        
+        .btn-green:hover {
+            background: #2b4502;
+            box-shadow: 0 7px 15px rgba(153, 232, 63, 0.2);
+        }
+        
+        /* 离开按钮样式 - 深红背景，玫红文字 */
+        .btn-red {
+            background: #49021f;
+            color: #ff3266;
+            border: 1px solid rgba(255, 50, 102, 0.3);
+        }
+        
+        .btn-red:hover {
+            background: #6b032e;
+            box-shadow: 0 7px 15px rgba(255, 50, 102, 0.2);
+        }
+        
+        .player-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .player-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .player-card.active {
+            border-color: var(--accent-color);
+            background: rgba(49, 168, 255, 0.15);
+        }
+        
+        /* 移除边框绿色效果 */
+        /* .player-card.ready {
+            border-color: #99e83f;
+        } */
+        
+        .player-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .player-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+            color: var(--text-accent);
+        }
+        
+        .player-status {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 20px;
+        }
+        
+        /* 准备状态文字样式 */
+        .player-status.ready {
+            color: var(--ready-color);
+            background: var(--ready-bg);
+            font-weight: bold;
+        }
+        
+        .mystery-container {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid var(--accent-color);
+            position: relative;
+        }
+        
+        .mystery-icon {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--accent-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(49, 168, 255, 0.3);
+        }
+        
+        .mystery-text {
+            font-size: 1.4rem;
+            line-height: 1.7;
+            font-style: italic;
+            text-align: center;
+            color: var(--text-primary);
+            padding: 0 10px;
+        }
+        
+        .history-container {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-question {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .history-question i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .history-answer {
+            color: #31a8ff;
+            padding-left: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .history-answer i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .game-controls button {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .solution-container {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .solution-title {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .solution-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        .room-id-display {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 25px 0;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius);
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .game-info {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .current-player-display {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 30, 54, 0.6);
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(49, 168, 255, 0.3);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        /* 新添加的按钮容器样式 */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .wide-button {
+            width: 100%;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        /* 修改输入区域布局 */
+        .input-with-button {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-with-button input {
+            flex: 1;
+        }
+        
+        .input-with-button button {
+            width: auto;
+            min-width: 120px;
+            max-width: 150px;
+        }
+        
+        /* 添加居中容器 */
+        .center-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .input-section {
+            width: 100%;
+            max-width: 700px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px var(--ready-color); }
+            50% { text-shadow: 0 0 15px var(--ready-color); }
+            100% { text-shadow: 0 0 5px var(--ready-color); }
+        }
+        
+        .glow {
+            animation: glow 1.5s infinite;
+        }
+        
+        /* 修改电脑端布局 */
+        @media (min-width: 769px) {
+            .input-section {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .input-with-button {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .input-with-button button {
+                width: 100%;
+                max-width: 100%;
+                min-width: unset;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .player-list {
+                flex-direction: column;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+            }
+            
+            .player-card {
+                min-width: 100%;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .input-with-button {
+                flex-direction: column;
+            }
+            
+            .input-with-button button {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .mystery-text {
+                font-size: 1.2rem;
+            }
+            
+            .room-id-display {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="logo">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>海龟汤谜题</span>
+            </div>
+            <div class="game-info">
+                <div><i class="fa-solid fa-users"></i> 玩家: 1-5</div>
+                <div><i class="fa-solid fa-globe"></i> 多平台支持</div>
+            </div>
+        </div>
+        
+        <!-- 开始屏幕 -->
+        <div id="start-screen" class="screen active">
+            <h1>海龟汤谜题游戏</h1>
+            <p>欢迎来到海龟汤谜题游戏！在这个游戏中，你将面对一个离奇的情景或故事，通过向系统提问（只能回答是/否/无关）来解开谜题。</p>
+            
+            <div class="form-group">
+                <label for="room-id"><i class="fa-solid fa-door-open"></i> 房间号：</label>
+                <input type="text" id="room-id" placeholder="输入或创建房间号">
+            </div>
+            
+            <div class="form-group">
+                <label for="player-name"><i class="fa-solid fa-user"></i> 你的名字：</label>
+                <input type="text" id="player-name" placeholder="输入你的昵称">
+            </div>
+            
+            <div class="form-group">
+                <label for="player-count"><i class="fa-solid fa-user-group"></i> 玩家数量：</label>
+                <select id="player-count">
+                    <option value="1">1人游戏（与系统对战）</option>
+                    <option value="2">2人游戏</option>
+                    <option value="3">3人游戏</option>
+                    <option value="4">4人游戏</option>
+                    <option value="5">5人游戏</option>
+                </select>
+            </div>
+            
+            <div class="button-container">
+                <button id="start-btn" class="btn-primary wide-button">
+                    <i class="fa-solid fa-play"></i> 进入房间
+                </button>
+            </div>
+        </div>
+        
+        <!-- 房间等待屏幕 -->
+        <div id="lobby-screen" class="screen">
+            <h1>房间等待区</h1>
+            <div class="room-id-display">
+                <i class="fa-solid fa-door-closed"></i>
+                <span>房间号: <span id="display-room-id">ROOM123</span></span>
+            </div>
+            
+            <h2>玩家列表</h2>
+            <div class="player-list" id="player-list">
+                <!-- 玩家卡片将通过JS动态添加 -->
+            </div>
+            
+            <p>等待所有玩家准备... 当所有玩家准备就绪后，房主可以开始游戏。</p>
+            
+            <div class="btn-container">
+                <button id="ready-btn" class="btn-green">
+                    <i class="fa-solid fa-check"></i> 准备
+                </button>
+                <button id="start-game-btn" class="btn-primary">
+                    <i class="fa-solid fa-gamepad"></i> 开始游戏
+                </button>
+                <button id="leave-lobby-btn" class="btn-red">
+                    <i class="fa-solid fa-door-open"></i> 离开房间
+                </button>
+            </div>
+        </div>
+        
+        <!-- 游戏屏幕 -->
+        <div id="game-screen" class="screen">
+            <h1>海龟汤谜题</h1>
+            <div class="room-id-display">
+                <i class="fa-solid fa-key"></i>
+                <span>房间号: <span id="game-room-id">ROOM123</span></span>
+            </div>
+            
+            <div class="current-player-display">
+                <i class="fa-solid fa-user"></i>
+                <span>当前玩家: <span id="current-player">玩家1</span></span>
+            </div>
+            
+            <div class="mystery-container">
+                <div class="mystery-icon">
+                    <i class="fa-solid fa-question"></i>
+                </div>
+                <div class="mystery-text" id="mystery-text">
+                    一个男人走进一家酒吧，向酒保要了一杯水。酒保掏出一把枪指着男人。男人说"谢谢你"，然后离开了。发生了什么事？
+                </div>
+            </div>
+            
+            <div class="center-container">
+                <div class="input-section">
+                    <div class="form-group">
+                        <label for="question-input"><i class="fa-solid fa-comment-dots"></i> 你的问题（系统只会回答是/否/无关）：</label>
+                        <div class="input-with-button">
+                            <input type="text" id="question-input" placeholder="输入你的问题...">
+                            <button id="ask-btn" class="btn-primary">
+                                <i class="fa-solid fa-paper-plane"></i> 提问
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>问答记录</h2>
+            <div class="history-container" id="history-container">
+                <!-- 历史记录将通过JS动态添加 -->
+            </div>
+            
+            <div class="game-controls">
+                <button id="surrender-btn" class="btn-red">
+                    <i class="fa-solid fa-flag"></i> 认输并查看答案
+                </button>
+                <button id="leave-game-btn">
+                    <i class="fa-solid fa-arrow-left"></i> 退出游戏
+                </button>
+            </div>
+        </div>
+        
+        <!-- 答案屏幕 -->
+        <div id="solution-screen" class="screen">
+            <h1>谜底揭晓</h1>
+            
+            <div class="mystery-container">
+                <div class="mystery-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="mystery-text" id="final-mystery-text">
+                    一个男人走进一家酒吧，向酒保要了一杯水。酒保掏出一把枪指着男人。男人说"谢谢你"，然后离开了。发生了什么事？
+                </div>
+            </div>
+            
+            <div class="solution-container">
+                <h3 class="solution-title">
+                    <i class="fa-solid fa-book-open"></i> 完整解释
+                </h3>
+                <div class="solution-text" id="solution-text">
+                    这个男人一直在打嗝，他想要一杯水来缓解打嗝。酒保意识到这一点，于是用枪指着男人吓唬他。男人因为惊吓停止了打嗝，所以他说"谢谢你"然后离开了。
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <button id="new-game-btn" class="btn-primary">
+                    <i class="fa-solid fa-rotate"></i> 开始新游戏
+                </button>
+                <button id="back-to-lobby-btn">
+                    <i class="fa-solid fa-people-group"></i> 返回房间
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态管理
+        const gameState = {
+            currentScreen: 'start',
+            roomId: '',
+            playerName: '',
+            playerCount: 1,
+            players: [],
+            isHost: false,
+            currentPlayerIndex: 0,
+            mystery: {},
+            history: [],
+            timer: null
+        };
+
+        // 示例谜题库
+        const mysteries = [
+            {
+                question: "一个男人走进一家酒吧，向酒保要了一杯水。酒保掏出一把枪指着男人。男人说'谢谢你'，然后离开了。发生了什么事？",
+                solution: "这个男人一直在打嗝，他想要一杯水来缓解打嗝。酒保意识到这一点，于是用枪指着男人吓唬他。男人因为惊吓停止了打嗝，所以他说'谢谢你'然后离开了。"
+            },
+            {
+                question: "一个女人在沙漠中发现了一具男尸。他背上有一个背包，身上没有任何伤痕。他是怎么死的？",
+                solution: "这个男人是个跳伞运动员，他的降落伞没能打开。背包里装的就是降落伞。"
+            },
+            {
+                question: "一个男人住在10楼。每天他乘电梯下到1楼去上班。回家时，他乘电梯到7楼，然后爬楼梯到10楼。为什么？",
+                solution: "这个男人是个侏儒，他只能按到电梯里7楼的按钮。再高的按钮他够不到，所以7楼之后他必须走楼梯。"
+            },
+            {
+                question: "一对夫妇在开车时发生车祸。丈夫当场死亡，妻子被紧急送往医院。外科医生看到病人后说：'我不能给她做手术，她是我儿子！' 这怎么可能？",
+                solution: "外科医生是她的父亲。"
+            },
+            {
+                question: "一个男人被发现死在田野里，旁边有一个未打开的包裹。他是怎么死的？",
+                solution: "这个男人是跳伞员，包裹里是他的降落伞。降落伞没能打开导致了他的死亡。"
+            }
+        ];
+
+        // DOM 元素
+        const screens = {
+            start: document.getElementById('start-screen'),
+            lobby: document.getElementById('lobby-screen'),
+            game: document.getElementById('game-screen'),
+            solution: document.getElementById('solution-screen')
+        };
+
+        // 初始化
+        function init() {
+            // 绑定按钮事件
+            document.getElementById('start-btn').addEventListener('click', enterLobby);
+            document.getElementById('ready-btn').addEventListener('click', toggleReady);
+            document.getElementById('start-game-btn').addEventListener('click', startGame);
+            document.getElementById('leave-lobby-btn').addEventListener('click', leaveLobby);
+            document.getElementById('ask-btn').addEventListener('click', askQuestion);
+            document.getElementById('surrender-btn').addEventListener('click', showSolution);
+            document.getElementById('leave-game-btn').addEventListener('click', leaveGame);
+            document.getElementById('new-game-btn').addEventListener('click', newGame);
+            document.getElementById('back-to-lobby-btn').addEventListener('click', backToLobby);
+            
+            // 模拟按回车键提问
+            document.getElementById('question-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    askQuestion();
+                }
+            });
+        }
+
+        // 进入房间
+        function enterLobby() {
+            const roomId = document.getElementById('room-id').value.trim() || `ROOM${Math.floor(1000 + Math.random() * 9000)}`;
+            const playerName = document.getElementById('player-name').value.trim() || `玩家${Math.floor(1 + Math.random() * 99)}`;
+            const playerCount = parseInt(document.getElementById('player-count').value);
+            
+            // 更新游戏状态
+            gameState.roomId = roomId;
+            gameState.playerName = playerName;
+            gameState.playerCount = playerCount;
+            gameState.isHost = true; // 第一个加入的是房主
+            
+            // 创建玩家
+            gameState.players = [{
+                name: playerName,
+                ready: false,
+                isHost: true
+            }];
+            
+            // 如果是多人游戏，添加AI玩家
+            if (playerCount > 1) {
+                for (let i = 2; i <= playerCount; i++) {
+                    gameState.players.push({
+                        name: `玩家${i}`,
+                        ready: false,
+                        isHost: false
+                    });
+                }
+            }
+            
+            // 更新UI
+            document.getElementById('display-room-id').textContent = roomId;
+            document.getElementById('game-room-id').textContent = roomId;
+            updatePlayerList();
+            
+            // 显示房间等待屏幕
+            showScreen('lobby');
+        }
+
+        // 更新玩家列表
+        function updatePlayerList() {
+            const playerList = document.getElementById('player-list');
+            playerList.innerHTML = '';
+            
+            gameState.players.forEach((player, index) => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                if (index === 0) playerCard.classList.add('pulse');
+                
+                playerCard.innerHTML = `
+                    <div class="player-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-status ${player.ready ? 'ready glow' : ''}">
+                        ${player.ready ? '<i class="fa-solid fa-check"></i> 已准备' : '<i class="fa-solid fa-clock"></i> 未准备'}
+                    </div>
+                    ${player.isHost ? '<div class="player-status"><i class="fa-solid fa-crown"></i> 房主</div>' : ''}
+                `;
+                
+                playerList.appendChild(playerCard);
+            });
+            
+            // 更新开始游戏按钮状态
+            const allReady = gameState.players.every(player => player.ready);
+            document.getElementById('start-game-btn').disabled = !allReady || !gameState.isHost;
+        }
+
+        // 切换准备状态
+        function toggleReady() {
+            const player = gameState.players.find(p => p.name === gameState.playerName);
+            if (player) {
+                player.ready = !player.ready;
+                updatePlayerList();
+            }
+        }
+
+        // 开始游戏
+        function startGame() {
+            // 选择随机谜题
+            const randomIndex = Math.floor(Math.random() * mysteries.length);
+            gameState.mystery = mysteries[randomIndex];
+            
+            // 重置游戏状态
+            gameState.currentPlayerIndex = 0;
+            gameState.history = [];
+            
+            // 更新UI
+            document.getElementById('mystery-text').textContent = gameState.mystery.question;
+            document.getElementById('final-mystery-text').textContent = gameState.mystery.question;
+            document.getElementById('solution-text').textContent = gameState.mystery.solution;
+            document.getElementById('current-player').textContent = gameState.players[0].name;
+            document.getElementById('history-container').innerHTML = '';
+            document.getElementById('question-input').value = '';
+            
+            // 显示游戏屏幕
+            showScreen('game');
+        }
+
+        // 提问
+        function askQuestion() {
+            const questionInput = document.getElementById('question-input');
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                alert('请输入问题');
+                return;
+            }
+            
+            // 模拟系统回答（随机）
+            const answers = ['是', '否', '无关'];
+            const answer = answers[Math.floor(Math.random() * answers.length)];
+            
+            // 添加到历史记录
+            gameState.history.push({ player: gameState.players[gameState.currentPlayerIndex].name, question, answer });
+            
+            // 更新UI
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+                <div class="history-question">
+                    <i class="fa-solid fa-circle-question"></i>
+                    ${gameState.players[gameState.currentPlayerIndex].name}: ${question}
+                </div>
+                <div class="history-answer">
+                    <i class="fa-solid fa-robot"></i>
+                    系统: ${answer}
+                </div>
+            `;
+            document.getElementById('history-container').appendChild(historyItem);
+            
+            // 滚动到底部
+            document.getElementById('history-container').scrollTop = document.getElementById('history-container').scrollHeight;
+            
+            // 清空输入框
+            questionInput.value = '';
+            
+            // 切换到下一个玩家
+            nextPlayer();
+        }
+
+        // 切换到下一个玩家
+        function nextPlayer() {
+            // 更新当前玩家
+            gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+            document.getElementById('current-player').textContent = gameState.players[gameState.currentPlayerIndex].name;
+        }
+
+        // 显示答案
+        function showSolution() {
+            showScreen('solution');
+        }
+
+        // 离开房间
+        function leaveLobby() {
+            showScreen('start');
+        }
+
+        // 离开游戏
+        function leaveGame() {
+            showScreen('lobby');
+        }
+
+        // 新游戏
+        function newGame() {
+            startGame();
+        }
+
+        // 返回房间
+        function backToLobby() {
+            // 重置当前玩家的准备状态
+            const player = gameState.players.find(p => p.name === gameState.playerName);
+            if (player) {
+                player.ready = false;
+            }
+            updatePlayerList();
+            showScreen('lobby');
+        }
+
+        // 显示指定屏幕
+        function showScreen(screenName) {
+            // 隐藏所有屏幕
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // 显示目标屏幕
+            screens[screenName].classList.add('active');
+            gameState.currentScreen = screenName;
+        }
+
+        // 初始化游戏
+        window.onload = init;
+    </script>
+</body>
+</html>
