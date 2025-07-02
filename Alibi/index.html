@@ -226,7 +226,7 @@
             100% { opacity: 1; }
         }
         
-        /* 道具系统 */
+        /* 道具系统 - 重点优化部分 */
         .tools-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -234,81 +234,109 @@
         }
         
         .tool-card {
-            background: rgba(50, 80, 100, 0.6);
+            background: linear-gradient(145deg, rgba(70, 100, 130, 0.8), rgba(40, 60, 90, 0.8));
             border-radius: 10px;
             padding: 15px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid rgba(90, 120, 180, 0.5);
             position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         
         .tool-card:hover:not(.used):not(.frozen) {
-            transform: translateY(-3px);
-            background: rgba(50, 100, 120, 0.8);
-            border-color: #1abc9c;
+            transform: translateY(-5px);
+            background: linear-gradient(145deg, rgba(80, 120, 160, 0.9), rgba(50, 80, 120, 0.9));
+            border-color: #6a5acd;
+            box-shadow: 0 6px 15px rgba(106, 90, 205, 0.5);
         }
         
         .tool-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: #b19cd9;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover:not(.used):not(.frozen) .tool-icon {
+            transform: scale(1.1);
+            color: #d0c0f0;
+            text-shadow: 0 0 10px rgba(177, 156, 217, 0.7);
         }
         
         .tool-name {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #e6e6ff;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
         
-        .tool-status {
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            right: 0;
-            font-size: 0.7rem;
-            font-weight: bold;
+        .tool-card:hover:not(.used):not(.frozen) .tool-name {
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
         
-        .tool-card.used .tool-icon,
-        .tool-card.used .tool-name {
-            opacity: 0.5;
-        }
-        
-        .tool-card.used .tool-status {
-            color: #e74c3c;
-        }
-        
-        .tool-card.frozen .tool-icon,
-        .tool-card.frozen .tool-name {
-            opacity: 0.7;
-        }
-        
-        .tool-card.frozen .tool-status {
-            color: #3498db;
-        }
-        
+        /* 道具状态标记 */
         .tool-card.used::after {
             content: "已使用";
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 8px;
+            right: 8px;
             background: #e74c3c;
             color: white;
-            font-size: 0.7rem;
-            padding: 2px 5px;
-            border-radius: 10px;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
         
         .tool-card.frozen::after {
             content: "已冻结";
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 8px;
+            right: 8px;
             background: #3498db;
             color: white;
-            font-size: 0.7rem;
-            padding: 2px 5px;
-            border-radius: 10px;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        
+        /* 已使用道具样式 */
+        .tool-card.used {
+            background: linear-gradient(145deg, rgba(90, 60, 70, 0.7), rgba(60, 40, 45, 0.7));
+            border-color: rgba(180, 80, 80, 0.5);
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+        
+        .tool-card.used .tool-icon {
+            color: #b08080;
+        }
+        
+        .tool-card.used .tool-name {
+            color: #c0a0a0;
+        }
+        
+        /* 已冻结道具样式 */
+        .tool-card.frozen {
+            background: linear-gradient(145deg, rgba(60, 80, 120, 0.7), rgba(40, 50, 90, 0.7));
+            border-color: rgba(80, 140, 200, 0.5);
+            cursor: not-allowed;
+        }
+        
+        .tool-card.frozen .tool-icon {
+            color: #80b0d0;
+        }
+        
+        .tool-card.frozen .tool-name {
+            color: #a0c0e0;
         }
         
         /* 推理日志 */
@@ -416,12 +444,14 @@
             transition: all 0.2s ease;
             position: relative;
             border: 2px solid transparent;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .suspect-cell:hover {
             background: rgba(80, 80, 140, 0.8);
             border-color: #9b59b6;
             transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.4);
         }
         
         .suspect-cell.eliminated::before {
@@ -562,6 +592,10 @@
             
             .modal-title {
                 font-size: 1.8rem;
+            }
+            
+            .tools-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
@@ -1073,7 +1107,7 @@
             currentDay.textContent = `第${gameState.currentDay}天`;
         }
 
-        // 渲染道具
+        // 渲染道具 - 重点优化部分
         function renderTools() {
             toolsContainer.innerHTML = '';
             
@@ -1085,14 +1119,11 @@
             gameState.tools.forEach((tool, index) => {
                 const toolCard = document.createElement('div');
                 let cardClass = 'tool-card';
-                let statusText = '';
                 
                 if (tool.used) {
                     cardClass += ' used';
-                    statusText = '已使用';
                 } else if (tool.status === 'frozen') {
                     cardClass += ' frozen';
-                    statusText = '已冻结';
                 }
                 
                 toolCard.className = cardClass;
@@ -1102,7 +1133,6 @@
                 toolCard.innerHTML = `
                     <div class="tool-icon"><i class="${tool.icon}"></i></div>
                     <div class="tool-name">${tool.name}</div>
-                    <div class="tool-status">${statusText}</div>
                 `;
                 
                 if (tool.status === 'active' && !tool.used) {
