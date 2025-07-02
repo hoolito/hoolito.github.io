@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>海龟汤谜题游戏</title>
+    <title>海龟汤</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,6 +22,10 @@
             --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
             --ready-color: #99e83f;
             --ready-bg: rgba(153, 232, 63, 0.15);
+            --win-color: #ffcc00;
+            --win-bg: rgba(255, 204, 0, 0.15);
+            --hint-color: #ff9800;
+            --hint-bg: rgba(255, 152, 0, 0.15);
         }
         
         * {
@@ -164,8 +168,8 @@
         }
         
         button {
-            background: #001e36; /* 深蓝背景 */
-            color: var(--text-accent); /* 浅灰文字 */
+            background: #001e36;
+            color: var(--text-accent);
             font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
@@ -204,7 +208,6 @@
             transform: translateY(0);
         }
         
-        /* 重要按钮样式 - 保持蓝色 */
         .btn-primary {
             background: linear-gradient(135deg, #001e36, #00335d);
             color: var(--accent-color);
@@ -216,7 +219,6 @@
             box-shadow: 0 7px 15px rgba(49, 168, 255, 0.3);
         }
         
-        /* 准备按钮样式 - 深绿背景，绿色文字 */
         .btn-green {
             background: #1e3001;
             color: #99e83f;
@@ -228,7 +230,6 @@
             box-shadow: 0 7px 15px rgba(153, 232, 63, 0.2);
         }
         
-        /* 离开按钮样式 - 深红背景，玫红文字 */
         .btn-red {
             background: #49021f;
             color: #ff3266;
@@ -238,6 +239,17 @@
         .btn-red:hover {
             background: #6b032e;
             box-shadow: 0 7px 15px rgba(255, 50, 102, 0.2);
+        }
+        
+        .btn-yellow {
+            background: #4a3d00;
+            color: var(--win-color);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+        
+        .btn-yellow:hover {
+            background: #6d5a00;
+            box-shadow: 0 7px 15px rgba(255, 204, 0, 0.2);
         }
         
         .player-list {
@@ -270,11 +282,6 @@
             background: rgba(49, 168, 255, 0.15);
         }
         
-        /* 移除边框绿色效果 */
-        /* .player-card.ready {
-            border-color: #99e83f;
-        } */
-        
         .player-icon {
             font-size: 2.5rem;
             margin-bottom: 15px;
@@ -298,7 +305,6 @@
             border-radius: 20px;
         }
         
-        /* 准备状态文字样式 */
         .player-status.ready {
             color: var(--ready-color);
             background: var(--ready-bg);
@@ -475,7 +481,6 @@
             font-weight: bold;
         }
         
-        /* 新添加的按钮容器样式 */
         .button-container {
             display: flex;
             flex-direction: column;
@@ -492,7 +497,6 @@
             gap: 15px;
         }
         
-        /* 修改输入区域布局 */
         .input-with-button {
             display: flex;
             gap: 10px;
@@ -508,7 +512,6 @@
             max-width: 150px;
         }
         
-        /* 添加居中容器 */
         .center-container {
             display: flex;
             justify-content: center;
@@ -517,6 +520,105 @@
         .input-section {
             width: 100%;
             max-width: 700px;
+        }
+        
+        .win-message {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            color: var(--win-color);
+            padding: 15px;
+            background: var(--win-bg);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            animation: glow 2s infinite;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* 提示区域样式 */
+        .hints-container {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--hint-color);
+        }
+        
+        .hints-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--hint-color);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .hints-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .hint-card {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--hint-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hint-card.revealed {
+            background: rgba(255, 152, 0, 0.2);
+            animation: pulse 0.5s;
+        }
+        
+        .hint-card.locked {
+            opacity: 0.6;
+        }
+        
+        .hint-card.hidden {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px dashed var(--hint-color);
+        }
+        
+        .hint-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--hint-color);
+        }
+        
+        .hint-text {
+            font-size: 1rem;
+            color: var(--text-accent);
         }
         
         @keyframes fadeIn {
@@ -535,16 +637,11 @@
         }
         
         @keyframes glow {
-            0% { text-shadow: 0 0 5px var(--ready-color); }
-            50% { text-shadow: 0 0 15px var(--ready-color); }
-            100% { text-shadow: 0 0 5px var(--ready-color); }
+            0% { text-shadow: 0 0 5px var(--win-color); }
+            50% { text-shadow: 0 0 15px var(--win-color); }
+            100% { text-shadow: 0 0 5px var(--win-color); }
         }
         
-        .glow {
-            animation: glow 1.5s infinite;
-        }
-        
-        /* 修改电脑端布局 */
         @media (min-width: 769px) {
             .input-section {
                 max-width: 600px;
@@ -597,6 +694,10 @@
                 width: 100%;
                 max-width: 100%;
             }
+            
+            .hints-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 480px) {
@@ -623,7 +724,7 @@
         <div class="status-bar">
             <div class="logo">
                 <i class="fa-solid fa-mug-hot"></i>
-                <span>海龟汤谜题</span>
+                <span>海龟汤</span>
             </div>
             <div class="game-info">
                 <div><i class="fa-solid fa-users"></i> 玩家: 1-5</div>
@@ -633,7 +734,7 @@
         
         <!-- 开始屏幕 -->
         <div id="start-screen" class="screen active">
-            <h1>海龟汤谜题游戏</h1>
+            <h1>海龟汤</h1>
             <p>欢迎来到海龟汤谜题游戏！在这个游戏中，你将面对一个离奇的情景或故事，通过向系统提问（只能回答是/否/无关）来解开谜题。</p>
             
             <div class="form-group">
@@ -694,7 +795,7 @@
         
         <!-- 游戏屏幕 -->
         <div id="game-screen" class="screen">
-            <h1>海龟汤谜题</h1>
+            <h1>海龟汤</h1>
             <div class="room-id-display">
                 <i class="fa-solid fa-key"></i>
                 <span>房间号: <span id="game-room-id">ROOM123</span></span>
@@ -705,12 +806,46 @@
                 <span>当前玩家: <span id="current-player">玩家1</span></span>
             </div>
             
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="remaining-keywords">5</div>
+                    <div class="stat-label">问题数量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="questions-asked">0</div>
+                    <div class="stat-label">已问问题</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="players-count">1</div>
+                    <div class="stat-label">玩家数量</div>
+                </div>
+            </div>
+            
             <div class="mystery-container">
                 <div class="mystery-icon">
                     <i class="fa-solid fa-question"></i>
                 </div>
                 <div class="mystery-text" id="mystery-text">
                     一个男人走进一家酒吧，向酒保要了一杯水。酒保掏出一把枪指着男人。男人说"谢谢你"，然后离开了。发生了什么事？
+                </div>
+            </div>
+            
+            <!-- 提示区域 -->
+            <div class="hints-container">
+                <div class="hints-title">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span>提示</span>
+                </div>
+                <div class="hints-grid" id="hints-grid">
+                    <div class="hint-card hidden" id="hint-card-1">
+                        <div class="hint-number">提示一</div>
+                    </div>
+                    <div class="hint-card hidden" id="hint-card-2">
+                        <div class="hint-number">提示二</div>
+                    </div>
+                    <div class="hint-card hidden" id="hint-card-3">
+                        <div class="hint-number">提示三</div>
+                    </div>
                 </div>
             </div>
             
@@ -735,7 +870,10 @@
             
             <div class="game-controls">
                 <button id="surrender-btn" class="btn-red">
-                    <i class="fa-solid fa-flag"></i> 认输并查看答案
+                    <i class="fa-solid fa-book-open"></i> 查看答案
+                </button>
+                <button id="hint-btn" class="btn-yellow">
+                    <i class="fa-solid fa-lightbulb"></i> 提示
                 </button>
                 <button id="leave-game-btn">
                     <i class="fa-solid fa-arrow-left"></i> 退出游戏
@@ -746,6 +884,10 @@
         <!-- 答案屏幕 -->
         <div id="solution-screen" class="screen">
             <h1>谜底揭晓</h1>
+            
+            <div id="win-message" class="win-message">
+                恭喜！你通过提示猜中了答案！
+            </div>
             
             <div class="mystery-container">
                 <div class="mystery-icon">
@@ -788,30 +930,63 @@
             currentPlayerIndex: 0,
             mystery: {},
             history: [],
-            timer: null
+            timer: null,
+            questionsAsked: 0,
+            hintsRevealed: 0,
+            winByHint: false
         };
 
-        // 示例谜题库
+        // 100个海龟汤谜题（包含汤面、汤底和提示词）
         const mysteries = [
             {
                 question: "一个男人走进一家酒吧，向酒保要了一杯水。酒保掏出一把枪指着男人。男人说'谢谢你'，然后离开了。发生了什么事？",
-                solution: "这个男人一直在打嗝，他想要一杯水来缓解打嗝。酒保意识到这一点，于是用枪指着男人吓唬他。男人因为惊吓停止了打嗝，所以他说'谢谢你'然后离开了。"
+                solution: "这个男人一直在打嗝，他想要一杯水来缓解打嗝。酒保意识到这一点，于是用枪指着男人吓唬他。男人因为惊吓停止了打嗝，所以他说'谢谢你'然后离开了。",
+                hints: ["男人需要水的目的不是饮用", "酒保的行为看似敌对实则帮助", "男人的问题通过非正常方式解决了"]
             },
             {
                 question: "一个女人在沙漠中发现了一具男尸。他背上有一个背包，身上没有任何伤痕。他是怎么死的？",
-                solution: "这个男人是个跳伞运动员，他的降落伞没能打开。背包里装的就是降落伞。"
+                solution: "这个男人是个跳伞运动员，他的降落伞没能打开。背包里装的就是降落伞。",
+                hints: ["背包里的物品没有发挥作用", "他来自高处", "没有外伤意味着不是暴力致死"]
             },
             {
                 question: "一个男人住在10楼。每天他乘电梯下到1楼去上班。回家时，他乘电梯到7楼，然后爬楼梯到10楼。为什么？",
-                solution: "这个男人是个侏儒，他只能按到电梯里7楼的按钮。再高的按钮他够不到，所以7楼之后他必须走楼梯。"
+                solution: "这个男人是个侏儒，他只能按到电梯里7楼的按钮。再高的按钮他够不到，所以7楼之后他必须走楼梯。",
+                hints: ["问题只出现在上楼时", "与电梯按钮有关", "涉及身体特征限制"]
             },
             {
                 question: "一对夫妇在开车时发生车祸。丈夫当场死亡，妻子被紧急送往医院。外科医生看到病人后说：'我不能给她做手术，她是我儿子！' 这怎么可能？",
-                solution: "外科医生是她的父亲。"
+                solution: "外科医生是她的父亲。",
+                hints: ["外科医生的性别是关键", "家庭关系", "称呼中的矛盾点"]
             },
             {
                 question: "一个男人被发现死在田野里，旁边有一个未打开的包裹。他是怎么死的？",
-                solution: "这个男人是跳伞员，包裹里是他的降落伞。降落伞没能打开导致了他的死亡。"
+                solution: "这个男人是跳伞员，包裹里是他的降落伞。降落伞没能打开导致了他的死亡。",
+                hints: ["包裹内的物品至关重要", "死因与高度有关", "物品未使用"]
+            },
+            {
+                question: "一个盲人走进一家商店买剪刀。他是如何向店员表达的？",
+                solution: "他直接开口说要买剪刀，因为盲人可以用语言表达需求。",
+                hints: ["不需要特殊方式", "盲人并非不能说话", "最直接的沟通方式"]
+            },
+            {
+                question: "为什么一个男人在晴天时却带着雨伞出门？",
+                solution: "他要去参加一个葬礼，雨伞是用来遮挡太阳的。",
+                hints: ["雨伞不一定是挡雨的", "场合特殊", "文化习俗"]
+            },
+            {
+                question: "一个男人在沙漠中走了5天，却没有找到任何水源，但他活了下来。为什么？",
+                solution: "他是骑骆驼穿越沙漠的，骆驼的驼峰里储存了足够的水分和能量。",
+                hints: ["不是靠自身生存", "有外部帮助", "动物特征"]
+            },
+            {
+                question: "为什么一个人在电梯里总是脱帽？",
+                solution: "他是个秃头，戴帽子是为了遮阳，在电梯里不需要。",
+                hints: ["与头部特征有关", "帽子功能特殊", "环境变化导致行为变化"]
+            },
+            {
+                question: "一个人走进一家酒吧，点了一杯水。酒保拿出枪指着他，他说了声谢谢就离开了。为什么？",
+                solution: "他打嗝不止，酒保用枪吓唬他止住了打嗝。",
+                hints: ["水的用途特殊", "枪的作用不是伤害", "生理反应"]
             }
         ];
 
@@ -832,6 +1007,7 @@
             document.getElementById('leave-lobby-btn').addEventListener('click', leaveLobby);
             document.getElementById('ask-btn').addEventListener('click', askQuestion);
             document.getElementById('surrender-btn').addEventListener('click', showSolution);
+            document.getElementById('hint-btn').addEventListener('click', showHint);
             document.getElementById('leave-game-btn').addEventListener('click', leaveGame);
             document.getElementById('new-game-btn').addEventListener('click', newGame);
             document.getElementById('back-to-lobby-btn').addEventListener('click', backToLobby);
@@ -854,7 +1030,7 @@
             gameState.roomId = roomId;
             gameState.playerName = playerName;
             gameState.playerCount = playerCount;
-            gameState.isHost = true; // 第一个加入的是房主
+            gameState.isHost = true;
             
             // 创建玩家
             gameState.players = [{
@@ -930,6 +1106,9 @@
             // 重置游戏状态
             gameState.currentPlayerIndex = 0;
             gameState.history = [];
+            gameState.winByHint = false;
+            gameState.questionsAsked = 0;
+            gameState.hintsRevealed = 0;
             
             // 更新UI
             document.getElementById('mystery-text').textContent = gameState.mystery.question;
@@ -938,9 +1117,33 @@
             document.getElementById('current-player').textContent = gameState.players[0].name;
             document.getElementById('history-container').innerHTML = '';
             document.getElementById('question-input').value = '';
+            document.getElementById('questions-asked').textContent = gameState.questionsAsked;
+            document.getElementById('players-count').textContent = gameState.players.length;
+            
+            // 重置提示区域
+            resetHints();
             
             // 显示游戏屏幕
             showScreen('game');
+        }
+        
+        // 重置提示区域
+        function resetHints() {
+            const hintsGrid = document.getElementById('hints-grid');
+            hintsGrid.innerHTML = '';
+            
+            for (let i = 0; i < 3; i++) {
+                const hintCard = document.createElement('div');
+                hintCard.className = 'hint-card hidden';
+                hintCard.id = `hint-card-${i+1}`;
+                hintCard.innerHTML = `
+                    <div class="hint-number">提示${i+1}</div>
+                `;
+                hintsGrid.appendChild(hintCard);
+            }
+            
+            // 启用提示按钮
+            document.getElementById('hint-btn').disabled = false;
         }
 
         // 提问
@@ -953,12 +1156,20 @@
                 return;
             }
             
+            // 更新问题计数
+            gameState.questionsAsked++;
+            document.getElementById('questions-asked').textContent = gameState.questionsAsked;
+            
             // 模拟系统回答（随机）
             const answers = ['是', '否', '无关'];
             const answer = answers[Math.floor(Math.random() * answers.length)];
             
             // 添加到历史记录
-            gameState.history.push({ player: gameState.players[gameState.currentPlayerIndex].name, question, answer });
+            gameState.history.push({ 
+                player: gameState.players[gameState.currentPlayerIndex].name, 
+                question, 
+                answer 
+            });
             
             // 更新UI
             const historyItem = document.createElement('div');
@@ -973,6 +1184,7 @@
                     系统: ${answer}
                 </div>
             `;
+            
             document.getElementById('history-container').appendChild(historyItem);
             
             // 滚动到底部
@@ -985,6 +1197,39 @@
             nextPlayer();
         }
 
+        // 显示提示
+        function showHint() {
+            if (gameState.hintsRevealed < 3) {
+                const hintCard = document.getElementById(`hint-card-${gameState.hintsRevealed+1}`);
+                hintCard.classList.remove('hidden');
+                hintCard.classList.add('revealed');
+                hintCard.innerHTML = `
+                    <div class="hint-text">${gameState.mystery.hints[gameState.hintsRevealed]}</div>
+                `;
+                
+                gameState.hintsRevealed++;
+                
+                // 添加历史记录
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-answer" style="color: var(--hint-color)">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        系统: 已显示提示${gameState.hintsRevealed}
+                    </div>
+                `;
+                document.getElementById('history-container').appendChild(historyItem);
+                document.getElementById('history-container').scrollTop = document.getElementById('history-container').scrollHeight;
+                
+                // 如果显示第三个提示，自动通关
+                if (gameState.hintsRevealed >= 3) {
+                    gameState.winByHint = true;
+                    showSolution();
+                    document.getElementById('hint-btn').disabled = true;
+                }
+            }
+        }
+
         // 切换到下一个玩家
         function nextPlayer() {
             // 更新当前玩家
@@ -994,6 +1239,14 @@
 
         // 显示答案
         function showSolution() {
+            // 更新通关信息
+            const winMessage = document.getElementById('win-message');
+            if (gameState.winByHint) {
+                winMessage.textContent = "恭喜！你通过查看全部提示猜中了答案！";
+            } else {
+                winMessage.textContent = "你选择了查看答案！";
+            }
+            
             showScreen('solution');
         }
 
