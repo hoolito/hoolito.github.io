@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>像素风小兔子挖金矿</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #121212;
+            font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif;
+            overflow: hidden;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 800px;
+            max-width: 100%;
+            text-align: center;
+        }
+        
+        .game-header {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 10px;
+        }
+        
+        .title-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .game-title {
+            font-size: 36px;
+            color: #e6b400;
+            text-shadow: 2px 2px 0 #000;
+            letter-spacing: 2px;
+            padding: 12px 30px;
+            background: #2a2a2a;
+            border-radius: 12px;
+            border: 3px solid #444;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(40, 40, 40, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #444;
+        }
+        
+        .score-container, .lives-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stats-label {
+            font-size: 22px;
+            color: #aaa;
+        }
+        
+        #score {
+            font-size: 32px;
+            color: #e6b400;
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        canvas {
+            background-color: #2c2c2c;
+            border: 4px solid #444;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            image-rendering: pixelated;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #3a3a3a;
+            border: none;
+            border-bottom: 4px solid #2a2a2a;
+            color: #e0e0e0;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.1s;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #2a2a2a;
+            font-weight: bold;
+            letter-spacing: 1px;
+            min-width: 180px;
+        }
+        
+        .btn:hover {
+            background: #4a4a4a;
+        }
+        
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #2a2a2a;
+            border-bottom-width: 0;
+        }
+        
+        .mobile-controls {
+            display: none;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .mobile-controls button {
+            background: #3a3a3a;
+            border: none;
+            border-bottom: 4px solid #2a2a2a;
+            color: #e0e0e0;
+            padding: 18px;
+            font-size: 26px;
+            font-family: inherit;
+            border-radius: 10px;
+            box-shadow: 0 4px 0 #2a2a2a;
+            font-weight: bold;
+        }
+        
+        .direction-controls {
+            grid-column: 1 / 4;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .instructions {
+            background: rgba(40, 40, 40, 0.8);
+            border: 2px solid #444;
+            border-radius: 12px;
+            color: #ccc;
+            padding: 20px;
+            margin-top: 25px;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        
+        .instructions h3 {
+            color: #e6b400;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        .instructions ul {
+            text-align: left;
+            padding-left: 30px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+        }
+        
+        .key {
+            display: inline-block;
+            background: #333;
+            color: #e6b400;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 0 4px;
+            border: 1px solid #555;
+            font-size: 18px;
+        }
+        
+        /* 移动设备适配 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .game-container {
+                width: 100%;
+            }
+            
+            .game-header {
+                margin-bottom: 15px;
+                gap: 12px;
+            }
+            
+            .game-title {
+                font-size: 26px;
+                padding: 10px 22px;
+            }
+            
+            .stats-container {
+                padding: 15px;
+            }
+            
+            .stats-label {
+                font-size: 18px;
+            }
+            
+            #score {
+                font-size: 24px;
+            }
+            
+            .mobile-controls {
+                display: grid;
+            }
+            
+            .controls {
+                display: none;
+            }
+            
+            .instructions {
+                font-size: 14px;
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+                font-size: 18px;
+                min-width: 150px;
+            }
+            
+            .heart {
+                width: 20px;
+                height: 20px;
+            }
+            .heart:before, .heart:after {
+                width: 20px;
+                height: 20px;
+            }
+            .heart:before {
+                top: -10px;
+            }
+            .heart:after {
+                left: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) and (orientation: landscape) {
+            .game-title {
+                font-size: 22px;
+                padding: 8px 18px;
+            }
+            
+            .stats-label {
+                font-size: 16px;
+            }
+            
+            #score {
+                font-size: 20px;
+            }
+            
+            .instructions {
+                display: none;
+            }
+            
+            .heart {
+                width: 16px;
+                height: 16px;
+            }
+            .heart:before, .heart:after {
+                width: 16px;
+                height: 16px;
+            }
+            .heart:before {
+                top: -8px;
+            }
+            .heart:after {
+                left: 8px;
+            }
+        }
+        
+        /* 游戏结束弹窗 */
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 30, 0.95);
+            border: 3px solid #e6b400;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            color: #e0e0e0;
+            z-index: 10;
+            display: none;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+        
+        .game-over h2 {
+            color: #e6b400;
+            margin-bottom: 25px;
+            font-size: 40px;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .game-over p {
+            margin: 20px 0;
+            font-size: 28px;
+        }
+        
+        /* 生命值心形 - 优化大小和间距 */
+        .lives-hearts {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .heart {
+            width: 24px;
+            height: 24px;
+            background-color: #ff6b6b;
+            position: relative;
+            transform: rotate(-45deg);
+            flex-shrink: 0;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: "";
+            width: 24px;
+            height: 24px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart:before {
+            top: -12px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: 12px;
+        }
+        
+        /* 粒子效果 */
+        .particle {
+            position: absolute;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        /* 矿灯效果 */
+        .miner-light {
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="title-container">
+                <h1 class="game-title">小兔子挖金矿</h1>
+            </div>
+            
+            <div class="stats-container">
+                <div class="score-container">
+                    <div class="stats-label">得分:</div>
+                    <div id="score">0</div>
+                </div>
+                
+                <div class="lives-container">
+                    <div class="stats-label">生命:</div>
+                    <div class="lives-hearts" id="livesHearts">
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn">开始游戏</button>
+            <button id="restartBtn" class="btn">重新开始</button>
+        </div>
+        
+        <div class="mobile-controls">
+            <div class="direction-controls">
+                <button id="leftBtn" class="mobile-btn">←</button>
+                <button id="upBtn" class="mobile-btn">↑</button>
+                <button id="rightBtn" class="mobile-btn">→</button>
+            </div>
+            <button id="digBtn" class="mobile-btn">挖矿</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>游戏说明</h3>
+            <ul>
+                <li>控制小兔子使用 <span class="key">←</span> <span class="key">→</span> 方向键左右移动</li>
+                <li>按 <span class="key">空格键</span> 或点击屏幕上的挖矿按钮收集金矿</li>
+                <li>收集金矿获得分数，碰到石头会扣分</li>
+                <li>收集10个金矿获得额外生命</li>
+                <li>生命值耗尽游戏结束</li>
+            </ul>
+        </div>
+        
+        <div id="gameOver" class="game-over">
+            <h2>游戏结束</h2>
+            <p>最终得分: <span id="finalScore">0</span></p>
+            <button id="playAgainBtn" class="btn">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏主要变量
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const livesHearts = document.getElementById('livesHearts');
+        
+        // 移动控制按钮
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const upBtn = document.getElementById('upBtn');
+        const digBtn = document.getElementById('digBtn');
+        
+        // 游戏状态
+        let gameRunning = false;
+        let score = 0;
+        let lives = 3;
+        let gameSpeed = 3;
+        let particles = [];
+        let minerLight = null;
+        
+        // 玩家角色
+        const player = {
+            x: canvas.width / 2 - 15,
+            y: canvas.height - 60,
+            width: 30,
+            height: 40,
+            speed: 5,
+            dx: 0,
+            isDigging: false,
+            digTimer: 0
+        };
+        
+        // 金矿数组
+        let golds = [];
+        // 障碍物数组
+        let obstacles = [];
+        
+        // 像素风小兔子绘制
+        function drawPlayer() {
+            ctx.save();
+            
+            // 兔子的身体（棕色）
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(player.x, player.y + 10, player.width, player.height - 10);
+            
+            // 兔子的头（浅棕色）
+            ctx.fillStyle = '#CD853F';
+            ctx.fillRect(player.x, player.y, player.width, 20);
+            
+            // 兔子的耳朵
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(player.x + 5, player.y - 15, 6, 15);
+            ctx.fillRect(player.x + 19, player.y - 15, 6, 15);
+            
+            // 兔子的眼睛（黑色）
+            ctx.fillStyle = '#000';
+            ctx.fillRect(player.x + 8, player.y + 5, 4, 4);
+            ctx.fillRect(player.x + 18, player.y + 5, 4, 4);
+            
+            // 兔子的鼻子（粉色）
+            ctx.fillStyle = '#FF69B4';
+            ctx.fillRect(player.x + 14, player.y + 10, 2, 3);
+            
+            // 如果正在挖矿，绘制镐头
+            if (player.isDigging) {
+                ctx.fillStyle = '#808080';
+                // 镐头杆
+                ctx.fillRect(player.x + player.width/2 - 2, player.y - 30, 4, 30);
+                // 镐头
+                ctx.beginPath();
+                ctx.moveTo(player.x + player.width/2 - 2, player.y - 30);
+                ctx.lineTo(player.x + player.width/2 - 15, player.y - 40);
+                ctx.lineTo(player.x + player.width/2 + 15, player.y - 40);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            ctx.restore();
+        }
+        
+        // 绘制金矿
+        function drawGold(gold) {
+            ctx.save();
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(gold.x, gold.y, gold.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 金矿内部细节
+            ctx.fillStyle = '#D4AF37';
+            ctx.beginPath();
+            ctx.arc(gold.x - 3, gold.y - 2, 3, 0, Math.PI * 2);
+            ctx.arc(gold.x + 4, gold.y + 3, 2, 0, Math.PI * 2);
+            ctx.arc(gold.x - 2, gold.y + 4, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+        
+        // 绘制障碍物（石头）
+        function drawObstacle(obstacle) {
+            ctx.save();
+            ctx.fillStyle = '#808080';
+            ctx.beginPath();
+            ctx.arc(obstacle.x, obstacle.y, obstacle.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 石头纹理
+            ctx.fillStyle = '#696969';
+            ctx.beginPath();
+            ctx.arc(obstacle.x - 5, obstacle.y - 3, 2, 0, Math.PI * 2);
+            ctx.arc(obstacle.x + 4, obstacle.y + 2, 3, 0, Math.PI * 2);
+            ctx.arc(obstacle.x, obstacle.y + 3, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+        
+        // 更新生命值显示
+        function updateLivesDisplay() {
+            livesHearts.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                livesHearts.appendChild(heart);
+            }
+        }
+        
+        // 绘制背景（矿洞）
+        function drawBackground() {
+            // 绘制泥土背景
+            ctx.fillStyle = '#2c2c2c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制矿洞纹理
+            ctx.fillStyle = '#252525';
+            for (let i = 0; i < 80; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 8 + 2;
+                ctx.fillRect(x, y, size, size);
+            }
+            
+            // 绘制矿洞顶部
+            ctx.fillStyle = '#1f1f1f';
+            ctx.fillRect(0, 0, canvas.width, 50);
+            
+            // 绘制矿洞墙壁纹理
+            ctx.fillStyle = '#222';
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 50);
+                ctx.lineTo(x + 20, 70);
+                ctx.lineTo(x, 90);
+                ctx.stroke();
+            }
+            
+            // 绘制网格线（增强像素感）
+            ctx.strokeStyle = 'rgba(60, 60, 60, 0.2)';
+            ctx.lineWidth = 1;
+            
+            // 水平线
+            for (let y = 0; y < canvas.height; y += 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // 垂直线
+            for (let x = 0; x < canvas.width; x += 20) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+        }
+        
+        // 创建矿灯光效
+        function createMinerLight() {
+            return {
+                x: player.x + player.width/2,
+                y: player.y,
+                width: 200,
+                height: 100,
+                opacity: 0.7
+            };
+        }
+        
+        // 绘制矿灯光效
+        function drawMinerLight() {
+            if (!minerLight) return;
+            
+            ctx.save();
+            ctx.globalAlpha = minerLight.opacity;
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+            
+            // 创建锥形光效
+            ctx.beginPath();
+            ctx.moveTo(minerLight.x, minerLight.y);
+            ctx.lineTo(minerLight.x - minerLight.width/2, minerLight.y + minerLight.height);
+            ctx.lineTo(minerLight.x + minerLight.width/2, minerLight.y + minerLight.height);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        // 创建金矿
+        function createGold() {
+            const radius = 12;
+            const gold = {
+                x: Math.random() * (canvas.width - radius * 2) + radius,
+                y: -radius,
+                radius: radius,
+                speed: Math.random() * 2 + 1,
+                shine: Math.random() * 0.5 + 0.5
+            };
+            golds.push(gold);
+        }
+        
+        // 创建障碍物
+        function createObstacle() {
+            const radius = 15;
+            const obstacle = {
+                x: Math.random() * (canvas.width - radius * 2) + radius,
+                y: -radius,
+                radius: radius,
+                speed: Math.random() * 2 + 1.5
+            };
+            obstacles.push(obstacle);
+        }
+        
+        // 创建粒子效果
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    color: color,
+                    radius: Math.random() * 4 + 1,
+                    speedX: (Math.random() - 0.5) * 4,
+                    speedY: (Math.random() - 0.5) * 4,
+                    life: 30
+                });
+            }
+        }
+        
+        // 更新粒子
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life--;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+        
+        // 绘制粒子
+        function drawParticles() {
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.life / 30;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+        
+        // 更新金矿位置
+        function updateGold() {
+            for (let i = golds.length - 1; i >= 0; i--) {
+                const gold = golds[i];
+                gold.y += gold.speed;
+                
+                // 移除超出屏幕的金矿
+                if (gold.y > canvas.height + gold.radius) {
+                    golds.splice(i, 1);
+                    continue;
+                }
+                
+                // 检测挖矿碰撞
+                if (player.isDigging) {
+                    const digX = player.x + player.width/2;
+                    const digY = player.y - 40;
+                    const distance = Math.sqrt((digX - gold.x) ** 2 + (digY - gold.y) ** 2);
+                    
+                    if (distance < player.width/2 + gold.radius) {
+                        score += 10;
+                        scoreDisplay.textContent = score;
+                        createParticles(gold.x, gold.y, '#FFD700', 15);
+                        golds.splice(i, 1);
+                        
+                        // 每收集10个金矿获得额外生命
+                        if (score % 100 === 0) {
+                            lives = Math.min(lives + 1, 5);
+                            updateLivesDisplay();
+                            createParticles(player.x + player.width/2, player.y, '#ff6b6b', 20);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 更新障碍物位置
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.y += obstacle.speed;
+                
+                // 移除超出屏幕的障碍物
+                if (obstacle.y > canvas.height + obstacle.radius) {
+                    obstacles.splice(i, 1);
+                    continue;
+                }
+                
+                // 检测玩家碰撞
+                const playerCenterX = player.x + player.width / 2;
+                const playerCenterY = player.y + player.height / 2;
+                const distance = Math.sqrt(
+                    (playerCenterX - obstacle.x) ** 2 + 
+                    (playerCenterY - obstacle.y) ** 2
+                );
+                
+                if (distance < player.width / 2 + obstacle.radius) {
+                    lives--;
+                    updateLivesDisplay();
+                    createParticles(obstacle.x, obstacle.y, '#808080', 20);
+                    obstacles.splice(i, 1);
+                    
+                    if (lives <= 0) {
+                        gameOver();
+                    }
+                }
+            }
+        }
+        
+        // 更新玩家位置
+        function updatePlayer() {
+            player.x += player.dx;
+            
+            // 边界检查
+            if (player.x < 0) {
+                player.x = 0;
+            }
+            if (player.x + player.width > canvas.width) {
+                player.x = canvas.width - player.width;
+            }
+            
+            // 更新挖矿状态
+            if (player.isDigging) {
+                player.digTimer++;
+                if (player.digTimer > 20) {
+                    player.isDigging = false;
+                    player.digTimer = 0;
+                }
+            }
+            
+            // 更新矿灯光效位置
+            minerLight = createMinerLight();
+        }
+        
+        // 绘制游戏
+        function draw() {
+            drawBackground();
+            
+            // 绘制矿灯光效（在背景和物体之间）
+            drawMinerLight();
+            
+            // 绘制金矿
+            golds.forEach(drawGold);
+            
+            // 绘制障碍物
+            obstacles.forEach(drawObstacle);
+            
+            // 绘制粒子
+            drawParticles();
+            
+            drawPlayer();
+        }
+        
+        // 更新游戏状态
+        function update() {
+            updatePlayer();
+            updateGold();
+            updateObstacles();
+            updateParticles();
+            draw();
+            
+            // 随机生成金矿和障碍物
+            if (Math.random() < 0.03) {
+                createGold();
+            }
+            if (Math.random() < 0.02) {
+                createObstacle();
+            }
+        }
+        
+        // 清除画布
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // 键盘控制
+        function keyDown(e) {
+            if (!gameRunning) return;
+            
+            if (e.key === 'ArrowRight' || e.key === 'd') {
+                player.dx = player.speed;
+            } else if (e.key === 'ArrowLeft' || e.key === 'a') {
+                player.dx = -player.speed;
+            } else if (e.key === ' ' && !player.isDigging) {
+                player.isDigging = true;
+            }
+        }
+        
+        function keyUp(e) {
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'ArrowLeft' || e.key === 'a') {
+                player.dx = 0;
+            }
+        }
+        
+        // 移动端控制
+        function setupMobileControls() {
+            leftBtn.addEventListener('touchstart', () => player.dx = -player.speed);
+            leftBtn.addEventListener('touchend', () => player.dx = 0);
+            
+            rightBtn.addEventListener('touchstart', () => player.dx = player.speed);
+            rightBtn.addEventListener('touchend', () => player.dx = 0);
+            
+            digBtn.addEventListener('touchstart', () => {
+                if (!player.isDigging) player.isDigging = true;
+            });
+            
+            // 防止按钮点击触发页面滚动
+            document.querySelectorAll('.mobile-btn').forEach(btn => {
+                btn.addEventListener('touchstart', (e) => e.preventDefault());
+            });
+        }
+        
+        // 开始游戏
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            lives = 3;
+            golds = [];
+            obstacles = [];
+            particles = [];
+            player.x = canvas.width / 2 - 15;
+            player.dx = 0;
+            player.isDigging = false;
+            scoreDisplay.textContent = score;
+            gameOverScreen.style.display = 'none';
+            updateLivesDisplay();
+            
+            minerLight = createMinerLight();
+            
+            startBtn.textContent = '游戏中...';
+            startBtn.disabled = true;
+            
+            // 初始生成一些金矿和障碍物
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createGold(), i * 500);
+                setTimeout(() => createObstacle(), i * 700);
+            }
+        }
+        
+        // 游戏结束
+        function gameOver() {
+            gameRunning = false;
+            finalScoreDisplay.textContent = score;
+            gameOverScreen.style.display = 'block';
+            
+            startBtn.textContent = '开始游戏';
+            startBtn.disabled = false;
+        }
+        
+        // 初始化游戏
+        function init() {
+            // 事件监听
+            document.addEventListener('keydown', keyDown);
+            document.addEventListener('keyup', keyUp);
+            
+            startBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('click', startGame);
+            playAgainBtn.addEventListener('click', startGame);
+            
+            setupMobileControls();
+            
+            // 初始绘制
+            drawBackground();
+            drawPlayer();
+            updateLivesDisplay();
+            
+            // 游戏循环
+            function gameLoop() {
+                if (gameRunning) {
+                    clearCanvas();
+                    update();
+                }
+                requestAnimationFrame(gameLoop);
+            }
+            
+            gameLoop();
+        }
+        
+        // 页面加载完成后初始化游戏
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
