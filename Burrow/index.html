@@ -173,6 +173,8 @@
             margin-top: 25px;
             font-size: 16px;
             line-height: 1.7;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
         .instructions h3 {
@@ -214,7 +216,7 @@
             border-radius: 8px;
         }
         
-        /* 新增：桌面按钮控制区域 */
+        /* 桌面按钮控制区域 */
         .desktop-controls {
             display: flex;
             justify-content: center;
@@ -286,6 +288,7 @@
             .instructions {
                 font-size: 14px;
                 padding: 15px;
+                max-height: 150px;
             }
             
             .btn {
@@ -376,7 +379,8 @@
             }
             
             .instructions {
-                display: none;
+                display: block;
+                max-height: 200px;
             }
             
             .touch-instruction {
@@ -491,14 +495,6 @@
             display: none;
         }
         
-        /* 空格按钮样式 */
-        .space-btn {
-            min-width: 120px;
-            font-size: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
         /* 新增：挖矿提示 */
         .dig-indicator {
             position: absolute;
@@ -513,6 +509,23 @@
         @keyframes pulse {
             0% { transform: scale(0.5); opacity: 0.7; }
             100% { transform: scale(2); opacity: 0; }
+        }
+        
+        /* 新增：金币收集动画 */
+        .gold-collect-animation {
+            position: absolute;
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 10;
+            animation: floatUp 1s ease-out;
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
         }
     </style>
 </head>
@@ -541,24 +554,22 @@
         </div>
         
         <canvas id="gameCanvas" width="800" height="500"></canvas>
-        <div class="touch-instruction">左右拖动小兔子移动，点击屏幕任意位置挖矿</div>
+        <div class="touch-instruction">左右拖动小兔子移动，自动收集金币</div>
         
         <div class="controls">
             <button id="startBtn" class="btn">开始游戏</button>
             <button id="restartBtn" class="btn">重新开始</button>
         </div>
         
-        <!-- 新增：桌面控制按钮 -->
+        <!-- 桌面控制按钮 -->
         <div class="desktop-controls">
             <button id="desktopLeftBtn" class="desktop-btn">←</button>
-            <button id="desktopSpaceBtn" class="desktop-btn space-btn">空格</button>
             <button id="desktopRightBtn" class="desktop-btn">→</button>
         </div>
         
         <div class="mobile-controls">
             <div class="direction-controls">
                 <button id="leftBtn" class="mobile-btn">←</button>
-                <button id="spaceBtn" class="mobile-btn space-btn">空格</button>
                 <button id="rightBtn" class="mobile-btn">→</button>
             </div>
         </div>
@@ -567,10 +578,11 @@
             <h3>游戏说明</h3>
             <ul>
                 <li>控制小兔子使用 <span class="key">←</span> <span class="key">→</span> 方向键或按钮左右移动</li>
-                <li>按 <span class="key">空格键</span> 或点击屏幕上的空格按钮/屏幕任意位置收集金矿</li>
+                <li>小兔子接触到金币会自动收集</li>
                 <li>收集金矿获得分数，碰到石头会扣分</li>
                 <li>收集10个金矿获得额外生命</li>
                 <li>生命值耗尽游戏结束</li>
+                <li>移动设备可以左右拖动小兔子移动</li>
             </ul>
         </div>
         
@@ -599,12 +611,10 @@
         // 移动控制按钮
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
-        const spaceBtn = document.getElementById('spaceBtn');
         
         // 桌面控制按钮
         const desktopLeftBtn = document.getElementById('desktopLeftBtn');
         const desktopRightBtn = document.getElementById('desktopRightBtn');
-        const desktopSpaceBtn = document.getElementById('desktopSpaceBtn');
         
         // 游戏状态
         let gameRunning = false;
@@ -617,6 +627,7 @@
         let dragStartX = 0;
         let playerStartX = 0;
         let isMobile = false;
+        let lastGoldCollectTime = 0;
         
         // 玩家角色
         const player = {
@@ -625,9 +636,7 @@
             width: 30,
             height: 40,
             speed: 5,
-            dx: 0,
-            isDigging: false,
-            digTimer: 0
+            dx: 0
         };
         
         // 金矿数组
@@ -667,20 +676,6 @@
             // 兔子的鼻子（粉色）
             ctx.fillStyle = '#FF69B4';
             ctx.fillRect(player.x + 14, player.y + 10, 2, 3);
-            
-            // 如果正在挖矿，绘制镐头
-            if (player.isDigging) {
-                ctx.fillStyle = '#808080';
-                // 镐头杆
-                ctx.fillRect(player.x + player.width/2 - 2, player.y - 30, 4, 30);
-                // 镐头
-                ctx.beginPath();
-                ctx.moveTo(player.x + player.width/2 - 2, player.y - 30);
-                ctx.lineTo(player.x + player.width/2 - 15, player.y - 40);
-                ctx.lineTo(player.x + player.width/2 + 15, player.y - 40);
-                ctx.closePath();
-                ctx.fill();
-            }
             
             ctx.restore();
         }
@@ -878,6 +873,25 @@
             });
         }
         
+        // 创建金币收集动画
+        function createGoldCollectAnimation(x, y) {
+            const now = Date.now();
+            if (now - lastGoldCollectTime < 200) return;
+            
+            lastGoldCollectTime = now;
+            
+            const animation = document.createElement('div');
+            animation.className = 'gold-collect-animation';
+            animation.textContent = '+10';
+            animation.style.left = `${x}px`;
+            animation.style.top = `${y}px`;
+            document.body.appendChild(animation);
+            
+            setTimeout(() => {
+                animation.remove();
+            }, 1000);
+        }
+        
         // 更新金矿位置
         function updateGold() {
             for (let i = golds.length - 1; i >= 0; i--) {
@@ -890,24 +904,26 @@
                     continue;
                 }
                 
-                // 检测挖矿碰撞
-                if (player.isDigging) {
-                    const digX = player.x + player.width/2;
-                    const digY = player.y - 40;
-                    const distance = Math.sqrt((digX - gold.x) ** 2 + (digY - gold.y) ** 2);
+                // 检测金币碰撞
+                const playerCenterX = player.x + player.width / 2;
+                const playerCenterY = player.y + player.height / 2;
+                const distance = Math.sqrt(
+                    (playerCenterX - gold.x) ** 2 + 
+                    (playerCenterY - gold.y) ** 2
+                );
+                
+                if (distance < player.width / 2 + gold.radius) {
+                    score += 10;
+                    scoreDisplay.textContent = score;
+                    createParticles(gold.x, gold.y, '#FFD700', 15);
+                    createGoldCollectAnimation(gold.x, gold.y);
+                    golds.splice(i, 1);
                     
-                    if (distance < player.width/2 + gold.radius) {
-                        score += 10;
-                        scoreDisplay.textContent = score;
-                        createParticles(gold.x, gold.y, '#FFD700', 15);
-                        golds.splice(i, 1);
-                        
-                        // 每收集10个金矿获得额外生命
-                        if (score % 100 === 0) {
-                            lives = Math.min(lives + 1, 5);
-                            updateLivesDisplay();
-                            createParticles(player.x + player.width/2, player.y, '#ff6b6b', 20);
-                        }
+                    // 每收集10个金矿获得额外生命
+                    if (score % 100 === 0) {
+                        lives = Math.min(lives + 1, 5);
+                        updateLivesDisplay();
+                        createParticles(player.x + player.width/2, player.y, '#ff6b6b', 20);
                     }
                 }
             }
@@ -956,15 +972,6 @@
             }
             if (player.x + player.width > canvas.width) {
                 player.x = canvas.width - player.width;
-            }
-            
-            // 更新挖矿状态
-            if (player.isDigging) {
-                player.digTimer++;
-                if (player.digTimer > 20) {
-                    player.isDigging = false;
-                    player.digTimer = 0;
-                }
             }
             
             // 更新矿灯光效位置
@@ -1020,8 +1027,6 @@
                 player.dx = player.speed;
             } else if (e.key === 'ArrowLeft' || e.key === 'a') {
                 player.dx = -player.speed;
-            } else if (e.key === ' ' && !player.isDigging) {
-                player.isDigging = true;
             }
         }
         
@@ -1044,39 +1049,6 @@
                     e.preventDefault();
                 });
             });
-        }
-        
-        // 新增：移动端单击挖矿
-        function setupTapDig() {
-            canvas.addEventListener('touchstart', (e) => {
-                if (!gameRunning) return;
-                e.preventDefault();
-                
-                // 如果不是拖动操作，则挖矿
-                if (!isDragging) {
-                    if (!player.isDigging) {
-                        player.isDigging = true;
-                        
-                        // 显示挖矿效果
-                        showDigIndicator(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }
-            });
-        }
-        
-        // 显示挖矿提示效果
-        function showDigIndicator(x, y) {
-            const indicator = document.createElement('div');
-            indicator.className = 'dig-indicator';
-            indicator.style.left = (x - 25) + 'px';
-            indicator.style.top = (y - 25) + 'px';
-            indicator.style.width = '50px';
-            indicator.style.height = '50px';
-            document.body.appendChild(indicator);
-            
-            setTimeout(() => {
-                indicator.remove();
-            }, 500);
         }
         
         function handleTouchStart(e) {
@@ -1126,7 +1098,6 @@
             particles = [];
             player.x = canvas.width / 2 - 15;
             player.dx = 0;
-            player.isDigging = false;
             scoreDisplay.textContent = score;
             gameOverScreen.style.display = 'none';
             updateLivesDisplay();
@@ -1183,37 +1154,27 @@
                 if (player.dx > 0) player.dx = 0;
             });
             
-            desktopSpaceBtn.addEventListener('click', () => {
-                if (gameRunning && !player.isDigging) player.isDigging = true;
-            });
-            
             // 移动端添加触摸控制
             if (isMobile) {
                 setupTouchControls();
-                setupTapDig();
                 
-                // 空格按钮事件
-                spaceBtn.addEventListener('touchstart', () => {
-                    if (!player.isDigging) player.isDigging = true;
+                // 添加移动按钮事件
+                leftBtn.addEventListener('touchstart', () => {
+                    player.dx = -player.speed;
+                });
+                
+                rightBtn.addEventListener('touchstart', () => {
+                    player.dx = player.speed;
+                });
+                
+                leftBtn.addEventListener('touchend', () => {
+                    if (player.dx < 0) player.dx = 0;
+                });
+                
+                rightBtn.addEventListener('touchend', () => {
+                    if (player.dx > 0) player.dx = 0;
                 });
             }
-            
-            // 添加移动按钮事件
-            leftBtn.addEventListener('touchstart', () => {
-                player.dx = -player.speed;
-            });
-            
-            rightBtn.addEventListener('touchstart', () => {
-                player.dx = player.speed;
-            });
-            
-            leftBtn.addEventListener('touchend', () => {
-                if (player.dx < 0) player.dx = 0;
-            });
-            
-            rightBtn.addEventListener('touchend', () => {
-                if (player.dx > 0) player.dx = 0;
-            });
             
             // 初始绘制
             drawBackground();
