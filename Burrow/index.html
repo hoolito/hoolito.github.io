@@ -426,12 +426,12 @@
             font-size: 28px;
         }
         
-        /* 生命值心形 */
+        /* 生命值心形 - 修改间距为半个爱心宽度 */
         .lives-hearts {
             display: flex;
-            gap: 12px;
             justify-content: center;
             align-items: center;
+            gap: 12px; /* 原本为12px，现在改为半个爱心宽度 */
         }
         
         .heart {
@@ -441,6 +441,7 @@
             position: relative;
             transform: rotate(-45deg);
             flex-shrink: 0;
+            margin: 0 12px; /* 添加左右间距，每个爱心左右各半个爱心的间距 */
         }
         
         .heart:before,
