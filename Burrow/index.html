@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>像素风小兔子挖金矿</title>
+    <title>小兔子挖金矿</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             min-height: 100vh;
             background: #121212;
             font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif;
-            overflow: hidden;
+            overflow: auto;
             padding: 20px;
             color: #e0e0e0;
         }
@@ -29,6 +29,7 @@
             width: 800px;
             max-width: 100%;
             text-align: center;
+            margin: 20px 0;
         }
         
         .game-header {
@@ -95,6 +96,7 @@
             margin: 0 auto;
             max-width: 100%;
             image-rendering: pixelated;
+            cursor: pointer;
         }
         
         .controls {
@@ -136,7 +138,7 @@
         .mobile-controls {
             display: none;
             grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: auto auto;
+            grid-template-rows: auto;
             gap: 15px;
             margin-top: 25px;
         }
@@ -152,6 +154,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 0 #2a2a2a;
             font-weight: bold;
+            cursor: pointer;
         }
         
         .direction-controls {
@@ -200,6 +203,40 @@
             font-size: 18px;
         }
         
+        .touch-instruction {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 18px;
+            padding: 10px;
+            background: rgba(40,40,40,0.7);
+            border-radius: 8px;
+        }
+        
+        /* 新增：桌面按钮控制区域 */
+        .desktop-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .desktop-controls button {
+            background: #3a3a3a;
+            border: none;
+            border-bottom: 4px solid #2a2a2a;
+            color: #e0e0e0;
+            padding: 15px 30px;
+            font-size: 24px;
+            font-family: inherit;
+            border-radius: 10px;
+            box-shadow: 0 4px 0 #2a2a2a;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 100px;
+        }
+        
         /* 移动设备适配 */
         @media (max-width: 768px) and (orientation: landscape) {
             .game-container {
@@ -228,12 +265,22 @@
                 font-size: 24px;
             }
             
+            .desktop-controls {
+                display: none;
+            }
+            
             .mobile-controls {
                 display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            
+            .direction-controls {
+                display: none;
             }
             
             .controls {
-                display: none;
+                display: flex;
             }
             
             .instructions {
@@ -260,6 +307,10 @@
             }
             .heart:after {
                 left: 10px;
+            }
+            
+            .touch-instruction {
+                display: block;
             }
         }
         
@@ -297,6 +348,49 @@
             }
         }
         
+        /* 竖屏模式 */
+        @media (orientation: portrait) {
+            body {
+                padding: 10px;
+            }
+            
+            .game-title {
+                font-size: 24px;
+                padding: 8px 20px;
+            }
+            
+            .stats-container {
+                padding: 15px;
+            }
+            
+            .stats-label {
+                font-size: 18px;
+            }
+            
+            #score {
+                font-size: 24px;
+            }
+            
+            .desktop-controls {
+                display: none;
+            }
+            
+            .instructions {
+                display: none;
+            }
+            
+            .touch-instruction {
+                display: block;
+                margin-top: 10px;
+                font-size: 16px;
+            }
+            
+            .mobile-controls {
+                display: grid;
+                margin-top: 15px;
+            }
+        }
+        
         /* 游戏结束弹窗 */
         .game-over {
             position: absolute;
@@ -328,7 +422,7 @@
             font-size: 28px;
         }
         
-        /* 生命值心形 - 优化大小和间距 */
+        /* 生命值心形 */
         .lives-hearts {
             display: flex;
             gap: 12px;
@@ -384,6 +478,42 @@
             z-index: 1;
             opacity: 0.7;
         }
+        
+        /* 拖拽指示器 */
+        .drag-indicator {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px dashed rgba(230, 180, 0, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+        }
+        
+        /* 空格按钮样式 */
+        .space-btn {
+            min-width: 120px;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* 新增：挖矿提示 */
+        .dig-indicator {
+            position: absolute;
+            background: rgba(230, 180, 0, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+            animation: pulse 0.5s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.5); opacity: 0.7; }
+            100% { transform: scale(2); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -411,26 +541,33 @@
         </div>
         
         <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div class="touch-instruction">左右拖动小兔子移动，点击屏幕任意位置挖矿</div>
         
         <div class="controls">
             <button id="startBtn" class="btn">开始游戏</button>
             <button id="restartBtn" class="btn">重新开始</button>
         </div>
         
+        <!-- 新增：桌面控制按钮 -->
+        <div class="desktop-controls">
+            <button id="desktopLeftBtn" class="desktop-btn">←</button>
+            <button id="desktopSpaceBtn" class="desktop-btn space-btn">空格</button>
+            <button id="desktopRightBtn" class="desktop-btn">→</button>
+        </div>
+        
         <div class="mobile-controls">
             <div class="direction-controls">
                 <button id="leftBtn" class="mobile-btn">←</button>
-                <button id="upBtn" class="mobile-btn">↑</button>
+                <button id="spaceBtn" class="mobile-btn space-btn">空格</button>
                 <button id="rightBtn" class="mobile-btn">→</button>
             </div>
-            <button id="digBtn" class="mobile-btn">挖矿</button>
         </div>
         
         <div class="instructions">
             <h3>游戏说明</h3>
             <ul>
-                <li>控制小兔子使用 <span class="key">←</span> <span class="key">→</span> 方向键左右移动</li>
-                <li>按 <span class="key">空格键</span> 或点击屏幕上的挖矿按钮收集金矿</li>
+                <li>控制小兔子使用 <span class="key">←</span> <span class="key">→</span> 方向键或按钮左右移动</li>
+                <li>按 <span class="key">空格键</span> 或点击屏幕上的空格按钮/屏幕任意位置收集金矿</li>
                 <li>收集金矿获得分数，碰到石头会扣分</li>
                 <li>收集10个金矿获得额外生命</li>
                 <li>生命值耗尽游戏结束</li>
@@ -442,6 +579,8 @@
             <p>最终得分: <span id="finalScore">0</span></p>
             <button id="playAgainBtn" class="btn">再玩一次</button>
         </div>
+        
+        <div id="dragIndicator" class="drag-indicator"></div>
     </div>
 
     <script>
@@ -455,12 +594,17 @@
         const finalScoreDisplay = document.getElementById('finalScore');
         const playAgainBtn = document.getElementById('playAgainBtn');
         const livesHearts = document.getElementById('livesHearts');
+        const dragIndicator = document.getElementById('dragIndicator');
         
         // 移动控制按钮
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
-        const upBtn = document.getElementById('upBtn');
-        const digBtn = document.getElementById('digBtn');
+        const spaceBtn = document.getElementById('spaceBtn');
+        
+        // 桌面控制按钮
+        const desktopLeftBtn = document.getElementById('desktopLeftBtn');
+        const desktopRightBtn = document.getElementById('desktopRightBtn');
+        const desktopSpaceBtn = document.getElementById('desktopSpaceBtn');
         
         // 游戏状态
         let gameRunning = false;
@@ -469,6 +613,10 @@
         let gameSpeed = 3;
         let particles = [];
         let minerLight = null;
+        let isDragging = false;
+        let dragStartX = 0;
+        let playerStartX = 0;
+        let isMobile = false;
         
         // 玩家角色
         const player = {
@@ -486,6 +634,13 @@
         let golds = [];
         // 障碍物数组
         let obstacles = [];
+        
+        // 检测移动设备
+        function detectMobile() {
+            return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+        }
         
         // 像素风小兔子绘制
         function drawPlayer() {
@@ -876,22 +1031,89 @@
             }
         }
         
-        // 移动端控制
-        function setupMobileControls() {
-            leftBtn.addEventListener('touchstart', () => player.dx = -player.speed);
-            leftBtn.addEventListener('touchend', () => player.dx = 0);
-            
-            rightBtn.addEventListener('touchstart', () => player.dx = player.speed);
-            rightBtn.addEventListener('touchend', () => player.dx = 0);
-            
-            digBtn.addEventListener('touchstart', () => {
-                if (!player.isDigging) player.isDigging = true;
-            });
+        // 移动端触摸控制
+        function setupTouchControls() {
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', handleTouchEnd);
+            canvas.addEventListener('touchcancel', handleTouchEnd);
             
             // 防止按钮点击触发页面滚动
             document.querySelectorAll('.mobile-btn').forEach(btn => {
-                btn.addEventListener('touchstart', (e) => e.preventDefault());
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                });
             });
+        }
+        
+        // 新增：移动端单击挖矿
+        function setupTapDig() {
+            canvas.addEventListener('touchstart', (e) => {
+                if (!gameRunning) return;
+                e.preventDefault();
+                
+                // 如果不是拖动操作，则挖矿
+                if (!isDragging) {
+                    if (!player.isDigging) {
+                        player.isDigging = true;
+                        
+                        // 显示挖矿效果
+                        showDigIndicator(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }
+            });
+        }
+        
+        // 显示挖矿提示效果
+        function showDigIndicator(x, y) {
+            const indicator = document.createElement('div');
+            indicator.className = 'dig-indicator';
+            indicator.style.left = (x - 25) + 'px';
+            indicator.style.top = (y - 25) + 'px';
+            indicator.style.width = '50px';
+            indicator.style.height = '50px';
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                indicator.remove();
+            }, 500);
+        }
+        
+        function handleTouchStart(e) {
+            if (!gameRunning) return;
+            
+            const touch = e.touches[0];
+            dragStartX = touch.clientX;
+            playerStartX = player.x;
+            isDragging = true;
+            
+            // 显示拖拽指示器
+            dragIndicator.style.display = 'block';
+            dragIndicator.style.left = (touch.clientX - 25) + 'px';
+            dragIndicator.style.top = (touch.clientY - 25) + 'px';
+        }
+        
+        function handleTouchMove(e) {
+            if (!gameRunning || !isDragging) return;
+            
+            const touch = e.touches[0];
+            const moveX = touch.clientX - dragStartX;
+            
+            // 更新拖拽指示器位置
+            dragIndicator.style.left = (touch.clientX - 25) + 'px';
+            dragIndicator.style.top = (touch.clientY - 25) + 'px';
+            
+            // 根据初始位置和移动距离计算新的玩家位置
+            player.x = playerStartX + moveX * 1.5;
+            
+            // 边界检查
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+        }
+        
+        function handleTouchEnd(e) {
+            isDragging = false;
+            dragIndicator.style.display = 'none';
         }
         
         // 开始游戏
@@ -933,6 +1155,9 @@
         
         // 初始化游戏
         function init() {
+            // 检测设备类型
+            isMobile = detectMobile();
+            
             // 事件监听
             document.addEventListener('keydown', keyDown);
             document.addEventListener('keyup', keyUp);
@@ -941,7 +1166,54 @@
             restartBtn.addEventListener('click', startGame);
             playAgainBtn.addEventListener('click', startGame);
             
-            setupMobileControls();
+            // 桌面控制按钮事件
+            desktopLeftBtn.addEventListener('mousedown', () => {
+                if (gameRunning) player.dx = -player.speed;
+            });
+            
+            desktopRightBtn.addEventListener('mousedown', () => {
+                if (gameRunning) player.dx = player.speed;
+            });
+            
+            desktopLeftBtn.addEventListener('mouseup', () => {
+                if (player.dx < 0) player.dx = 0;
+            });
+            
+            desktopRightBtn.addEventListener('mouseup', () => {
+                if (player.dx > 0) player.dx = 0;
+            });
+            
+            desktopSpaceBtn.addEventListener('click', () => {
+                if (gameRunning && !player.isDigging) player.isDigging = true;
+            });
+            
+            // 移动端添加触摸控制
+            if (isMobile) {
+                setupTouchControls();
+                setupTapDig();
+                
+                // 空格按钮事件
+                spaceBtn.addEventListener('touchstart', () => {
+                    if (!player.isDigging) player.isDigging = true;
+                });
+            }
+            
+            // 添加移动按钮事件
+            leftBtn.addEventListener('touchstart', () => {
+                player.dx = -player.speed;
+            });
+            
+            rightBtn.addEventListener('touchstart', () => {
+                player.dx = player.speed;
+            });
+            
+            leftBtn.addEventListener('touchend', () => {
+                if (player.dx < 0) player.dx = 0;
+            });
+            
+            rightBtn.addEventListener('touchend', () => {
+                if (player.dx > 0) player.dx = 0;
+            });
             
             // 初始绘制
             drawBackground();
