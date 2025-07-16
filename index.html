@@ -84,6 +84,25 @@
             border-radius: 6px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border: 1px solid #e1e4e8;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #337fc7, rgba(51, 127, 199, 0.3));
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
         
         .hero h2 {
@@ -140,10 +159,10 @@
         
         .game-image {
             height: 180px;
-            background: linear-gradient(135deg, #337fc7, rgba(51, 127, 199, 0.3));
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, #337fc7, rgba(51, 127, 199, 0.3));
         }
         
         .game-icon {
@@ -156,6 +175,7 @@
             justify-content: center;
             font-size: 32px;
             color: #337fc7;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
         .game-content {
@@ -213,6 +233,25 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border: 1px solid #e1e4e8;
             margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .coming-soon::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(51, 127, 199, 0.1), rgba(51, 127, 199, 0.05));
+            opacity: 0.5;
+            z-index: 0;
+        }
+        
+        .coming-soon-content {
+            position: relative;
+            z-index: 1;
         }
         
         .coming-soon h2 {
@@ -235,7 +274,6 @@
             gap: 15px;
         }
         
-        /* 游戏单元格 - 1:1正方形 */
         .game-cell {
             width: 70px;
             height: 70px;
@@ -262,12 +300,26 @@
             font-size: 15px;
         }
         
-        /* 增加上方文字与网格的间距 */
         .intro-text {
             text-align: center;
             color: #586069;
-            margin-bottom: 30px; /* 增加与网格的间距 */
+            margin-bottom: 30px;
             font-size: 15px;
+        }
+        
+        .games-title {
+            font-size: 28px;
+            text-align: center;
+            margin: 40px 0 20px;
+            color: #337fc7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .games-title i {
+            font-size: 32px;
         }
         
         footer {
@@ -301,29 +353,61 @@
                 padding: 30px 20px;
             }
             
-            /* 在手机上调整游戏网格间距 */
             .games-grid {
                 gap: 10px;
-                margin: 20px auto; /* 调整移动端网格间距 */
+                margin: 20px auto;
             }
             
             .intro-text {
-                margin-bottom: 20px; /* 移动端间距调整 */
+                margin-bottom: 20px;
             }
         }
         
-        /* 大屏幕（电脑）显示为一行9个 */
         @media (min-width: 992px) {
             .games-grid {
-                max-width: 750px; /* 9个单元格 + 8个间隙 */
+                max-width: 750px;
             }
         }
         
-        /* 小屏幕（手机）显示为三行，每行3个 */
         @media (max-width: 991px) {
             .games-grid {
-                max-width: 270px; /* 3个单元格 + 2个间隙 */
+                max-width: 270px;
             }
+        }
+        
+        /* 新增游戏卡片背景色 - 统一为蓝色渐变 */
+        .game-card .game-image { 
+            background: linear-gradient(135deg, #337fc7, rgba(51, 127, 199, 0.3));
+        }
+        
+        /* 新增动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .game-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .game-card:nth-child(2) .game-icon {
+            animation-delay: 0.2s;
+        }
+        
+        .game-card:nth-child(3) .game-icon {
+            animation-delay: 0.4s;
+        }
+        
+        .game-card:nth-child(4) .game-icon {
+            animation-delay: 0.6s;
+        }
+        
+        .game-card:nth-child(5) .game-icon {
+            animation-delay: 0.8s;
+        }
+        
+        .game-card:nth-child(6) .game-icon {
+            animation-delay: 1s;
         }
     </style>
 </head>
@@ -347,15 +431,20 @@
         </header>
         
         <section class="hero">
-            <h2>Hello World</h2>
-            <p>欢迎来到狐狸头的摸鱼游戏大厅～在这里，你可以尽情享受各种有趣的小游戏，放松心情，释放压力。我们的目标是收集1001个精品小游戏，打造最有趣的摸鱼平台！</p>
-            <div class="counter">
-                <i class="fas fa-trophy"></i> 
-                已上线游戏: <strong>3</strong> 款 | 目标: <strong>1001</strong> 款
+            <div class="hero-content">
+                <h2>Hello World</h2>
+                <p>欢迎来到狐狸头的摸鱼游戏大厅～在这里，你可以尽情享受各种有趣的小游戏，放松心情，释放压力。我们的目标是收集1001个精品小游戏，打造最有趣的摸鱼平台！</p>
+                <div class="counter">
+                    <i class="fas fa-trophy"></i> 
+                    已上线游戏: <strong>6</strong> 款 | 目标: <strong>1001</strong> 款
+                </div>
             </div>
         </section>
         
+        <h2 class="games-title"><i class="fas fa-star"></i> 热门游戏推荐 <i class="fas fa-star"></i></h2>
+        
         <section class="games-container">
+            <!-- 第一行游戏 -->
             <div class="game-card">
                 <div class="game-image">
                     <div class="game-icon">
@@ -396,7 +485,6 @@
                 </div>
             </div>
             
-            <!-- 新增第三款游戏 -->
             <div class="game-card">
                 <div class="game-image">
                     <div class="game-icon">
@@ -416,33 +504,95 @@
                     </a>
                 </div>
             </div>
+            
+            <!-- 新增三款游戏 -->
+            <div class="game-card">
+                <div class="game-image">
+                    <div class="game-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">
+                        <i class="fas fa-gem"></i> 
+                        小兔子挖金矿
+                    </h3>
+                    <p class="game-description">
+                        帮助小兔子挖到更多的金矿！挖掘宝藏，躲避障碍，挑战高分。
+                    </p>
+                    <a href="https://hoolito.github.io/Burrow/" class="play-btn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </a>
+                </div>
+            </div>
+            
+            <div class="game-card">
+                <div class="game-image">
+                    <div class="game-icon">
+                        <i class="fas fa-bomb"></i>
+                    </div>
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">
+                        <i class="fas fa-bomb"></i> 
+                        扫雷
+                    </h3>
+                    <p class="game-description">
+                        经典扫雷游戏，考验你的推理和运气！避开地雷，标记所有安全区域。
+                    </p>
+                    <a href="https://hoolito.github.io/Minesweeper/" class="play-btn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </a>
+                </div>
+            </div>
+            
+            <div class="game-card">
+                <div class="game-image">
+                    <div class="game-icon">
+                        <i class="fas fa-chess-board"></i>
+                    </div>
+                </div>
+                <div class="game-content">
+                    <h3 class="game-title">
+                        <i class="fas fa-crown"></i> 
+                        五子棋
+                    </h3>
+                    <p class="game-description">
+                        古老而经典的策略游戏！五子连珠，智胜对手。
+                    </p>
+                    <a href="https://hoolito.github.io/Gomoku/" class="play-btn">
+                        <i class="fas fa-play"></i> 开始游戏
+                    </a>
+                </div>
+            </div>
         </section>
         
         <section class="coming-soon">
-            <h2>
-                <i class="fas fa-wand-magic-sparkles"></i> 
-                更多游戏正在开发中
-            </h2>
-            <!-- 增加上方文字与网格的间距 -->
-            <p class="intro-text">
-                我们正在努力开发更多有趣的游戏，目标达到1001款！以下是我们计划中的部分游戏类型：
-            </p>
-            
-            <div class="games-grid">
-                <div class="game-cell"><i class="fas fa-chess"></i></div>
-                <div class="game-cell"><i class="fas fa-dice"></i></div>
-                <div class="game-cell"><i class="fas fa-puzzle-piece"></i></div>
-                <div class="game-cell"><i class="fas fa-car"></i></div>
-                <div class="game-cell"><i class="fas fa-basketball-ball"></i></div>
-                <div class="game-cell"><i class="fas fa-ghost"></i></div>
-                <div class="game-cell"><i class="fas fa-futbol"></i></div>
-                <div class="game-cell"><i class="fas fa-heart"></i></div>
-                <div class="game-cell"><i class="fas fa-infinity"></i></div>
+            <div class="coming-soon-content">
+                <h2>
+                    <i class="fas fa-wand-magic-sparkles"></i> 
+                    更多游戏正在开发中
+                </h2>
+                <p class="intro-text">
+                    我们正在努力开发更多有趣的游戏，目标达到1001款！以下是我们计划中的部分游戏类型：
+                </p>
+                
+                <div class="games-grid">
+                    <div class="game-cell"><i class="fas fa-chess"></i></div>
+                    <div class="game-cell"><i class="fas fa-dice"></i></div>
+                    <div class="game-cell"><i class="fas fa-puzzle-piece"></i></div>
+                    <div class="game-cell"><i class="fas fa-car"></i></div>
+                    <div class="game-cell"><i class="fas fa-basketball-ball"></i></div>
+                    <div class="game-cell"><i class="fas fa-ghost"></i></div>
+                    <div class="game-cell"><i class="fas fa-futbol"></i></div>
+                    <div class="game-cell"><i class="fas fa-heart"></i></div>
+                    <div class="game-cell"><i class="fas fa-infinity"></i></div>
+                </div>
+                
+                <p class="info-text">
+                    敬请期待，我们将不断更新游戏库！
+                </p>
             </div>
-            
-            <p class="info-text">
-                敬请期待，我们将不断更新游戏库！
-            </p>
         </section>
         
         <footer>
@@ -452,7 +602,6 @@
     </div>
 
     <script>
-        // 简单的动态效果
         document.addEventListener('DOMContentLoaded', function() {
             // 卡片悬停效果
             const cards = document.querySelectorAll('.game-card');
@@ -478,6 +627,19 @@
                     icon.style.transform = 'scale(1) rotate(0)';
                     icon.style.backgroundColor = '#f6f8fa';
                 });
+            });
+            
+            // 添加游戏卡片动画
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach((card, index) => {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(20px)";
+                
+                setTimeout(() => {
+                    card.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+                    card.style.opacity = "1";
+                    card.style.transform = "translateY(0)";
+                }, 200 + index * 150);
             });
         });
     </script>
