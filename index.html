@@ -39,12 +39,19 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
+            color: inherit;
         }
         
         .logo h1 {
             font-size: 24px;
             font-weight: 600;
             color: #24292e;
+            transition: color 0.3s;
+        }
+        
+        .logo:hover h1 {
+            color: #337fc7;
         }
         
         .logo-icon {
@@ -57,6 +64,12 @@
             justify-content: center;
             color: white;
             font-size: 20px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        
+        .logo:hover .logo-icon {
+            transform: scale(1.1);
+            background-color: #2a67ad;
         }
         
         nav ul {
@@ -70,6 +83,9 @@
             color: #24292e;
             font-weight: 500;
             transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         nav a:hover {
@@ -185,23 +201,21 @@
             flex-direction: column;
         }
         
+        /* 修改标题为左对齐 */
         .game-title {
             font-size: 20px;
             margin-bottom: 12px;
             color: #24292e;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            text-align: left;
         }
         
-        .game-title i {
-            color: #337fc7;
-        }
-        
+        /* 修改简介为两端对齐 */
         .game-description {
             color: #586069;
             margin-bottom: 20px;
             flex-grow: 1;
+            text-align: justify;
+            hyphens: auto; /* 允许单词断字 */
         }
         
         .play-btn {
@@ -361,6 +375,11 @@
             .intro-text {
                 margin-bottom: 20px;
             }
+            
+            /* 移动端优化：减少游戏卡片间距 */
+            .game-content {
+                padding: 15px;
+            }
         }
         
         @media (min-width: 992px) {
@@ -409,20 +428,27 @@
         .game-card:nth-child(6) .game-icon {
             animation-delay: 1s;
         }
+        
+        /* 新增：卡片标题图标 */
+        .game-title i {
+            margin-right: 8px;
+            font-size: 18px;
+            color: #337fc7;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
+            <a href="https://hoolito.github.io/" class="logo">
                 <div class="logo-icon">
                     <i class="fas fa-gamepad"></i>
                 </div>
                 <h1>摸鱼游戏大厅</h1>
-            </div>
+            </a>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> 首页</a></li>
+                    <li><a href="https://hoolito.github.io/"><i class="fas fa-home"></i> 首页</a></li>
                     <li><a href="#"><i class="fas fa-gamepad"></i> 所有游戏</a></li>
                     <li><a href="#"><i class="fas fa-info-circle"></i> 关于</a></li>
                     <li><a href="#"><i class="fas fa-envelope"></i> 联系</a></li>
@@ -453,8 +479,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-flask"></i> 
-                        女巫的毒药-果蔬大战
+                        <i class="fas fa-apple-alt"></i> 女巫的毒药-果蔬大战
                     </h3>
                     <p class="game-description">
                         有人闯入女巫的魔法厨房，在果蔬放入了神奇药水！假如你不小心吃下去……
@@ -473,8 +498,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-hourglass-half"></i> 
-                        女巫的毒药-死神来了
+                        <i class="fas fa-skull"></i> 女巫的毒药-死神来了
                     </h3>
                     <p class="game-description">
                         与死神进行一场智慧的较量！躲避死神的追捕，完成挑战，证明你的生存能力。
@@ -493,8 +517,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-user-secret"></i> 
-                        女巫的毒药-超级侦探
+                        <i class="fas fa-search"></i> 女巫的毒药-超级侦探
                     </h3>
                     <p class="game-description">
                         化身侦探，解开离奇案件背后的谜团！推理真相，找出隐藏在人群中的真凶。
@@ -514,8 +537,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-gem"></i> 
-                        小兔子挖金矿
+                        <i class="fas fa-gem"></i> 小兔子挖金矿
                     </h3>
                     <p class="game-description">
                         帮助小兔子挖到更多的金矿！挖掘宝藏，躲避障碍，挑战高分。
@@ -534,8 +556,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-bomb"></i> 
-                        扫雷
+                        <i class="fas fa-bomb"></i> 扫雷
                     </h3>
                     <p class="game-description">
                         经典扫雷游戏，考验你的推理和运气！避开地雷，标记所有安全区域。
@@ -554,8 +575,7 @@
                 </div>
                 <div class="game-content">
                     <h3 class="game-title">
-                        <i class="fas fa-crown"></i> 
-                        五子棋
+                        <i class="fas fa-chess-board"></i> 五子棋
                     </h3>
                     <p class="game-description">
                         古老而经典的策略游戏！五子连珠，智胜对手。
