@@ -104,6 +104,7 @@
             justify-content: center;
             gap: 20px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -144,10 +145,43 @@
             background: var(--dark);
             color: white;
         }
+        
+        /* 新增：模式切换按钮 */
+        .mode-toggle-container {
+            display: none; /* 默认隐藏，移动端显示 */
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .mode-toggle {
+            background: white;
+            border-radius: 30px;
+            padding: 5px;
+            display: flex;
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: transparent;
+            color: var(--dark);
+            box-shadow: none;
+        }
+        
+        .mode-btn.active {
+            background: var(--dark);
+            color: white;
+            box-shadow: 0 3px 8px rgba(61, 90, 128, 0.3);
+        }
 
         .board-container {
             display: flex;
             justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         #game-board {
@@ -304,6 +338,11 @@
                 height: 28px;
                 font-size: 1rem;
             }
+            
+            /* 移动端显示模式切换按钮 */
+            .mode-toggle-container {
+                display: flex;
+            }
         }
 
         @media (max-width: 480px) {
@@ -333,6 +372,11 @@
             .cell {
                 width: 22px;
                 height: 22px;
+                font-size: 0.8rem;
+            }
+            
+            .mode-btn {
+                padding: 8px 16px;
                 font-size: 0.8rem;
             }
         }
@@ -386,6 +430,14 @@
             </div>
         </div>
         
+        <!-- 新增：模式切换按钮 -->
+        <div class="mode-toggle-container">
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="sweep">扫雷模式</button>
+                <button class="mode-btn" data-mode="flag">排雷模式</button>
+            </div>
+        </div>
+        
         <div class="controls">
             <button id="restart-btn">重新开始</button>
             <div class="difficulty">
@@ -423,7 +475,9 @@
                 gameOver: false,
                 gameWon: false,
                 startTime: null,
-                timerInterval: null
+                timerInterval: null,
+                // 新增：当前操作模式
+                mode: 'sweep' // 'sweep' 或 'flag'
             };
             
             // DOM 元素
@@ -437,7 +491,10 @@
                 message: document.getElementById('message'),
                 messageTitle: document.getElementById('message-title'),
                 messageText: document.getElementById('message-text'),
-                playAgainBtn: document.getElementById('play-again')
+                playAgainBtn: document.getElementById('play-again'),
+                // 新增：模式切换按钮
+                modeToggle: document.querySelector('.mode-toggle'),
+                modeBtns: document.querySelectorAll('.mode-btn')
             };
             
             // 初始化游戏
@@ -450,6 +507,7 @@
                 gameState.flaggedCount = 0;
                 gameState.gameOver = false;
                 gameState.gameWon = false;
+                gameState.mode = 'sweep'; // 重置为扫雷模式
                 
                 // 清除计时器
                 if (gameState.timerInterval) {
@@ -462,6 +520,15 @@
                 elements.timer.textContent = '0';
                 elements.flagsCount.textContent = '0';
                 elements.message.style.display = 'none';
+                
+                // 重置模式按钮状态
+                elements.modeBtns.forEach(btn => {
+                    if (btn.dataset.mode === 'sweep') {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
                 
                 // 创建游戏板
                 createBoard();
@@ -484,13 +551,21 @@
                         cell.dataset.col = col;
                         
                         // 添加事件监听器
-                        cell.addEventListener('click', () => revealCell(row, col));
+                        cell.addEventListener('click', () => {
+                            if (gameState.mode === 'sweep') {
+                                revealCell(row, col);
+                            } else {
+                                flagCell(row, col);
+                            }
+                        });
+                        
+                        // 右键点击事件（桌面端）
                         cell.addEventListener('contextmenu', (e) => {
                             e.preventDefault();
                             flagCell(row, col);
                         });
                         
-                        // 移动端长按事件
+                        // 移动端长按事件（作为备用）
                         let touchTimer;
                         cell.addEventListener('touchstart', (e) => {
                             touchTimer = setTimeout(() => {
@@ -500,6 +575,10 @@
                         });
                         
                         cell.addEventListener('touchend', () => {
+                            clearTimeout(touchTimer);
+                        });
+                        
+                        cell.addEventListener('touchmove', () => {
                             clearTimeout(touchTimer);
                         });
                         
@@ -711,6 +790,18 @@
                     
                     // 使用新难度重新开始游戏
                     initGame(difficulty);
+                });
+            });
+            
+            // 新增：模式切换按钮事件
+            elements.modeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // 更新活动按钮
+                    elements.modeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // 设置当前模式
+                    gameState.mode = btn.dataset.mode;
                 });
             });
             
