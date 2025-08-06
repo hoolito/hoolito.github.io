@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MBTI动物园规则怪谈</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="bbe5cbf8d3a2437a8361be750c8eca5e" class="chart-container" style="width:1280px; height:830px; "></div>
+    <script>
+        var chart_bbe5cbf8d3a2437a8361be750c8eca5e = echarts.init(
+            document.getElementById('bbe5cbf8d3a2437a8361be750c8eca5e'), 'light', {renderer: 'canvas'});
+            
+    // 设置全屏背景和移除边框
+    document.body.style.backgroundColor = '#f0edde';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.documentElement.style.backgroundColor = '#f0edde';
+    document.documentElement.style.margin = '0';
+    document.documentElement.style.padding = '0';
+    
+    // 创建节点名称切换按钮
+    function createToggleButton() {
+        var button = document.createElement('div');
+        button.id = 'toggle-labels-btn';
+        button.style.position = 'absolute';
+        button.style.bottom = '80px';
+        button.style.right = '20px';
+        button.style.width = '120px';
+        button.style.height = '30px';
+        button.style.backgroundColor = 'white';
+        button.style.border = '2px solid #cf262a';
+        button.style.borderRadius = '20px';
+        button.style.cursor = 'pointer';
+        button.style.display = 'flex';
+        button.style.alignItems = 'center';
+        button.style.justifyContent = 'center';
+        button.style.fontSize = '14px';
+        button.style.fontWeight = 'bold';
+        button.style.fontFamily = 'Microsoft YaHei';
+        button.style.zIndex = '10000';
+        button.style.transition = 'all 0.3s ease';
+        
+        var isOn = true;
+        
+        function updateButtonState() {
+            if (isOn) {
+                button.innerHTML = '<span style="display: inline-block; width: 8px; height: 8px; background-color: #cf262a; border-radius: 50%; margin-right: 6px;"></span>ON';
+                button.style.color = 'rgba(0, 0, 0, 0.85)';
+                button.style.borderColor = '#cf262a';
+            } else {
+                button.innerHTML = 'OFF';
+                button.style.color = 'rgba(0, 0, 0, 0.5)';
+                button.style.borderColor = 'rgba(0, 0, 0, 0.5)';
+            }
+        }
+        
+        updateButtonState();
+        
+        button.addEventListener('click', function() {
+            isOn = !isOn;
+            updateButtonState();
+            if (isOn) {
+                showNodeLabels();
+            } else {
+                hideNodeLabels();
+            }
+        });
+        
+        button.addEventListener('mouseenter', function() {
+            button.style.transform = 'scale(1.05)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            button.style.transform = 'scale(1)';
+        });
+        
+        document.body.appendChild(button);
+    }
+    
+    // 显示节点标签
+    function showNodeLabels() {
+        var chart = echarts.getInstanceByDom(document.querySelector('#chart') || document.querySelector('[_echarts_instance_]'));
+        if (chart) {
+            chart.setOption({
+                series: [{
+                    label: {
+                        show: true,
+                        position: 'right',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                        color: '#000000',
+                        fontFamily: 'Microsoft YaHei',
+                        formatter: '{b}'
+                    }
+                }]
+            });
+        }
+    }
+    
+    // 隐藏节点标签
+    function hideNodeLabels() {
+        var chart = echarts.getInstanceByDom(document.querySelector('#chart') || document.querySelector('[_echarts_instance_]'));
+        if (chart) {
+            chart.setOption({
+                series: [{
+                    label: {
+                        show: false
+                    }
+                }]
+            });
+        }
+    }
+    
+    // 初始化按钮
+    createToggleButton();
+    
+    // 设置图表容器居中显示
+     var chartContainer = document.querySelector('.chart-container');
+     if (chartContainer) {
+         chartContainer.style.border = 'none';
+         chartContainer.style.boxShadow = 'none';
+         chartContainer.style.borderRadius = '0';
+         chartContainer.style.width = '1280px';
+         chartContainer.style.height = '830px';
+         chartContainer.style.margin = '20px auto';
+         chartContainer.style.display = 'block';
+         chartContainer.style.maxWidth = '100vw';
+         chartContainer.style.maxHeight = '100vh';
+         chartContainer.style.position = 'relative';
+     }
+     
+    // 创建辅助参考线容器
+    function createGuideLines() {
+        var guideContainer = document.createElement('div');
+        guideContainer.id = 'guide-lines';
+        guideContainer.style.position = 'absolute';
+        guideContainer.style.top = '0';
+        guideContainer.style.left = '0';
+        guideContainer.style.width = '100%';
+        guideContainer.style.height = '100%';
+        guideContainer.style.pointerEvents = 'none';
+        guideContainer.style.zIndex = '1000';
+        chartContainer.appendChild(guideContainer);
+        return guideContainer;
+    }
+    
+    // 显示参考线
+    function showGuideLines(x, y) {
+        var guideContainer = document.getElementById('guide-lines') || createGuideLines();
+        guideContainer.innerHTML = '';
+        
+        // 垂直参考线
+        var vLine = document.createElement('div');
+        vLine.style.position = 'absolute';
+        vLine.style.left = x + 'px';
+        vLine.style.top = '0';
+        vLine.style.width = '1px';
+        vLine.style.height = '100%';
+        vLine.style.backgroundColor = '#ff6b6b';
+        vLine.style.opacity = '0.6';
+        vLine.style.zIndex = '1001';
+        guideContainer.appendChild(vLine);
+        
+        // 水平参考线
+        var hLine = document.createElement('div');
+        hLine.style.position = 'absolute';
+        hLine.style.left = '0';
+        hLine.style.top = y + 'px';
+        hLine.style.width = '100%';
+        hLine.style.height = '1px';
+        hLine.style.backgroundColor = '#ff6b6b';
+        hLine.style.opacity = '0.6';
+        hLine.style.zIndex = '1001';
+        guideContainer.appendChild(hLine);
+    }
+    
+    // 隐藏参考线
+    function hideGuideLines() {
+        var guideContainer = document.getElementById('guide-lines');
+        if (guideContainer) {
+            guideContainer.innerHTML = '';
+        }
+    }
+    
+    // 获取图表实例并添加拖拽辅助功能
+    setTimeout(function() {
+        var chart = echarts.getInstanceByDom(document.querySelector('#chart') || document.querySelector('[_echarts_instance_]'));
+        if (chart) {
+            // 启用拖拽功能
+            chart.setOption({
+                series: [{
+                    draggable: true
+                }]
+            });
+            
+            // 监听鼠标事件
+            var isDragging = false;
+            
+            chart.on('mousedown', function(params) {
+                if (params.componentType === 'series' && params.seriesType === 'sankey') {
+                    isDragging = true;
+                }
+            });
+            
+            chart.on('mousemove', function(params) {
+                if (isDragging && params.event) {
+                    var rect = chartContainer.getBoundingClientRect();
+                    var x = params.event.offsetX;
+                    var y = params.event.offsetY;
+                    showGuideLines(x, y);
+                }
+            });
+            
+            chart.on('mouseup', function(params) {
+                isDragging = false;
+                hideGuideLines();
+            });
+            
+            chart.on('globalout', function() {
+                isDragging = false;
+                hideGuideLines();
+            });
+        }
+    }, 1000);
+    
+    // 添加网格参考线功能（按G键切换）
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'g' || e.key === 'G') {
+            toggleGrid();
+        }
+    });
+    
+    function toggleGrid() {
+        var gridContainer = document.getElementById('grid-lines');
+        if (gridContainer) {
+            gridContainer.remove();
+        } else {
+            createGrid();
+        }
+    }
+    
+    function createGrid() {
+        var gridContainer = document.createElement('div');
+        gridContainer.id = 'grid-lines';
+        gridContainer.style.position = 'absolute';
+        gridContainer.style.top = '0';
+        gridContainer.style.left = '0';
+        gridContainer.style.width = '100%';
+        gridContainer.style.height = '100%';
+        gridContainer.style.pointerEvents = 'none';
+        gridContainer.style.zIndex = '999';
+        
+        // 创建网格线
+        var gridSize = 50;
+        var containerWidth = chartContainer.offsetWidth;
+        var containerHeight = chartContainer.offsetHeight;
+        
+        // 垂直网格线
+        for (var x = 0; x <= containerWidth; x += gridSize) {
+            var vLine = document.createElement('div');
+            vLine.style.position = 'absolute';
+            vLine.style.left = x + 'px';
+            vLine.style.top = '0';
+            vLine.style.width = '1px';
+            vLine.style.height = '100%';
+            vLine.style.backgroundColor = '#ddd';
+            vLine.style.opacity = '0.3';
+            gridContainer.appendChild(vLine);
+        }
+        
+        // 水平网格线
+        for (var y = 0; y <= containerHeight; y += gridSize) {
+            var hLine = document.createElement('div');
+            hLine.style.position = 'absolute';
+            hLine.style.left = '0';
+            hLine.style.top = y + 'px';
+            hLine.style.width = '100%';
+            hLine.style.height = '1px';
+            hLine.style.backgroundColor = '#ddd';
+            hLine.style.opacity = '0.3';
+            gridContainer.appendChild(hLine);
+        }
+        
+        chartContainer.appendChild(gridContainer);
+    }
+    
+    // 添加使用说明
+    var helpText = document.createElement('div');
+    helpText.style.position = 'absolute';
+    helpText.style.bottom = '10px';
+    helpText.style.right = '10px';
+    helpText.style.padding = '8px 12px';
+    helpText.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    helpText.style.color = 'white';
+    helpText.style.fontSize = '12px';
+    helpText.style.borderRadius = '4px';
+    helpText.style.zIndex = '2000';
+    helpText.innerHTML = '拖拽节点时显示参考线<br>按G键切换网格';
+    document.body.appendChild(helpText);
+    
+        var option_bbe5cbf8d3a2437a8361be750c8eca5e = {
+    "backgroundColor": "#f0edde",
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "sankey",
+            "name": "MBTI\u52a8\u7269\u56ed\u89c4\u5219\u602a\u8c08",
+            "data": [
+                {
+                    "name": "ESFP",
+                    "value": 85,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    }
+                },
+                {
+                    "name": "ISFP",
+                    "value": 88,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    }
+                },
+                {
+                    "name": "ESTP",
+                    "value": 43,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    }
+                },
+                {
+                    "name": "ISTP",
+                    "value": 54,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    }
+                },
+                {
+                    "name": "ESTJ",
+                    "value": 87,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    }
+                },
+                {
+                    "name": "ESFJ",
+                    "value": 123,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    }
+                },
+                {
+                    "name": "ISTJ",
+                    "value": 116,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    }
+                },
+                {
+                    "name": "ISFJ",
+                    "value": 138,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    }
+                },
+                {
+                    "name": "ENTJ",
+                    "value": 18,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    }
+                },
+                {
+                    "name": "ENTP",
+                    "value": 32,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    }
+                },
+                {
+                    "name": "INTJ",
+                    "value": 21,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    }
+                },
+                {
+                    "name": "INTP",
+                    "value": 33,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    }
+                },
+                {
+                    "name": "ENFJ",
+                    "value": 25,
+                    "itemStyle": {
+                        "color": "#418856"
+                    }
+                },
+                {
+                    "name": "ENFP",
+                    "value": 81,
+                    "itemStyle": {
+                        "color": "#418856"
+                    }
+                },
+                {
+                    "name": "INFP",
+                    "value": 44,
+                    "itemStyle": {
+                        "color": "#418856"
+                    }
+                },
+                {
+                    "name": "INFJ",
+                    "value": 15,
+                    "itemStyle": {
+                        "color": "#418856"
+                    }
+                },
+                {
+                    "name": "1.\u5bfc\u6e38",
+                    "value": 85,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    },
+                    "death": "\u5e26\u56e2\u65f6\u548c\u767d\u72ee\u5b50\u73a9\u81ea\u62cd",
+                    "scene": "\u5bb6\u4eba\u4eec\u770b\u955c\u5934\uff01\u8fd9\u662f\u7b2c5\u5934\u767d\u72ee\u2026\u2026\u5455\uff08\u8840\u8089\u98de\u6e85\u58f0\uff09",
+                    "analysis": "\u8fc7\u5ea6\u4f9d\u8d56Se\u76f8\u4fe1\"\u773c\u89c1\u4e3a\u5b9e\"\uff0c\u5ffd\u7565\u89c4\u5219\u4e2d\"4\u5934\u72ee\u5b50\"\u7684\u81f4\u547d\u7ec6\u8282"
+                },
+                {
+                    "name": "2.\u56ed\u957f\u52a9\u7406",
+                    "value": 87,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    },
+                    "death": "\u5f3a\u884c\u64e6\u9664\u6240\u6709\u8b66\u793a\u6d82\u9e26",
+                    "scene": "\u89c4\u5219\u5c31\u662f\u89c4\u5219\uff01\u8fd9\u884c\u7ea2\u5b57\u5fc5\u987b\u64e6\u6389\u2026\u2026\u7b49\u7b49\u6211\u7684\u624b\u600e\u4e48\u878d\u5316\u4e86\uff1f",
+                    "analysis": "Te-Si\u50f5\u5316\u6267\u884c\u8868\u9762\u89c4\u5219\uff0c\u62b9\u53bbINFJ\u7528Fi-Ne\u7559\u4e0b\u7684\u6551\u547d\u7ebf\u7d22"
+                },
+                {
+                    "name": "3.\u9972\u517b\u5458",
+                    "value": 88,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    },
+                    "death": "\u7ed9\"\u6d41\u6cea\u7684\u5154\u5b50\"\u5582\u80e1\u841d\u535c",
+                    "scene": "\u5b83\u4eec\u53ea\u662f\u997f\u4e86\u2026\u2026\u554a\u554a\u554a\u773c\u775b\uff01\u6211\u7684\u773c\u775b\uff01",
+                    "analysis": "Fi-Se\u8fc7\u5ea6\u5171\u60c5\u52a8\u7269\uff0c\u6210\u4e3a\u7b2c\u4e00\u4e2a\u88ab\"\u5b83\"\u6c61\u67d3\u7684\u8f7d\u4f53"
+                },
+                {
+                    "name": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "value": 123,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    },
+                    "death": "\u7ed9\u6bcf\u4e2a\u6e38\u5ba2\u5012\u5154\u5b50\u8840\u996e\u6599",
+                    "scene": "\u8fd9\u662f\u672c\u56ed\u7279\u8272\u996e\u54c1\uff5e\u54ce\uff1f\u60a8\u600e\u4e48\u957f\u51fa\u5154\u8033\u6735\u4e86\uff1f",
+                    "analysis": "Fe\u76f2\u76ee\u670d\u52a1\u4ed6\u4eba\uff0c\u6ca1\u53d1\u73b0\u81ea\u5df1\u5728\u5e2e\"\u5b83\"\u6269\u6563\u6c61\u67d3"
+                },
+                {
+                    "name": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "value": 25,
+                    "itemStyle": {
+                        "color": "#418856"
+                    },
+                    "death": "\u7ec4\u7ec7\u5c0f\u670b\u53cb\u627e\"\u5931\u8e2a\u7684\u5927\u8c61\"",
+                    "scene": "\u5b69\u5b50\u4eec\u8ddf\u6211\u6765\uff01\u6211\u77e5\u9053\u5927\u8c61\u5728\u2026\u2026\uff08\u88ab\u8c61\u9f3b\u7ede\u6740\u58f0\uff09",
+                    "analysis": "Fe-Ni\u8bd5\u56fe\u62ef\u6551\u6240\u6709\u4eba\uff0c\u5374\u8e0f\u5165\"\u5927\u8c61\u56ed\u533a\u8ba4\u77e5\u9677\u9631\""
+                },
+                {
+                    "name": "6.\u6444\u5f71\u5e08",
+                    "value": 43,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    },
+                    "death": "\u5077\u62cd\u9ed1\u8863\u4eba\u7684\u771f\u9762\u76ee",
+                    "scene": "\u8fd9\u5f20\u7167\u7247\u80fd\u62ff\u666e\u5229\u7b56\u5956\u2026\u2026\u7b49\u7b49\u76f8\u7247\u91cc\u7684\u6211\u600e\u4e48\u5728\u7b11\uff1f",
+                    "analysis": "Se-Ti\u8ffd\u6c42\u523a\u6fc0\uff0c\u89e6\u53d1\"\u4e0d\u53ef\u62cd\u6444\"\u7684\u6df1\u5c42\u89c4\u5219"
+                },
+                {
+                    "name": "7.\u8d22\u52a1",
+                    "value": 116,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    },
+                    "death": "\u6df1\u591c\u6e05\u70b9\u52a8\u7269\u56ed\u8d26\u76ee",
+                    "scene": "\u6d77\u6d0b\u9986\u7684\u7528\u7535\u91cf\u5f02\u5e38\u2026\u2026\uff08\u8d26\u672c\u6e17\u51fa\u9c9c\u8840\uff09",
+                    "analysis": "Si-Te\u6267\u7740\u6838\u5bf9\u6570\u636e\uff0c\u53d1\u73b0\"\u5b83\"\u7684\u80fd\u6e90\u4f9b\u7ed9\u79d8\u5bc6\u540e\u88ab\u706d\u53e3"
+                },
+                {
+                    "name": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "value": 81,
+                    "itemStyle": {
+                        "color": "#418856"
+                    },
+                    "death": "\u548c\u5154\u5b50\u4eba\u5076\u8df3\u821e\u4e09\u5929\u4e09\u591c",
+                    "scene": "\u65cb\u8f6c\uff5e\u8df3\u8dc3\uff5e\u54a6\u6211\u7684\u811a\u53d8\u6210\u8e44\u5b50\u4e86\uff1f",
+                    "analysis": "Ne-Fi\u628a\u89c4\u5219\u6c61\u67d3\u5f53\u884c\u4e3a\u827a\u672f\uff0c\u4e50\u6781\u751f\u60b2"
+                },
+                {
+                    "name": "9.\u6295\u8d44\u4eba",
+                    "value": 18,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    },
+                    "death": "\u8bd5\u56fe\u6536\u8d2d\u52a8\u7269\u56ed",
+                    "scene": "\u6211\u547d\u4ee4\u4f60\u7acb\u523b\u505c\u6b62\u6c61\u67d3\u2026\u2026\uff08\u8f6c\u5316\u4e3a\u767d\u72ee\u5b50\u7684\u9aa8\u9abc\u7206\u88c2\u58f0\uff09",
+                    "analysis": "Te-Ni\u5984\u60f3\u63a7\u5236\u8d85\u81ea\u7136\u5b58\u5728\uff0c\u906d\u7ef4\u5ea6\u964d\u7ea7\u6253\u51fb"
+                },
+                {
+                    "name": "10.\u6e05\u6d01\u5de5",
+                    "value": 138,
+                    "itemStyle": {
+                        "color": "#1dcced"
+                    },
+                    "death": "\u5077\u5077\u5582\u517b\"\u53ef\u601c\u7684\u5c71\u7f8a\"",
+                    "scene": "\u5c0f\u4e56\u4e56\u591a\u5403\u70b9\u2026\u2026\uff08\u53cd\u520d\u7269\u4ece\u5589\u5499\u55b7\u51fa\uff09",
+                    "analysis": "Si-Fe\u628a\u8ba4\u77e5\u6c61\u67d3\u4f53\u5f53\u5f31\u52bf\u7fa4\u4f53\u7167\u987e"
+                },
+                {
+                    "name": "11.\u8bd7\u4eba",
+                    "value": 44,
+                    "itemStyle": {
+                        "color": "#418856"
+                    },
+                    "death": "\u4e3a\u6d41\u6cea\u7684\u5154\u5b50\u5199\u60bc\u4ea1\u8bd7",
+                    "scene": "\u6b7b\u4ea1\u662f\u6700\u540e\u7684\u6e29\u67d4\u2026\u2026\uff08\u7b14\u5c16\u523a\u7a7f\u773c\u7403\u58f0\uff09",
+                    "analysis": "Fi-Ne\u5c06\u6c61\u67d3\u6d6a\u6f2b\u5316\uff0c\u6210\u4e3a\"\u5b83\"\u7684\u4f20\u64ad\u5a92\u4ecb"
+                },
+                {
+                    "name": "12.\u641e\u4e8b\u738b",
+                    "value": 32,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    },
+                    "death": "\u540c\u65f6\u7a7f\u4e0a\u9ed1\u8863+\u5154\u8033cosplay",
+                    "scene": "\u770b\u6211\u5361\u89c4\u5219BUG\u2026\u2026\uff08\u5168\u8eab\u957f\u6ee1\u6c34\u6bcd\u89e6\u987b\uff09",
+                    "analysis": "Ne-Ti\u5728\u8fdd\u89c4\u8fb9\u7f18\u75af\u72c2\u8bd5\u63a2\uff0c\u7ec8\u906d\u6982\u5ff5\u7ea7\u53cd\u566c"
+                },
+                {
+                    "name": "13.\u9884\u8a00\u5bb6",
+                    "value": 15,
+                    "itemStyle": {
+                        "color": "#418856"
+                    },
+                    "death": "\u4e3a\u6551ISTP\u6321\u4e0b\u5f71\u5b50\u653b\u51fb",
+                    "scene": "\u5feb\u8d70\uff01\u8fd9\u662f\u6211\u7684\u547d\u5b9a\u2026\u2026\uff08\u88ab\u865a\u7a7a\u541e\u566c\u58f0\uff09",
+                    "analysis": "Ni-Fe\u660e\u77e5\u5fc5\u6b7b\u4ecd\u98de\u86fe\u6251\u706b\uff0c\u6b89\u9053\u8005\u4e13\u5c5e\u7ed3\u5c40"
+                },
+                {
+                    "name": "14.\u6218\u7565\u5bb6",
+                    "value": 21,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    },
+                    "death": "\u8bd5\u56fe\u7528\u6570\u5b66\u516c\u5f0f\u56da\u7981\"\u5b83\"",
+                    "scene": "\u53ea\u8981\u5728\u514b\u83b1\u56e0\u74f6\u6a21\u578b\u91cc\u2026\u2026\uff08\u5927\u8111\u4ece\u9f3b\u5b54\u6d41\u51fa\uff09",
+                    "analysis": "Ni-Te\u8fc7\u5ea6\u63a8\u6f14\u9ad8\u7ef4\u5b58\u5728\uff0c\u7406\u6027\u4e3b\u4e49\u8005\u7684\u672b\u8def"
+                },
+                {
+                    "name": "15.\u89e3\u5bc6\u8005",
+                    "value": 33,
+                    "itemStyle": {
+                        "color": "#8e358a"
+                    },
+                    "death": "\u53d1\u73b0MBTI\u662f\u5b89\u5168\u5bc6\u94a5\u540e\u81ea\u6740",
+                    "scene": "\u6211\u4eec\u90fd\u662f\u7a0b\u5e8f\u2026\u2026\uff08\u5220\u9664\u81ea\u8eab\u6570\u636e\u97f3\u6548\uff09",
+                    "analysis": "Ti-Ne\u770b\u7834\u771f\u76f8\u5374\u65e0\u6cd5\u627f\u53d7\uff0c\u9009\u62e9\u91cf\u5b50\u6001\u6446\u70c2"
+                },
+                {
+                    "name": "16.\u751f\u5b58\u738b",
+                    "value": 54,
+                    "itemStyle": {
+                        "color": "#f1d72f"
+                    },
+                    "death": "\u7528\u94a2\u7b4b\u63d2\u7206\u63a7\u5236\u4e2d\u67a2",
+                    "scene": "\u53bb\u4ed6\u5988\u7684\u89c4\u5219\u2026\u2026\uff08\u7206\u70b8\u58f0\u4e2d\u6bd4\u4e2d\u6307\uff09",
+                    "analysis": "\u6210\u4e3a\u7b2c17\u6279\u5b9e\u9a8c\u7684\u6e05\u6d01\u5de5\uff0c\u6bcf\u5929\u8fb9\u4fee\u8bbe\u5907\u8fb9\u51b7\u7b11"
+                },
+                {
+                    "name": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 118,
+                    "itemStyle": {
+                        "color": "#94aacd"
+                    }
+                },
+                {
+                    "name": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 299,
+                    "itemStyle": {
+                        "color": "#afbdd3"
+                    }
+                },
+                {
+                    "name": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 74,
+                    "itemStyle": {
+                        "color": "#c3e0d5"
+                    }
+                },
+                {
+                    "name": "\u56db\u3001\u5f02\u7a7a\u95f4\u8ff7\u5931",
+                    "value": 57,
+                    "itemStyle": {
+                        "color": "#c3e2e2"
+                    }
+                },
+                {
+                    "name": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 102,
+                    "itemStyle": {
+                        "color": "#8acdcd"
+                    }
+                },
+                {
+                    "name": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 65,
+                    "itemStyle": {
+                        "color": "#92b6c8"
+                    }
+                },
+                {
+                    "name": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 273,
+                    "itemStyle": {
+                        "color": "#7d90b2"
+                    }
+                }
+            ],
+            "links": [
+                {
+                    "source": "ESFP",
+                    "target": "1.\u5bfc\u6e38",
+                    "value": 85
+                },
+                {
+                    "source": "ESTJ",
+                    "target": "2.\u56ed\u957f\u52a9\u7406",
+                    "value": 87
+                },
+                {
+                    "source": "ISFP",
+                    "target": "3.\u9972\u517b\u5458",
+                    "value": 88
+                },
+                {
+                    "source": "ESFJ",
+                    "target": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "value": 123
+                },
+                {
+                    "source": "ENFJ",
+                    "target": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "value": 25
+                },
+                {
+                    "source": "ESTP",
+                    "target": "6.\u6444\u5f71\u5e08",
+                    "value": 43
+                },
+                {
+                    "source": "ISTJ",
+                    "target": "7.\u8d22\u52a1",
+                    "value": 116
+                },
+                {
+                    "source": "ENFP",
+                    "target": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "value": 81
+                },
+                {
+                    "source": "ENTJ",
+                    "target": "9.\u6295\u8d44\u4eba",
+                    "value": 18
+                },
+                {
+                    "source": "ISFJ",
+                    "target": "10.\u6e05\u6d01\u5de5",
+                    "value": 138
+                },
+                {
+                    "source": "INFP",
+                    "target": "11.\u8bd7\u4eba",
+                    "value": 44
+                },
+                {
+                    "source": "ENTP",
+                    "target": "12.\u641e\u4e8b\u738b",
+                    "value": 32
+                },
+                {
+                    "source": "INFJ",
+                    "target": "13.\u9884\u8a00\u5bb6",
+                    "value": 15
+                },
+                {
+                    "source": "INTJ",
+                    "target": "14.\u6218\u7565\u5bb6",
+                    "value": 21
+                },
+                {
+                    "source": "INTP",
+                    "target": "15.\u89e3\u5bc6\u8005",
+                    "value": 33
+                },
+                {
+                    "source": "ISTP",
+                    "target": "16.\u751f\u5b58\u738b",
+                    "value": 54
+                },
+                {
+                    "source": "1.\u5bfc\u6e38",
+                    "target": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 30
+                },
+                {
+                    "source": "1.\u5bfc\u6e38",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 35
+                },
+                {
+                    "source": "1.\u5bfc\u6e38",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 19
+                },
+                {
+                    "source": "1.\u5bfc\u6e38",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 1
+                },
+                {
+                    "source": "2.\u56ed\u957f\u52a9\u7406",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 59
+                },
+                {
+                    "source": "2.\u56ed\u957f\u52a9\u7406",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 15
+                },
+                {
+                    "source": "2.\u56ed\u957f\u52a9\u7406",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 11
+                },
+                {
+                    "source": "2.\u56ed\u957f\u52a9\u7406",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 2
+                },
+                {
+                    "source": "3.\u9972\u517b\u5458",
+                    "target": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 45
+                },
+                {
+                    "source": "3.\u9972\u517b\u5458",
+                    "target": "\u56db\u3001\u5f02\u7a7a\u95f4\u8ff7\u5931",
+                    "value": 25
+                },
+                {
+                    "source": "3.\u9972\u517b\u5458",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 15
+                },
+                {
+                    "source": "3.\u9972\u517b\u5458",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 3
+                },
+                {
+                    "source": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 80
+                },
+                {
+                    "source": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 25
+                },
+                {
+                    "source": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 12
+                },
+                {
+                    "source": "4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 6
+                },
+                {
+                    "source": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "target": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 8
+                },
+                {
+                    "source": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 10
+                },
+                {
+                    "source": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "target": "\u56db\u3001\u5f02\u7a7a\u95f4\u8ff7\u5931",
+                    "value": 5
+                },
+                {
+                    "source": "5.\u513f\u7ae5\u533a\u8001\u5e08",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 2
+                },
+                {
+                    "source": "6.\u6444\u5f71\u5e08",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 15
+                },
+                {
+                    "source": "6.\u6444\u5f71\u5e08",
+                    "target": "\u56db\u3001\u5f02\u7a7a\u95f4\u8ff7\u5931",
+                    "value": 12
+                },
+                {
+                    "source": "6.\u6444\u5f71\u5e08",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 10
+                },
+                {
+                    "source": "6.\u6444\u5f71\u5e08",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 6
+                },
+                {
+                    "source": "7.\u8d22\u52a1",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 40
+                },
+                {
+                    "source": "7.\u8d22\u52a1",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 35
+                },
+                {
+                    "source": "7.\u8d22\u52a1",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 12
+                },
+                {
+                    "source": "7.\u8d22\u52a1",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 29
+                },
+                {
+                    "source": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "target": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 25
+                },
+                {
+                    "source": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 20
+                },
+                {
+                    "source": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 14
+                },
+                {
+                    "source": "8.\u5409\u7965\u7269\u626e\u6f14\u8005",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 22
+                },
+                {
+                    "source": "9.\u6295\u8d44\u4eba",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 5
+                },
+                {
+                    "source": "9.\u6295\u8d44\u4eba",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 7
+                },
+                {
+                    "source": "9.\u6295\u8d44\u4eba",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 6
+                },
+                {
+                    "source": "10.\u6e05\u6d01\u5de5",
+                    "target": "\u4e8c\u3001\u89c4\u5219\u5b88\u62a4\u8005",
+                    "value": 50
+                },
+                {
+                    "source": "10.\u6e05\u6d01\u5de5",
+                    "target": "\u56db\u3001\u5f02\u7a7a\u95f4\u8ff7\u5931",
+                    "value": 15
+                },
+                {
+                    "source": "10.\u6e05\u6d01\u5de5",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 16
+                },
+                {
+                    "source": "10.\u6e05\u6d01\u5de5",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 57
+                },
+                {
+                    "source": "11.\u8bd7\u4eba",
+                    "target": "\u4e00\u3001\u52a8\u7269\u540c\u5316",
+                    "value": 10
+                },
+                {
+                    "source": "11.\u8bd7\u4eba",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 8
+                },
+                {
+                    "source": "11.\u8bd7\u4eba",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 6
+                },
+                {
+                    "source": "11.\u8bd7\u4eba",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 20
+                },
+                {
+                    "source": "12.\u641e\u4e8b\u738b",
+                    "target": "\u4e09\u3001\u65f6\u95f4\u5faa\u73af",
+                    "value": 8
+                },
+                {
+                    "source": "12.\u641e\u4e8b\u738b",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 8
+                },
+                {
+                    "source": "12.\u641e\u4e8b\u738b",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 16
+                },
+                {
+                    "source": "13.\u9884\u8a00\u5bb6",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 4
+                },
+                {
+                    "source": "13.\u9884\u8a00\u5bb6",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 11
+                },
+                {
+                    "source": "14.\u6218\u7565\u5bb6",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 5
+                },
+                {
+                    "source": "14.\u6218\u7565\u5bb6",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 16
+                },
+                {
+                    "source": "15.\u89e3\u5bc6\u8005",
+                    "target": "\u516d\u3001\u771f\u76f8\u63ed\u9732",
+                    "value": 8
+                },
+                {
+                    "source": "15.\u89e3\u5bc6\u8005",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 25
+                },
+                {
+                    "source": "16.\u751f\u5b58\u738b",
+                    "target": "\u4e94\u3001\u6c38\u591c\u503c\u73ed",
+                    "value": 3
+                },
+                {
+                    "source": "16.\u751f\u5b58\u738b",
+                    "target": "\u4e03\u3001\u9ece\u660e\u9003\u8131",
+                    "value": 51
+                }
+            ],
+            "left": "5%",
+            "top": "90px",
+            "right": "15%",
+            "bottom": "5%",
+            "nodeWidth": 20,
+            "nodeGap": 20,
+            "nodeAlign": "none",
+            "layoutIterations": 0,
+            "orient": "horizontal",
+            "draggable": true,
+            "label": {
+                "show": true,
+                "position": "right",
+                "color": "#000000",
+                "margin": 8,
+                "fontSize": 12,
+                "fontWeight": "bold",
+                "fontFamily": "Microsoft YaHei",
+                "valueAnimation": false
+            },
+            "lineStyle": {
+                "show": true,
+                "width": 1,
+                "opacity": 0.7,
+                "curveness": 0.5,
+                "type": "solid",
+                "color": "target"
+            },
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "showContent": true,
+                "alwaysShowContent": false,
+                "showDelay": 0,
+                "hideDelay": 100,
+                "enterable": false,
+                "confine": false,
+                "appendToBody": false,
+                "transitionDuration": 0.4,
+                "formatter": function(params) { var nodeName = params.data.name; var nodeValue = params.data.value; var displayName = nodeValue ? nodeName + ': ' + nodeValue : nodeName; if (nodeName && /^\\d+\\./.test(nodeName)) { var roleDetails = { '1.\u5bfc\u6e38': { death: '\u5e26\u56e2\u65f6\u548c\u767d\u72ee\u5b50\u73a9\u81ea\u62cd', scene: '\"\u5bb6\u4eba\u4eec\u770b\u955c\u5934\uff01\u8fd9\u662f\u7b2c5\u5934\u767d\u72ee\u2026\u2026\u5455\uff08\u8840\u8089\u98de\u6e85\u58f0\uff09\"', analysis: '\u8fc7\u5ea6\u4f9d\u8d56Se\u76f8\u4fe1\"\u773c\u89c1\u4e3a\u5b9e\"\uff0c\u5ffd\u7565\u89c4\u5219\u4e2d\"4\u5934\u72ee\u5b50\"\u7684\u81f4\u547d\u7ec6\u8282' }, '2.\u56ed\u957f\u52a9\u7406': { death: '\u5f3a\u884c\u64e6\u9664\u6240\u6709\u8b66\u793a\u6d82\u9e26', scene: '\"\u89c4\u5219\u5c31\u662f\u89c4\u5219\uff01\u8fd9\u884c\u7ea2\u5b57\u5fc5\u987b\u64e6\u6389\u2026\u2026\u7b49\u7b49\u6211\u7684\u624b\u600e\u4e48\u878d\u5316\u4e86\uff1f\"', analysis: 'Te-Si\u50f5\u5316\u6267\u884c\u8868\u9762\u89c4\u5219\uff0c\u62b9\u53bbINFJ\u7528Fi-Ne\u7559\u4e0b\u7684\u6551\u547d\u7ebf\u7d22' }, '3.\u9972\u517b\u5458': { death: '\u7ed9\"\u6d41\u6cea\u7684\u5154\u5b50\"\u5582\u80e1\u841d\u535c', scene: '\"\u5b83\u4eec\u53ea\u662f\u997f\u4e86\u2026\u2026\u554a\u554a\u554a\u773c\u775b\uff01\u6211\u7684\u773c\u775b\uff01\"', analysis: 'Fi-Se\u8fc7\u5ea6\u5171\u60c5\u52a8\u7269\uff0c\u6210\u4e3a\u7b2c\u4e00\u4e2a\u88ab\"\u5b83\"\u6c61\u67d3\u7684\u8f7d\u4f53' }, '4.\u6e38\u5ba2\u4e2d\u5fc3\u63a5\u5f85': { death: '\u7ed9\u6bcf\u4e2a\u6e38\u5ba2\u5012\u5154\u5b50\u8840\u996e\u6599', scene: '\"\u8fd9\u662f\u672c\u56ed\u7279\u8272\u996e\u54c1\uff5e\u54e6\uff1f\u60a8\u600e\u4e48\u957f\u51fa\u5154\u8033\u6735\u4e86\uff1f\"', analysis: 'Fe\u76f2\u76ee\u670d\u52a1\u4ed6\u4eba\uff0c\u6ca1\u53d1\u73b0\u81ea\u5df1\u5728\u5e2e\"\u5b83\"\u6269\u6563\u6c61\u67d3' }, '5.\u513f\u7ae5\u533a\u8001\u5e08': { death: '\u7ec4\u7ec7\u5c0f\u670b\u53cb\u627e\"\u5931\u8e2a\u7684\u5927\u8c61\"', scene: '\"\u5b69\u5b50\u4eec\u8ddf\u6211\u6765\uff01\u6211\u77e5\u9053\u5927\u8c61\u5728\u2026\u2026\uff08\u88ab\u8c61\u9f3b\u7ede\u6740\u58f0\uff09\"', analysis: 'Fe-Ni\u8bd5\u56fe\u62ef\u6551\u6240\u6709\u4eba\uff0c\u5374\u8e0f\u5165\"\u5927\u8c61\u56ed\u533a\u8ba4\u77e5\u9677\u9631\"' }, '6.\u6444\u5f71\u5e08': { death: '\u5077\u62cd\u9ed1\u8863\u4eba\u7684\u771f\u9762\u76ee', scene: '\"\u8fd9\u5f20\u7167\u7247\u80fd\u62ff\u666e\u5229\u7b56\u5956\u2026\u2026\u7b49\u7b49\u76f8\u7247\u91cc\u7684\u6211\u600e\u4e48\u5728\u7b11\uff1f\"', analysis: 'Se-Ti\u8ffd\u6c42\u523a\u6fc0\uff0c\u89e6\u53d1\"\u4e0d\u53ef\u62cd\u6444\"\u7684\u6df1\u5c42\u89c4\u5219' }, '7.\u8d22\u52a1': { death: '\u6df1\u591c\u6e05\u70b9\u52a8\u7269\u56ed\u8d26\u76ee', scene: '\"\u6d77\u6d0b\u9986\u7684\u7528\u7535\u91cf\u5f02\u5e38\u2026\u2026\uff08\u8d26\u672c\u6e17\u51fa\u9c9c\u8840\uff09\"', analysis: 'Si-Te\u6267\u7740\u6838\u5bf9\u6570\u636e\uff0c\u53d1\u73b0\"\u5b83\"\u7684\u80fd\u6e90\u4f9b\u7ed9\u79d8\u5bc6\u540e\u88ab\u706d\u53e3' }, '8.\u5409\u7965\u7269\u626e\u6f14\u8005': { death: '\u548c\u5154\u5b50\u4eba\u5076\u8df3\u821e\u4e09\u5929\u4e09\u591c', scene: '\"\u65cb\u8f6c\uff5e\u8df3\u8dc3\uff5e\u54a6\u6211\u7684\u811a\u53d8\u6210\u8e44\u5b50\u4e86\uff1f\"', analysis: 'Ne-Fi\u628a\u89c4\u5219\u6c61\u67d3\u5f53\u884c\u4e3a\u827a\u672f\uff0c\u4e50\u6781\u751f\u60b2' }, '9.\u6295\u8d44\u4eba': { death: '\u8bd5\u56fe\u6536\u8d2d\u52a8\u7269\u56ed', scene: '\"\u6211\u547d\u4ee4\u4f60\u7acb\u523b\u505c\u6b62\u6c61\u67d3\u2026\u2026\uff08\u8f6c\u5316\u4e3a\u767d\u72ee\u5b50\u7684\u9aa8\u9abc\u7206\u88c2\u58f0\uff09\"', analysis: 'Te-Ni\u5984\u60f3\u63a7\u5236\u8d85\u81ea\u7136\u5b58\u5728\uff0c\u906d\u7ef4\u5ea6\u964d\u7ea7\u6253\u51fb' }, '10.\u6e05\u6d01\u5de5': { death: '\u5077\u5077\u5582\u517b\"\u53ef\u601c\u7684\u5c71\u7f8a\"', scene: '\"\u5c0f\u4e56\u4e56\u591a\u5403\u70b9\u2026\u2026\uff08\u53cd\u520d\u7269\u4ece\u5589\u5499\u55b7\u51fa\uff09\"', analysis: 'Si-Fe\u628a\u8ba4\u77e5\u6c61\u67d3\u4f53\u5f53\u5f31\u52bf\u7fa4\u4f53\u7167\u987e' }, '11.\u8bd7\u4eba': { death: '\u4e3a\u6d41\u6cea\u7684\u5154\u5b50\u5199\u60bc\u4ea1\u8bd7', scene: '\"\u6b7b\u4ea1\u662f\u6700\u540e\u7684\u6e29\u67d4\u2026\u2026\uff08\u7b14\u5c16\u523a\u7a7f\u773c\u7403\u58f0\uff09\"', analysis: 'Fi-Ne\u5c06\u6c61\u67d3\u6d6a\u6f2b\u5316\uff0c\u6210\u4e3a\"\u5b83\"\u7684\u4f20\u64ad\u5a92\u4ecb' }, '12.\u641e\u4e8b\u738b': { death: '\u540c\u65f6\u7a7f\u4e0a\u9ed1\u8863+\u5154\u8033cosplay', scene: '\"\u770b\u6211\u5361\u89c4\u5219BUG\u2026\u2026\uff08\u5168\u8eab\u957f\u6ee1\u6c34\u6bcd\u89e6\u987b\uff09\"', analysis: 'Ne-Ti\u5728\u8fdd\u89c4\u8fb9\u7f18\u75af\u72c2\u8bd5\u63a2\uff0c\u7ec8\u906d\u6982\u5ff5\u7ea7\u53cd\u566c' }, '13.\u9884\u8a00\u5bb6': { death: '\u4e3a\u6551ISTP\u6321\u4e0b\u5f71\u5b50\u653b\u51fb', scene: '\"\u5feb\u8d70\uff01\u8fd9\u662f\u6211\u7684\u547d\u5b9a\u2026\u2026\uff08\u88ab\u865a\u7a7a\u541e\u566c\u58f0\uff09\"', analysis: 'Ni-Fe\u660e\u77e5\u5fc5\u6b7b\u4ecd\u98de\u86fe\u6251\u706b\uff0c\u6b89\u9053\u8005\u4e13\u5c5e\u7ed3\u5c40' }, '14.\u6218\u7565\u5bb6': { death: '\u8bd5\u56fe\u7528\u6570\u5b66\u516c\u5f0f\u56da\u7981\"\u5b83\"', scene: '\"\u53ea\u8981\u5728\u514b\u83b1\u56e0\u74f6\u6a21\u578b\u91cc\u2026\u2026\uff08\u5927\u8111\u4ece\u9f3b\u5b54\u6d41\u51fa\uff09\"', analysis: 'Ni-Te\u8fc7\u5ea6\u63a8\u6f14\u9ad8\u7ef4\u5b58\u5728\uff0c\u7406\u6027\u4e3b\u4e49\u8005\u7684\u672b\u8def' }, '15.\u89e3\u5bc6\u8005': { death: '\u53d1\u73b0MBTI\u662f\u5b89\u5168\u5bc6\u94a5\u540e\u81ea\u6740', scene: '\"\u6211\u4eec\u90fd\u662f\u7a0b\u5e8f\u2026\u2026\uff08\u5220\u9664\u81ea\u8eab\u6570\u636e\u97f3\u6548\uff09\"', analysis: 'Ti-Ne\u770b\u7834\u771f\u76f8\u5374\u65e0\u6cd5\u627f\u53d7\uff0c\u9009\u62e9\u91cf\u5b50\u6001\u6446\u70c2' }, '16.\u751f\u5b58\u738b': { death: '\u7528\u94a2\u7b4b\u63d2\u7206\u63a7\u5236\u4e2d\u67a2', scene: '\"\u53bb\u4ed6\u5988\u7684\u89c4\u5219\u2026\u2026\uff08\u7206\u70b8\u58f0\u4e2d\u6bd4\u4e2d\u6307\uff09\"', analysis: '\u6210\u4e3a\u7b2c17\u6279\u5b9e\u9a8c\u7684\u6e05\u6d01\u5de5\uff0c\u6bcf\u5929\u8fb9\u4fee\u8bbe\u5907\u8fb9\u51b7\u7b11' } }; var detail = roleDetails[nodeName]; if (detail) { return '<div style=\"max-width: 320px; font-family: Microsoft YaHei; padding: 12px; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);\">' + '<div style=\"font-weight: bold; font-size: 14px; color: #333; margin-bottom: 10px;\">' + displayName + '</div>' + '<div style=\"height: 1px; background: rgba(0,0,0,0.4); margin: 10px 0; border-radius: 0.5px;\"></div>' + '<div style=\"margin-bottom: 8px; font-size: 13px;\"><strong style=\"color: #d73027;\">\u6b7b\u56e0\uff1a</strong><span style=\"color: #555;\">' + detail.death + '</span></div>' + '<div style=\"margin-bottom: 8px; font-style: italic; color: #666; font-size: 12px; line-height: 1.4; background: #fff; padding: 6px; border-radius: 4px; border-left: 3px solid #ddd;\">' + detail.scene + '</div>' + '<div style=\"font-size: 12px; color: #444; line-height: 1.4;\"><strong style=\"color: #1f77b4;\">\u529f\u80fd\u5206\u6790\uff1a</strong>' + detail.analysis + '</div>' + '</div>'; } } if (params.componentType === 'series' && params.dataType === 'edge') { return '<div style=\"font-family: Microsoft YaHei; padding: 8px;\">' + '<div style=\"font-weight: bold;\">' + params.data.source + ' --> ' + params.data.target + ': ' + params.data.value + '</div>' + '</div>'; } return '<div style=\"font-family: Microsoft YaHei; padding: 8px;\">' + '<div style=\"font-weight: bold;\">' + displayName + '</div>' + '</div>'; },
+                "textStyle": {
+                    "fontSize": 14
+                },
+                "borderWidth": 0,
+                "padding": 5,
+                "order": "seriesAsc"
+            },
+            "itemStyle": {
+                "borderWidth": 0
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "MBTI\u52a8\u7269\u56ed\u89c4\u5219\u602a\u8c08"
+            ],
+            "selected": {},
+            "show": false,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "title": [
+        {
+            "show": true,
+            "text": "MBTI\u52a8\u7269\u56ed\u89c4\u5219\u602a\u8c08",
+            "target": "blank",
+            "subtarget": "blank",
+            "left": "center",
+            "top": "30px",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#333333",
+                "fontWeight": "bold",
+                "fontFamily": "Microsoft YaHei",
+                "fontSize": 32,
+                "lineHeight": 1.5
+            }
+        }
+    ]
+};
+        chart_bbe5cbf8d3a2437a8361be750c8eca5e.setOption(option_bbe5cbf8d3a2437a8361be750c8eca5e);
+    </script>
+
+    
+    <!-- 说明文字卡片 -->
+    <div style="width: 1080px; margin: 40px auto 40px auto; font-family: Microsoft YaHei; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow: hidden;">
+        
+        <!-- 一、基础规则复刻 -->
+        <div style="padding: 30px; border-bottom: 2px solid #f0f0f0;">
+            <h2 style="color: #333; font-size: 24px; font-weight: bold; margin: 0 0 20px 0; border-left: 4px solid #cf262a; padding-left: 16px;">一、基础规则复刻</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #cf262a;">
+                <p style="margin: 0 0 12px 0; font-weight: bold; color: #333; font-size: 16px;">所有人在动物园入口获得《游客守则》：</p>
+                <ol style="margin: 0; padding-left: 20px; color: #555; line-height: 1.8;">
+                    <li>兔子血饮料必须倒在第三棵松树下</li>
+                    <li>白狮子园区有且只有4头狮子</li>
+                    <li>看到戴兔子耳饰的员工请反向行走</li>
+                    <li>大象的腿永远粗于躯干</li>
+                    <li>不要回答黑衣人的任何问题</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- 二、死亡规律总结 -->
+        <div style="padding: 30px; border-bottom: 2px solid #f0f0f0;">
+            <h2 style="color: #333; font-size: 24px; font-weight: bold; margin: 0 0 20px 0; border-left: 4px solid #cf262a; padding-left: 16px;">二、死亡规律总结</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #f1d72f;">
+                    <strong style="color: #856404;">S系：</strong><span style="color: #666;">死于过度依赖物理感知（Se/Si），被规则表象迷惑</span>
+                </div>
+                <div style="background: #d1ecf1; padding: 16px; border-radius: 8px; border-left: 4px solid #1dcced;">
+                    <strong style="color: #0c5460;">N系：</strong><span style="color: #666;">死于过度解读虚妄概念（Ni/Ne），陷入认知迷雾</span>
+                </div>
+                <div style="background: #f8d7da; padding: 16px; border-radius: 8px; border-left: 4px solid #8e358a;">
+                    <strong style="color: #721c24;">T系：</strong><span style="color: #666;">死于逻辑链条的致命缺口（Ti/Te），聪明反被聪明误</span>
+                </div>
+                <div style="background: #d4edda; padding: 16px; border-radius: 8px; border-left: 4px solid #418856;">
+                    <strong style="color: #155724;">F系：</strong><span style="color: #666;">死于情感纽带的维度碾压（Fi/Fe），温柔成为催命符</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 三、MBTI死亡卡片 -->
+        <div style="padding: 30px; border-bottom: 2px solid #f0f0f0;">
+            <h2 style="color: #333; font-size: 24px; font-weight: bold; margin: 0 0 20px 0; border-left: 4px solid #cf262a; padding-left: 16px;">三、MBTI死亡卡片</h2>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                
+                <!-- 第一行 -->
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #f1d72f; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">1.ESFP（导游）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：带团时和白狮子玩自拍</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"家人们看镜头！这是第5头白狮……呕（血肉飞溅声）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>过度依赖Se相信"眼见为实"，忽略规则中"4头狮子"的致命细节</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #1dcced; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">2.ESTJ（园长助理）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：强行擦除所有警示涂鸦</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"规则就是规则！这行红字必须擦掉……等等我的手怎么融化了？"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Te-Si僵化执行表面规则，抹去INFJ用Fi-Ne留下的救命线索</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #f1d72f; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">3.ISFP（饲养员）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：给"流泪的兔子"喂胡萝卜</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"它们只是饿了……啊啊啊眼睛！我的眼睛！"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Fi-Se过度共情动物，成为第一个被"它"污染的载体</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #1dcced; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">4.ESFJ（游客中心接待）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：给每个游客倒兔子血饮料</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"这是本园特色饮品～哎？您怎么长出兔耳朵了？"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Fe盲目服务他人，没发现自己在帮"它"扩散污染</p>
+                </div>
+                
+                <!-- 第二行 -->
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #418856; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">5.ENFJ（儿童区老师）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：组织小朋友找"失踪的大象"</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"孩子们跟我来！我知道大象在……（被象鼻绞杀声）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Fe-Ni试图拯救所有人，却踏入"大象园区认知陷阱"</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #f1d72f; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">6.ESTP（摄影师）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：偷拍黑衣人的真面目</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"这张照片能拿普利策奖……等等相片里的我怎么在笑？"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Se-Ti追求刺激，触发"不可拍摄"的深层规则</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #1dcced; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">7.ISTJ（财务）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：深夜清点动物园账目</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"海洋馆的用电量异常……（账本渗出鲜血）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Si-Te执着核对数据，发现"它"的能源供给秘密后被灭口</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #418856; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">8.ENFP（吉祥物扮演者）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：和兔子人偶跳舞三天三夜</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"旋转～跳跃～咦我的脚变成蹄子了？"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Ne-Fi把规则污染当行为艺术，乐极生悲</p>
+                </div>
+                
+                <!-- 第三行 -->
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #8e358a; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">9.ENTJ（投资人）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：试图收购动物园</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"我命令你立刻停止污染……（转化为白狮子的骨骼爆裂声）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Te-Ni妄想控制超自然存在，遭维度降级打击</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #1dcced; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">10.ISFJ（清洁工）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：偷偷喂养"可怜的山羊"</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"小乖乖多吃点……（反刍物从喉咙喷出）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Si-Fe把认知污染体当弱势群体照顾</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #418856; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">11.INFP（诗人）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：为流泪的兔子写悼亡诗</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"死亡是最后的温柔……（笔尖刺穿眼球声）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Fi-Ne将污染浪漫化，成为"它"的传播媒介</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #8e358a; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">12.ENTP（搞事王）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：同时穿上黑衣+兔耳cosplay</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"看我卡规则BUG……（全身长满水母触须）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Ne-Ti在违规边缘疯狂试探，终遭概念级反噬</p>
+                </div>
+                
+                <!-- 第四行 -->
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #418856; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">13.INFJ（预言家）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：为救ISTP挡下影子攻击</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"快走！这是我的命定……（被虚空吞噬声）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Ni-Fe明知必死仍飞蛾扑火，殉道者专属结局</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #8e358a; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">14.INTJ（战略家）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：试图用数学公式囚禁"它"</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"只要在克莱因瓶模型里……（大脑从鼻孔流出）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Ni-Te过度推演高维存在，理性主义者的末路</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #8e358a; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">15.INTP（解密者）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #d73027; font-weight: bold;">死因：发现MBTI是安全密钥后自杀</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"我们都是程序……（删除自身数据音效）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">功能分析：</strong>Ti-Ne看破真相却无法承受，选择量子态摆烂</p>
+                </div>
+                
+                <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; transition: box-shadow 0.3s ease;">
+                    <h4 style="color: #f1d72f; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">16.ISTP（生存王）</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #28a745; font-weight: bold;">伪死因：用钢筋插爆控制中枢</p>
+                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; font-style: italic; background: #f9f9f9; padding: 6px; border-radius: 4px;">"去他妈的规则……（爆炸声中比中指）"</p>
+                    <p style="margin: 0; font-size: 11px; color: #444; line-height: 1.4;"><strong style="color: #1f77b4;">实际结局：</strong>成为第17批实验的清洁工，每天边修设备边冷笑</p>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- 四、注释 -->
+        <div style="padding: 30px; background: #f8f9fa;">
+            <h2 style="color: #333; font-size: 24px; font-weight: bold; margin: 0 0 20px 0; border-left: 4px solid #cf262a; padding-left: 16px;">四、注释</h2>
+            <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; text-align: center;">
+                <p style="margin: 0; font-size: 14px; color: #666; font-style: italic; line-height: 1.6;">（注：本锐评含80%刻板印象+20%玄学，幸存率取决于你有多像ISTP）</p>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>
