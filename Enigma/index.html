@@ -42,6 +42,7 @@
                     <div class="header-left">
                         <button class="back-btn" onclick="backToSelection()">← 返回</button>
                         <button class="home-btn" onclick="goToHome()">🏠 首页</button>
+                        <button class="change-btn" onclick="changeQuestion()">换一个</button>
                     </div>
                     <div class="game-info">
                         <span id="current-mode">经典模式</span>
@@ -53,6 +54,13 @@
                     <div class="story-card">
                         <h2>故事背景</h2>
                         <p id="story-text">加载中...</p>
+                    </div>
+                </div>
+
+                <div class="hint-display-container" id="hint-display-container" style="display: none;">
+                    <div class="hint-display-card">
+                        <h3>💡 温馨提示</h3>
+                        <p id="hint-display-text"></p>
                     </div>
                 </div>
 
@@ -95,8 +103,8 @@
                         <p id="full-answer">答案加载中...</p>
                     </div>
                     <div class="answer-actions">
+                        <button class="back-btn" onclick="backToConversation()">返回对话</button>
                         <button class="next-btn" onclick="nextQuestion()">下一题</button>
-                        <button class="restart-btn" onclick="restartGame()">重新开始</button>
                         <button class="home-btn-answer" onclick="goToHome()">🏠 回到首页</button>
                     </div>
                 </div>
