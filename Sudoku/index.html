@@ -809,21 +809,36 @@
             .sudoku-grid,
             .sudoku-grid *,
             .cell,
-            .cell * {
+            .cell *,
+            .game-number-display,
+            .game-number-display *,
+            .website-link,
+            .website-link * {
                 visibility: visible;
             }
             
+            body {
+                margin: 0 !important;
+                padding: 40px !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                min-height: 100vh !important;
+                background: white !important;
+            }
+            
             .game-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100% !important;
-                height: 100% !important;
+                position: relative !important;
+                width: auto !important;
+                height: auto !important;
                 display: flex !important;
                 justify-content: center !important;
                 align-items: center !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                background: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
             }
             
             .left-panel {
@@ -855,15 +870,39 @@
                 display: none !important;
             }
             
-            /* 显示游戏编号 */
+            /* 游戏编号作为标题显示在页面顶部 */
             .game-number-display {
-                display: block !important;
-                position: relative;
-                margin-top: 20px;
-                font-size: 16px;
-                color: #566e91;
-                font-weight: bold;
-                text-align: center;
+                position: absolute !important;
+                top: -35px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                color: #566e91 !important;
+                font-weight: bold !important;
+                text-align: center !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            .game-number-hash,
+            .game-number-digit {
+                font-size: 24px !important;
+                line-height: 1 !important;
+                margin: 0 !important;
+            }
+            
+            /* 网页链接显示在页面底部 */
+            .website-link {
+                position: fixed !important;
+                bottom: 20px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                font-size: 14px !important;
+                color: #333 !important;
+                text-align: center !important;
+                margin: 0 !important;
+                z-index: 10 !important;
             }
         }
         
@@ -1668,6 +1707,12 @@
             updateDisplay();
             updateNumberCounts();
             
+            // 清除数字选择状态，确保选择单次有效
+            selectedNumber = null;
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
             // 检查是否完成
             if (isBoardComplete()) {
                 if (isBoardValid()) {
@@ -1816,6 +1861,17 @@
                         btnElement.classList.remove('count-hidden');
                     } else {
                         btnElement.classList.add('count-hidden');
+                    }
+                    
+                    // 数量为零时禁用按钮
+                    if (numberCounts[i] === 0) {
+                        btnElement.classList.add('disabled');
+                        btnElement.style.pointerEvents = 'none';
+                        btnElement.style.opacity = '0.5';
+                    } else {
+                        btnElement.classList.remove('disabled');
+                        btnElement.style.pointerEvents = 'auto';
+                        btnElement.style.opacity = '1';
                     }
                 }
             }
@@ -1967,12 +2023,14 @@
                 // 可以添加遮罩层隐藏数独网格
                 document.getElementById('sudoku-grid').style.filter = 'blur(5px)';
                 
-                // 禁用四个按钮
+                // 禁用六个按钮（包括打印按钮和新游戏按钮）
                 const buttonsToDisable = [
                     document.querySelector('button[onclick="getRandomHint()"]'),
                     document.querySelector('button[onclick="undoMove()"]'),
                     document.getElementById('eraser-btn'),
-                    document.getElementById('toggle-count-btn')
+                    document.getElementById('toggle-count-btn'),
+                    document.querySelector('button[onclick="printPage()"]'),
+                    Array.from(document.querySelectorAll('button')).find(btn => btn.textContent.includes('新游戏'))
                 ];
                 buttonsToDisable.forEach(btn => {
                     if (btn) {
@@ -1991,12 +2049,14 @@
                 pauseBtn.querySelector('.btn-text').textContent = '暂停';
                 document.getElementById('sudoku-grid').style.filter = 'none';
                 
-                // 启用四个按钮
+                // 启用六个按钮（包括打印按钮和新游戏按钮）
                 const buttonsToEnable = [
                     document.querySelector('button[onclick="getRandomHint()"]'),
                     document.querySelector('button[onclick="undoMove()"]'),
                     document.getElementById('eraser-btn'),
-                    document.getElementById('toggle-count-btn')
+                    document.getElementById('toggle-count-btn'),
+                    document.querySelector('button[onclick="printPage()"]'),
+                    Array.from(document.querySelectorAll('button')).find(btn => btn.textContent.includes('新游戏'))
                 ];
                 buttonsToEnable.forEach(btn => {
                     if (btn) {
@@ -2032,12 +2092,54 @@
             }
         }
 
+        // 标记错误区域的函数
+        function markErrorCells() {
+            const cells = document.querySelectorAll('.cell');
+            
+            // 清除之前的错误标记
+            cells.forEach(cell => {
+                cell.classList.remove('error');
+            });
+            
+            // 检查每个已填入的数字是否有冲突
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const num = board[row][col];
+                    if (num !== 0 && !isValidMove(row, col, num)) {
+                        const cellIndex = row * 9 + col;
+                        const cell = document.querySelectorAll('.cell')[cellIndex];
+                        cell.classList.add('error');
+                    }
+                }
+            }
+        }
+        
         function getRandomHint() {
             // 暂停状态下禁用提示功能
             if (isPaused) return;
             
             const hintBtn = event.target.closest('.icon-btn');
             addClickAnimation(hintBtn);
+            
+            // 检查是否所有数字都用完了
+            let allNumbersUsed = true;
+            for (let i = 1; i <= 9; i++) {
+                if (numberCounts[i] > 0) {
+                    allNumbersUsed = false;
+                    break;
+                }
+            }
+            
+            if (allNumbersUsed) {
+                // 所有数字都用完了，标记错误区域
+                markErrorCells();
+                document.getElementById('status').textContent = '所有数字已用完，已标记错误区域';
+                document.getElementById('status').className = 'status error';
+                setTimeout(() => {
+                    document.getElementById('status').textContent = '';
+                }, 3000);
+                return;
+            }
             
             // 找到一个空的单元格并给出提示
             const emptyCells = [];
@@ -2053,27 +2155,33 @@
                 const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
                 const correctValue = solution[randomCell.row][randomCell.col];
                 
-                // 高亮显示提示
-                const cellIndex = randomCell.row * 9 + randomCell.col;
-                const cell = document.querySelectorAll('.cell')[cellIndex];
-                cell.style.background = '#ffeb3b';
-                cell.textContent = correctValue;
-                board[randomCell.row][randomCell.col] = correctValue;
-                
-                // 2秒后恢复正常颜色
-                setTimeout(() => {
-                    cell.style.background = '';
-                }, 2000);
-                
-                updateNumberCounts();
-                
-                // 检查是否完成
-                if (isBoardComplete()) {
-                    if (isBoardValid()) {
-                        document.getElementById('status').textContent = '恭喜！你成功完成了数独！';
-                        document.getElementById('status').className = 'status success';
-                        stopTimer();
+                // 检查这个数字是否还有剩余
+                if (numberCounts[correctValue] > 0) {
+                    // 高亮显示提示
+                    const cellIndex = randomCell.row * 9 + randomCell.col;
+                    const cell = document.querySelectorAll('.cell')[cellIndex];
+                    cell.style.background = '#ffeb3b';
+                    cell.textContent = correctValue;
+                    board[randomCell.row][randomCell.col] = correctValue;
+                    
+                    // 2秒后恢复正常颜色
+                    setTimeout(() => {
+                        cell.style.background = '';
+                    }, 2000);
+                    
+                    updateNumberCounts();
+                    
+                    // 检查是否完成
+                    if (isBoardComplete()) {
+                        if (isBoardValid()) {
+                            document.getElementById('status').textContent = '恭喜！你成功完成了数独！';
+                            document.getElementById('status').className = 'status success';
+                            stopTimer();
+                        }
                     }
+                } else {
+                    // 这个数字已经用完，重新尝试其他空格
+                    getRandomHint();
                 }
             }
         }
