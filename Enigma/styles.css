@@ -123,7 +123,7 @@ body {
     gap: 10px;
 }
 
-.back-btn, .home-btn {
+.back-btn, .home-btn, .change-btn {
     background: #f8f9fa;
     border: 1px solid #dee2e6;
     border-radius: 8px;
@@ -133,7 +133,7 @@ body {
     font-size: 0.9rem;
 }
 
-.back-btn:hover, .home-btn:hover {
+.back-btn:hover, .home-btn:hover, .change-btn:hover {
     background: #e9ecef;
 }
 
@@ -145,6 +145,36 @@ body {
 
 .home-btn:hover {
     background: #bbdefb;
+}
+
+.change-btn {
+    background: #00b894;
+    color: white;
+    border-color: #00b894;
+}
+
+.change-btn:hover {
+    background: #00a085;
+    border-color: #00a085;
+}
+
+.back-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .game-info {
@@ -163,6 +193,34 @@ body {
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.hint-display-container {
+    margin: 20px 0;
+}
+
+.hint-display-card {
+    background: rgba(255, 248, 220, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 24px rgba(255, 193, 7, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-left: 4px solid #ffc107;
+}
+
+.hint-display-card h3 {
+    color: #e65100;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hint-display-card p {
+    color: #5d4037;
+    margin: 0;
+    line-height: 1.6;
+    font-size: 16px;
 }
 
 .story-card h2 {
@@ -364,6 +422,28 @@ body {
     font-size: 1.1rem;
     line-height: 1.8;
     color: #34495e;
+}
+
+.conversation-summary {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.conversation-summary h3 {
+    margin: 0 0 15px 0;
+    color: #2d3436;
+    font-size: 18px;
+}
+
+.conversation-summary .conversation-log {
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
 }
 
 .answer-actions {
