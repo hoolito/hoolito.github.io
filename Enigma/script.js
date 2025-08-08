@@ -882,13 +882,12 @@ function initGame() {
 // 开始游戏
 function startGame(mode) {
     currentGame.mode = mode;
-    currentGame.questionIndex = 0;
     currentGame.questions = [...gameData[mode]];
     currentGame.hintsUsed = 0;
     currentGame.conversationLog = [];
     
-    // 随机打乱题目顺序
-    shuffleArray(currentGame.questions);
+    // 随机选择一个题目作为起始题目
+    currentGame.questionIndex = Math.floor(Math.random() * currentGame.questions.length);
     
     document.getElementById('current-mode').textContent = getModeDisplayName(mode);
     updateQuestionCounter();
@@ -1047,8 +1046,18 @@ function getHint() {
     const currentQuestion = currentGame.questions[currentGame.questionIndex];
     const hint = currentQuestion.hints[currentGame.hintsUsed];
     
+    // 显示弹窗提示
     document.getElementById('hint-text').textContent = hint;
     document.getElementById('hint-modal').style.display = 'block';
+    
+    // 累积显示所有提示
+    const hintDisplayText = document.getElementById('hint-display-text');
+    const allHints = [];
+    for (let i = 0; i <= currentGame.hintsUsed; i++) {
+        allHints.push(`${i + 1}. ${currentQuestion.hints[i]}`);
+    }
+    hintDisplayText.textContent = allHints.join('\n　\n');
+    document.getElementById('hint-display-container').style.display = 'block';
     
     currentGame.hintsUsed++;
     updateHintCounter();
@@ -1072,26 +1081,58 @@ function updateHintCounter() {
     }
 }
 
+// 换一个题目
+function changeQuestion() {
+    if (currentGame.conversationLog.length > 0) {
+        if (!confirm('切换题目将清除当前对话记录，确定要继续吗？')) {
+            return;
+        }
+    }
+    
+    // 随机选择一个新题目
+    const newIndex = Math.floor(Math.random() * currentGame.questions.length);
+    currentGame.questionIndex = newIndex;
+    currentGame.hintsUsed = 0;
+    currentGame.conversationLog = [];
+    
+    // 隐藏温馨提示区域
+    const hintDisplayContainer = document.getElementById('hint-display-container');
+    if (hintDisplayContainer) {
+        hintDisplayContainer.style.display = 'none';
+    }
+    
+    updateQuestionCounter();
+    updateHintCounter();
+    loadCurrentQuestion();
+}
+
 // 显示答案
 function showAnswer() {
     const currentQuestion = currentGame.questions[currentGame.questionIndex];
     document.getElementById('full-answer').textContent = currentQuestion.answer;
+    
     showScreen('answer-screen');
+}
+
+function backToConversation() {
+    showScreen('game-screen');
 }
 
 // 下一题
 function nextQuestion() {
-    currentGame.questionIndex++;
+    // 随机选择下一题
+    const newIndex = Math.floor(Math.random() * currentGame.questions.length);
+    currentGame.questionIndex = newIndex;
     
-    if (currentGame.questionIndex >= currentGame.questions.length) {
-        // 游戏结束
-        alert('恭喜你完成了所有题目！');
-        backToSelection();
-        return;
-    }
-    
-    // 重置提示计数
+    // 重置提示计数和对话记录
     currentGame.hintsUsed = 0;
+    currentGame.conversationLog = [];
+    
+    // 隐藏温馨提示区域
+    const hintDisplayContainer = document.getElementById('hint-display-container');
+    if (hintDisplayContainer) {
+        hintDisplayContainer.style.display = 'none';
+    }
     updateHintCounter();
     updateQuestionCounter();
     
