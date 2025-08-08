@@ -39,9 +39,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             padding: 30px;
             display: flex;
-            gap: 40px;
+            gap: 80px;
             align-items: flex-start;
-            width: 900px;
+            width: 950px;
+            position: relative;
         }
 
         .left-panel {
@@ -247,7 +248,7 @@
         }
 
         .game-action-buttons {
-            margin-top: 20px;
+            margin-top: 6px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -360,6 +361,53 @@
 
         .icon-btn.clicked {
             animation: buttonClick 0.2s ease;
+        }
+
+        /* 暂停覆盖层样式 */
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            border-radius: 8px;
+        }
+        
+        .pause-overlay.show {
+            display: flex;
+        }
+        
+        .pause-icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pause-icon::before,
+        .pause-icon::after {
+            content: '';
+            width: 8px;
+            height: 40px;
+            background: #566e91;
+            border-radius: 4px;
+        }
+        
+        .pause-icon::before {
+            margin-right: 8px;
+        }
+        
+        .pause-icon::after {
+            margin-left: 8px;
         }
 
         /* 暂停按钮特殊状态 */
@@ -651,6 +699,174 @@
             color: white !important;
         }
         
+        /* 按钮禁用状态样式 */
+        .icon-btn.disabled {
+            opacity: 0.5 !important;
+            pointer-events: none !important;
+            cursor: not-allowed !important;
+            background: #f0f0f0 !important;
+            color: #999 !important;
+            border-color: #ddd !important;
+        }
+        
+        /* 游戏编号显示样式（已移至下方统一定义） */
+        
+        /* 打印和添加到桌面按钮样式 */
+        .print-desktop-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+            width: 100%;
+            max-width: 300px; /* 与上方三个按钮的宽度对齐 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .rect-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 2px solid #566e91;
+            border-radius: 8px;
+            color: #566e91;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+        
+        .rect-btn:first-child {
+            margin-right: 2px;
+        }
+        
+        .rect-btn:last-child {
+            margin-left: 2px;
+        }
+        
+        .rect-btn:hover {
+            background: #566e91;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(86, 110, 145, 0.3);
+        }
+        
+        .rect-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(86, 110, 145, 0.2);
+        }
+        
+        .rect-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+        
+        /* 游戏编号样式 */
+        .game-number-display {
+            position: absolute;
+            top: calc(540px - 25px);
+            left: calc(540px + 50px);
+            text-align: center;
+            color: #566e91;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .game-number-display:hover {
+            color: #2196f3;
+            transform: scale(1.05);
+        }
+        
+        .game-number-hash {
+            font-size: 32px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        
+        .game-number-digit {
+            font-size: 18px;
+            line-height: 1;
+        }
+        
+        /* 打印样式 - 只显示数独游戏区域 */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .game-container,
+            .game-container *,
+            .left-panel,
+            .left-panel *,
+            .sudoku-grid,
+            .sudoku-grid *,
+            .cell,
+            .cell * {
+                visibility: visible;
+            }
+            
+            .game-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                height: 100% !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .left-panel {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .sudoku-grid {
+                width: 450px !important;
+                height: 450px !important;
+                margin: 0 !important;
+            }
+            
+            .cell {
+                font-size: 24px !important;
+                border: 1px solid #333 !important;
+            }
+            
+            /* 隐藏不需要打印的元素 */
+            .header-section,
+            .right-panel,
+            .number-grid,
+            .game-action-buttons,
+            .print-desktop-buttons,
+            .instructions-container,
+            .status {
+                display: none !important;
+            }
+            
+            /* 显示游戏编号 */
+            .game-number-display {
+                display: block !important;
+                position: relative;
+                margin-top: 20px;
+                font-size: 16px;
+                color: #566e91;
+                font-weight: bold;
+                text-align: center;
+            }
+        }
+        
         /* 配图样式 */
         .instruction-diagram {
             margin: 30px 0;
@@ -746,6 +962,11 @@
             <div class="timer" id="timer">时间: 00:00</div>
         </div>
         <div class="game-container">
+            <!-- 游戏编号显示 -->
+            <div class="game-number-display" onclick="showGameNumberInput()">
+                <div class="game-number-hash">#</div>
+                <div class="game-number-digit" id="game-number">001</div>
+            </div>
             <div class="left-panel">
                 <div class="sudoku-grid" id="sudoku-grid"></div>
                 <div class="status" id="status"></div>
@@ -828,7 +1049,7 @@
                 
                 <!-- 第二行按钮 -->
                 <div class="button-row">
-                    <button class="icon-btn" onclick="undo()" title="撤销">
+                    <button class="icon-btn" onclick="undoMove()" title="撤销">
                          <svg viewBox="0 0 1024 1024" fill="currentColor" stroke="none" style="width: 44px; height: 44px;">
                              <path d="M863.146667 93.866667h-682.666667c-28.16 0-51.2 23.04-51.2 51.2v733.866666c0 28.16 23.04 51.2 51.2 51.2h256c18.773333 0 34.133333-15.36 34.133333-34.133333s-15.36-34.133333-34.133333-34.133333h-238.933333V162.133333h648.533333v290.133334c0 18.773333 15.36 34.133333 34.133333 34.133333s34.133333-15.36 34.133334-34.133333V145.066667c0-28.16-22.613333-51.2-51.2-51.2z"/>
                              <path d="M344.32 663.893333c-13.226667-13.226667-13.226667-34.986667 0-48.213333l132.693333-132.693333c13.226667-13.226667 34.986667-13.226667 48.213334 0 13.226667 13.226667 13.226667 34.986667 0 48.213333L392.533333 663.893333a33.493333 33.493333 0 0 1-48.213333 0z"/>
@@ -854,6 +1075,30 @@
                       </button>
                 </div>
             </div>
+            
+            <!-- 新增的打印和添加到桌面按钮 -->
+            <div class="print-desktop-buttons">
+                <button class="rect-btn" onclick="printPage()" title="打印">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 6,2 18,2 18,9"/>
+                        <path d="M6,18H4a2,2 0 0,1-2-2v-5a2,2 0 0,1,2-2H20a2,2 0 0,1,2,2v5a2,2 0 0,1-2,2H18"/>
+                        <polyline points="6,14 18,14 18,22 6,22 6,14"/>
+                    </svg>
+                    <span class="btn-text">打印</span>
+                </button>
+                <button class="rect-btn" onclick="addToDesktop()" title="添加到桌面">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <!-- 显示器屏幕 -->
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <!-- 显示器底座 -->
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <!-- 显示器支架 -->
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                    <span class="btn-text">添加到桌面</span>
+                </button>
+            </div>
+            
             </div>
         </div>
 
@@ -951,12 +1196,170 @@
         let moveHistory = [];
         let showNumberCount = true;
         let numberCounts = {1: 9, 2: 9, 3: 9, 4: 9, 5: 9, 6: 9, 7: 9, 8: 9, 9: 9};
+        let currentGameNumber = 1; // 当前游戏编号
+        
+        // 100组数独题目库
+        const puzzleLibrary = [
+            // #001
+            {
+                puzzle: [
+                    [5,3,0,0,7,0,0,0,0],
+                    [6,0,0,1,9,5,0,0,0],
+                    [0,9,8,0,0,0,0,6,0],
+                    [8,0,0,0,6,0,0,0,3],
+                    [4,0,0,8,0,3,0,0,1],
+                    [7,0,0,0,2,0,0,0,6],
+                    [0,6,0,0,0,0,2,8,0],
+                    [0,0,0,4,1,9,0,0,5],
+                    [0,0,0,0,8,0,0,7,9]
+                ],
+                solution: [
+                    [5,3,4,6,7,8,9,1,2],
+                    [6,7,2,1,9,5,3,4,8],
+                    [1,9,8,3,4,2,5,6,7],
+                    [8,5,9,7,6,1,4,2,3],
+                    [4,2,6,8,5,3,7,9,1],
+                    [7,1,3,9,2,4,8,5,6],
+                    [9,6,1,5,3,7,2,8,4],
+                    [2,8,7,4,1,9,6,3,5],
+                    [3,4,5,2,8,6,1,7,9]
+                ]
+            },
+            // #002
+            {
+                puzzle: [
+                    [0,0,0,6,0,0,4,0,0],
+                    [7,0,0,0,0,3,6,0,0],
+                    [0,0,0,0,9,1,0,8,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,5,0,1,8,0,0,0,3],
+                    [0,0,0,3,0,6,0,4,5],
+                    [0,4,0,2,0,0,0,6,0],
+                    [9,0,3,0,0,0,0,0,0],
+                    [0,2,0,0,0,0,1,0,0]
+                ],
+                solution: [
+                    [1,3,2,6,7,8,4,5,9],
+                    [7,8,9,4,5,3,6,1,2],
+                    [4,6,5,7,9,1,3,8,7],
+                    [3,1,7,5,2,4,8,9,6],
+                    [6,5,4,1,8,9,7,2,3],
+                    [2,9,8,3,1,6,9,4,5],
+                    [5,4,1,2,3,7,9,6,8],
+                    [9,7,3,8,6,5,2,3,1],
+                    [8,2,6,9,4,3,1,7,4]
+                ]
+             },
+             // #003
+             {
+                 puzzle: [
+                     [0,2,0,6,0,8,0,0,0],
+                     [5,8,0,0,0,9,7,0,0],
+                     [0,0,0,0,4,0,0,0,0],
+                     [3,7,0,0,0,0,5,0,0],
+                     [6,0,0,0,0,0,0,0,4],
+                     [0,0,8,0,0,0,0,1,3],
+                     [0,0,0,0,2,0,0,0,0],
+                     [0,0,9,8,0,0,0,3,6],
+                     [0,0,0,3,0,6,0,9,0]
+                 ],
+                 solution: [
+                     [1,2,3,6,5,8,9,4,7],
+                     [5,8,4,2,3,9,7,6,1],
+                     [9,6,7,1,4,3,8,2,5],
+                     [3,7,1,9,6,4,5,8,2],
+                     [6,9,2,5,8,1,3,7,4],
+                     [4,5,8,7,9,2,6,1,3],
+                     [8,3,6,4,2,5,1,9,7],
+                     [2,1,9,8,7,4,4,3,6],
+                     [7,4,5,3,1,6,2,9,8]
+                 ]
+             },
+             // #004
+             {
+                 puzzle: [
+                     [0,0,0,0,0,0,6,8,0],
+                     [0,0,0,0,0,3,0,0,0],
+                     [7,0,0,0,9,0,5,0,0],
+                     [5,7,0,0,0,0,0,0,0],
+                     [0,0,0,0,8,0,0,0,0],
+                     [0,0,0,0,0,0,0,4,2],
+                     [0,0,5,0,0,0,0,0,3],
+                     [0,0,0,3,0,0,0,0,0],
+                     [0,4,2,0,0,0,0,0,0]
+                 ],
+                 solution: [
+                     [1,3,4,2,5,7,6,8,9],
+                     [2,6,8,4,1,3,7,9,5],
+                     [7,2,3,6,9,8,5,1,4],
+                     [5,7,1,9,3,4,8,6,2],
+                     [4,9,6,1,8,2,3,5,7],
+                     [3,8,9,5,7,6,1,4,2],
+                     [6,1,5,7,4,9,2,8,3],
+                     [8,5,7,3,2,1,9,6,4],
+                     [9,4,2,8,6,5,4,3,1]
+                 ]
+             },
+             // #005
+             {
+                 puzzle: [
+                     [0,0,0,0,0,0,0,0,0],
+                     [0,0,0,0,0,3,0,8,5],
+                     [0,0,1,0,2,0,0,0,0],
+                     [0,0,0,5,0,7,0,0,0],
+                     [0,0,4,0,0,0,1,0,0],
+                     [0,9,0,0,0,0,0,0,0],
+                     [5,0,0,0,0,0,0,7,3],
+                     [0,0,2,0,1,0,0,0,0],
+                     [0,0,0,0,4,0,0,0,9]
+                 ],
+                 solution: [
+                     [9,8,7,6,5,4,3,2,1],
+                     [2,4,6,1,7,3,9,8,5],
+                     [3,5,1,9,2,8,7,4,6],
+                     [1,2,8,5,3,7,6,9,4],
+                     [6,3,4,8,9,2,1,5,7],
+                     [7,9,5,4,6,1,8,3,2],
+                     [5,1,9,2,8,6,4,7,3],
+                     [4,7,2,3,1,9,5,6,8],
+                     [8,6,3,7,4,5,2,1,9]
+                 ]
+             }
+         ];
+         
+         // 生成剩余95组题目（简化版本，基于前5组的变化）
+         function generateRemainingPuzzles() {
+             const basePuzzles = puzzleLibrary.slice(0, 5);
+             
+             for (let i = 5; i < 100; i++) {
+                 const baseIndex = i % 5;
+                 const basePuzzle = basePuzzles[baseIndex];
+                 
+                 // 创建变化版本（简单的数字替换）
+                 const newPuzzle = {
+                     puzzle: basePuzzle.puzzle.map(row => row.map(cell => {
+                         if (cell === 0) return 0;
+                         // 简单的数字映射变换
+                         const mapping = [(i % 9) + 1, ((i + 1) % 9) + 1, ((i + 2) % 9) + 1, ((i + 3) % 9) + 1, ((i + 4) % 9) + 1, ((i + 5) % 9) + 1, ((i + 6) % 9) + 1, ((i + 7) % 9) + 1, ((i + 8) % 9) + 1];
+                         return mapping[cell - 1];
+                     })),
+                     solution: basePuzzle.solution.map(row => row.map(cell => {
+                         const mapping = [(i % 9) + 1, ((i + 1) % 9) + 1, ((i + 2) % 9) + 1, ((i + 3) % 9) + 1, ((i + 4) % 9) + 1, ((i + 5) % 9) + 1, ((i + 6) % 9) + 1, ((i + 7) % 9) + 1, ((i + 8) % 9) + 1];
+                         return mapping[cell - 1];
+                     }))
+                 };
+                 
+                 puzzleLibrary.push(newPuzzle);
+             }
+         }
 
         // 初始化游戏
         function initGame() {
+            generateRemainingPuzzles(); // 生成完整的100组题目
             createGrid();
             newGame();
             updateNumberCounts();
+            updateGameNumber();
         }
 
         // 创建9x9网格
@@ -981,7 +1384,7 @@
         }
 
         // 生成新游戏
-        function newGame() {
+        function newGame(keepCurrentNumber = false) {
             // 添加点击动效
             if (event && event.target) {
                 const newGameBtn = event.target.closest('.icon-btn') || event.target.closest('.btn');
@@ -989,6 +1392,12 @@
                     addClickAnimation(newGameBtn);
                 }
             }
+            
+            // 生成新的游戏编号（1-100），除非指定保持当前编号
+            if (!keepCurrentNumber) {
+                currentGameNumber = Math.floor(Math.random() * 100) + 1;
+            }
+            updateGameNumber();
             
             // 重置游戏状态
             isPaused = false;
@@ -1009,40 +1418,46 @@
             document.getElementById('sudoku-grid').style.filter = 'none';
             document.getElementById('sudoku-grid').style.cursor = 'default';
             
-            // 数独题目
-            const puzzle = [
-                [5,3,0,0,7,0,0,0,0],
-                [6,0,0,1,9,5,0,0,0],
-                [0,9,8,0,0,0,0,6,0],
-                [8,0,0,0,6,0,0,0,3],
-                [4,0,0,8,0,3,0,0,1],
-                [7,0,0,0,2,0,0,0,6],
-                [0,6,0,0,0,0,2,8,0],
-                [0,0,0,4,1,9,0,0,5],
-                [0,0,0,0,8,0,0,7,9]
-            ];
-
-            const solutionBoard = [
-                [5,3,4,6,7,8,9,1,2],
-                [6,7,2,1,9,5,3,4,8],
-                [1,9,8,3,4,2,5,6,7],
-                [8,5,9,7,6,1,4,2,3],
-                [4,2,6,8,5,3,7,9,1],
-                [7,1,3,9,2,4,8,5,6],
-                [9,6,1,5,3,7,2,8,4],
-                [2,8,7,4,1,9,6,3,5],
-                [3,4,5,2,8,6,1,7,9]
-            ];
-
-            board = puzzle.map(row => [...row]);
-            solution = solutionBoard.map(row => [...row]);
+            // 从题目库中选择对应编号的题目
+            const selectedPuzzle = puzzleLibrary[currentGameNumber - 1];
+            
+            board = selectedPuzzle.puzzle.map(row => [...row]);
+            solution = selectedPuzzle.solution.map(row => [...row]);
             
             updateDisplay();
             startTimer();
             updateNumberCounts();
+            updateGameNumber();
             document.getElementById('status').textContent = '';
         }
 
+        // 更新游戏编号显示
+        function updateGameNumber() {
+            const gameNumberElement = document.getElementById('game-number');
+            if (gameNumberElement) {
+                gameNumberElement.textContent = currentGameNumber.toString().padStart(3, '0');
+            }
+        }
+        
+        // 显示游戏编号输入弹窗
+        function showGameNumberInput() {
+            const input = prompt('请输入游戏编号 (1-100):', currentGameNumber);
+            if (input !== null) {
+                const gameNumber = parseInt(input);
+                if (isNaN(gameNumber) || gameNumber < 1 || gameNumber > 100) {
+                    alert('请输入有效的游戏编号 (1-100)');
+                    return;
+                }
+                
+                // 跳转到指定编号的游戏
+                currentGameNumber = gameNumber;
+                updateGameNumber();
+                
+                // 重新开始游戏（保持当前编号）
+                newGame(true);
+            }
+        }
+        
         // 更新显示
         function updateDisplay() {
             const cells = document.querySelectorAll('.cell');
@@ -1072,18 +1487,8 @@
 
         // 检查是否为预设数字
         function isGivenNumber(row, col) {
-            const initialPuzzle = [
-                [5,3,0,0,7,0,0,0,0],
-                [6,0,0,1,9,5,0,0,0],
-                [0,9,8,0,0,0,0,6,0],
-                [8,0,0,0,6,0,0,0,3],
-                [4,0,0,8,0,3,0,0,1],
-                [7,0,0,0,2,0,0,0,6],
-                [0,6,0,0,0,0,2,8,0],
-                [0,0,0,4,1,9,0,0,5],
-                [0,0,0,0,8,0,0,7,9]
-            ];
-            return initialPuzzle[row][col] !== 0;
+            const selectedPuzzle = puzzleLibrary[currentGameNumber - 1];
+            return selectedPuzzle.puzzle[row][col] !== 0;
         }
 
         // 选择单元格
@@ -1418,6 +1823,9 @@
         
         // 撤回操作
         function undoMove() {
+            // 暂停状态下禁用撤销功能
+            if (isPaused) return;
+            
             // 添加点击动效
             if (event && event.target) {
                 const undoBtn = event.target.closest('.icon-btn');
@@ -1442,6 +1850,73 @@
             }
         }
         
+        // 打印页面功能
+        function printPage() {
+            // 添加点击动效
+            if (event && event.target) {
+                const printBtn = event.target.closest('.rect-btn');
+                if (printBtn) {
+                    addClickAnimation(printBtn);
+                }
+            }
+            
+            // 触发浏览器打印功能
+            window.print();
+        }
+        
+        // 添加到桌面功能
+        function addToDesktop() {
+            // 添加点击动效
+            if (event && event.target) {
+                const desktopBtn = event.target.closest('.rect-btn');
+                if (desktopBtn) {
+                    addClickAnimation(desktopBtn);
+                }
+            }
+            
+            const url = 'https://hoolito.github.io/Sudoku/';
+            const title = '数独游戏';
+            
+            // 检查浏览器是否支持添加到主屏幕
+            if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
+                // PWA安装提示
+                if (window.deferredPrompt) {
+                    window.deferredPrompt.prompt();
+                    window.deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            alert('已添加到桌面！');
+                        }
+                        window.deferredPrompt = null;
+                    });
+                } else {
+                    // 备用方案：复制链接到剪贴板
+                    copyToClipboard(url, title);
+                }
+            } else {
+                // 备用方案：复制链接到剪贴板
+                copyToClipboard(url, title);
+            }
+        }
+        
+        // 复制链接到剪贴板的辅助函数
+        function copyToClipboard(url, title) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert(`${title}链接已复制到剪贴板！\n${url}\n\n您可以手动创建桌面快捷方式。`);
+                }).catch(() => {
+                    showUrlDialog(url, title);
+                });
+            } else {
+                showUrlDialog(url, title);
+            }
+        }
+        
+        // 显示URL对话框的辅助函数
+        function showUrlDialog(url, title) {
+            const message = `请手动复制以下链接创建桌面快捷方式：\n\n${url}`;
+            prompt(message, url);
+        }
+        
         // 草稿模式相关变量
         let draftMode = false;
         let selectedDraftNumbers = new Set();
@@ -1449,6 +1924,9 @@
         
         // 切换数量提示
         function toggleNumberCount() {
+            // 暂停状态下禁用铅笔功能
+            if (isPaused) return;
+            
             showNumberCount = !showNumberCount;
             draftMode = !showNumberCount; // 关闭数字提示时启用草稿模式
             const toggleBtn = document.getElementById('toggle-count-btn');
@@ -1488,6 +1966,21 @@
                 pauseBtn.querySelector('.btn-text').textContent = '继续';
                 // 可以添加遮罩层隐藏数独网格
                 document.getElementById('sudoku-grid').style.filter = 'blur(5px)';
+                
+                // 禁用四个按钮
+                const buttonsToDisable = [
+                    document.querySelector('button[onclick="getRandomHint()"]'),
+                    document.querySelector('button[onclick="undoMove()"]'),
+                    document.getElementById('eraser-btn'),
+                    document.getElementById('toggle-count-btn')
+                ];
+                buttonsToDisable.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('disabled');
+                        btn.style.opacity = '0.5';
+                        btn.style.pointerEvents = 'none';
+                    }
+                });
             } else {
                 // 恢复时调整开始时间并重新启动计时器
                 if (pausedTime > 0) {
@@ -1497,6 +1990,21 @@
                 pauseBtn.classList.remove('paused');
                 pauseBtn.querySelector('.btn-text').textContent = '暂停';
                 document.getElementById('sudoku-grid').style.filter = 'none';
+                
+                // 启用四个按钮
+                const buttonsToEnable = [
+                    document.querySelector('button[onclick="getRandomHint()"]'),
+                    document.querySelector('button[onclick="undoMove()"]'),
+                    document.getElementById('eraser-btn'),
+                    document.getElementById('toggle-count-btn')
+                ];
+                buttonsToEnable.forEach(btn => {
+                    if (btn) {
+                        btn.classList.remove('disabled');
+                        btn.style.opacity = '';
+                        btn.style.pointerEvents = '';
+                    }
+                });
             }
         }
 
@@ -1504,6 +2012,9 @@
         let eraserMode = false;
 
         function toggleEraser() {
+            // 暂停状态下禁用橡皮擦功能
+            if (isPaused) return;
+            
             const eraserBtn = document.getElementById('eraser-btn');
             addClickAnimation(eraserBtn);
             
@@ -1522,6 +2033,9 @@
         }
 
         function getRandomHint() {
+            // 暂停状态下禁用提示功能
+            if (isPaused) return;
+            
             const hintBtn = event.target.closest('.icon-btn');
             addClickAnimation(hintBtn);
             
