@@ -33,10 +33,9 @@
             position: relative;
         }
         
-        /* 通用页面样式 - 16:9横版矩形 */
+        /* 通用页面样式 */
         .page {
             width: 100%;
-            aspect-ratio: 16/9; /* 16:9比例 */
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -50,6 +49,20 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+        
+        /* 电脑端 - 横版16:9 */
+        @media (min-width: 769px) {
+            #loadingPage, #homePage {
+                aspect-ratio: 16/9; /* 电脑端横版16:9 */
+            }
+        }
+        
+        /* 手机端 - 竖版9:16 */
+        @media (max-width: 768px) {
+            #loadingPage, #homePage {
+                aspect-ratio: 9/16; /* 手机端竖版9:16 */
+            }
         }
         
         .page.active {
@@ -166,7 +179,7 @@
         
         /* 取号单页面 - 保持原有比例 */
         #ticketPage {
-            aspect-ratio: auto; /* 取消16:9限制 */
+            aspect-ratio: auto; /* 取消比例限制 */
             min-height: 800px; /* 保持足够高度显示内容 */
             display: block; /* 恢复默认显示 */
             justify-content: flex-start; /* 恢复顶部对齐 */
@@ -494,16 +507,13 @@
         @media (max-width: 768px) {
             .page {
                 padding: 30px 20px;
-                aspect-ratio: auto; /* 重置默认比例 */
             }
-
-            /* 明确指定加载页和首页为竖版9:16 */
+            
             #loadingPage, #homePage {
-                aspect-ratio: 9/16;
+                /* 手机端竖版9:16 */
             }
             
             #ticketPage {
-                aspect-ratio: auto;
                 min-height: 700px;
             }
             
@@ -543,12 +553,7 @@
         }
         
         @media (max-width: 480px) {
-            #loadingPage, #homePage {
-                aspect-ratio: 9/16; /* 确保小屏也保持9:16 */
-            }
-            
             #ticketPage {
-                aspect-ratio: auto;
                 min-height: 600px;
             }
             
@@ -640,9 +645,9 @@
             <div class="header-line"></div>
             
             <!-- 400×400px图片方格 -->
-        <div class="image-placeholder" id="imagePlaceholder">
-            <img src="fabler_bjoern.png" alt="Fabler Bjoern">
-        </div>
+            <div class="image-placeholder" id="imagePlaceholder">
+                <img src="fabler_bjoern.png" alt="Fabler Bjoern">
+            </div>
             
             <!-- 欢迎语 -->
             <div class="welcome-text">今天有什么可以帮到你？</div>
@@ -763,10 +768,7 @@
             });
             
             // 取号单页面相关功能
-            const imagePlaceholder = document.getElementById('imagePlaceholder');
             const ratingLevels = document.querySelectorAll('.rating-level');
-            
-
             
             // 评级条交互效果
             ratingLevels.forEach(level => {
@@ -822,25 +824,6 @@
             
             // 图片加载后重新计算位置
             window.addEventListener('load', updateLabelPositions);
-            
-            // 确保首页和加载页面保持16:9比例
-            function updatePageDimensions() {
-                const pages = document.querySelectorAll('.page:not(#ticketPage)');
-                const container = document.querySelector('.page-container');
-                const containerWidth = container.offsetWidth;
-                const targetHeight = containerWidth * 9 / 16; // 16:9比例计算高度
-                
-                pages.forEach(page => {
-                    // 仅对加载页面和首页应用固定高度
-                    if (page.id !== 'ticketPage') {
-                        page.style.height = `${targetHeight}px`;
-                    }
-                });
-            }
-            
-            // 初始设置和窗口调整时更新
-            updatePageDimensions();
-            window.addEventListener('resize', updatePageDimensions);
         });
     </script>
 </body>
