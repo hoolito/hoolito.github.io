@@ -111,7 +111,7 @@
             align-items: center;
             justify-content: center;
             font-size: 0.9rem;
-            color: #333;
+            color: white;
             font-weight: 500;
         }
         
@@ -178,14 +178,19 @@
             width: 400px;
             height: 400px;
             background-color: #f0f0f0;
-            border-radius: 8px;
+            border-radius: 20px;
             margin: 0 auto 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px dashed #ccc;
             position: relative;
             overflow: hidden;
+        }
+        
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         /* 欢迎语 - 与行政办公室样式一致 */
@@ -615,7 +620,9 @@
             <div class="header-line"></div>
             
             <!-- 400×400px图片占位方格 -->
-            <div class="image-placeholder" id="imagePlaceholder"></div>
+        <div class="image-placeholder" id="imagePlaceholder">
+            <img src="fabler_bjoern.png" alt="Fabler Bjoern">
+        </div>
             
             <!-- 欢迎语 -->
             <div class="welcome-text">今天有什么可以帮到你？</div>
