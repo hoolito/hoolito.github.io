@@ -409,6 +409,21 @@
             font-style: italic;
             color: #222; /* 与"取号单"颜色一致 */
         }
+
+        .theme-link {
+            color: #d93b86;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom-width 0.2s ease;
+        }
+
+        .theme-link:hover {
+            border-bottom: 1px solid #d93b86;
+        }
+
+        .theme-link:active {
+            border-bottom-width: 1.5px;
+        }
         
         /* 弹窗样式 */
         .modal-overlay {
@@ -673,6 +688,7 @@
                 <div class="bottom-line slogan">最像 AI 的一天</div>
                 <div class="bottom-line">营业时间：周一至周五9:00-17:00</div>
                 <div class="bottom-line">温馨提醒：投喂的可以插队</div>
+                <div class="bottom-line"><a href="https://hoolito.github.io/Number/" class="theme-link" target="_blank">https://hoolito.github.io/Number/</a></div>
             </div>
         </div>
     </div>
