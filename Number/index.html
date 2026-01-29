@@ -494,7 +494,12 @@
         @media (max-width: 768px) {
             .page {
                 padding: 30px 20px;
-                aspect-ratio: 16/9; /* 保持16:9比例 */
+                aspect-ratio: auto; /* 重置默认比例 */
+            }
+
+            /* 明确指定加载页和首页为竖版9:16 */
+            #loadingPage, #homePage {
+                aspect-ratio: 9/16;
             }
             
             #ticketPage {
@@ -538,8 +543,8 @@
         }
         
         @media (max-width: 480px) {
-            .page {
-                aspect-ratio: 16/9; /* 保持16:9比例 */
+            #loadingPage, #homePage {
+                aspect-ratio: 9/16; /* 确保小屏也保持9:16 */
             }
             
             #ticketPage {
