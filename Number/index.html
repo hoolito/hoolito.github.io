@@ -62,6 +62,7 @@
         @media (max-width: 768px) {
             #loadingPage, #homePage {
                 aspect-ratio: 9/16; /* 手机端竖版9:16 */
+                padding: 30px 20px;
             }
         }
         
@@ -503,12 +504,8 @@
             box-shadow: 0 4px 12px rgba(217, 59, 134, 0.3);
         }
         
-        /* 响应式设计 */
+        /* 响应式设计 - 手机端 */
         @media (max-width: 768px) {
-            .page {
-                padding: 30px 20px;
-            }
-            
             #loadingPage, #homePage {
                 /* 手机端竖版9:16 */
             }
@@ -523,9 +520,26 @@
                 margin-bottom: 25px;
             }
             
+            /* 手机版首页布局优化 */
             .home-title {
                 font-size: 2rem;
-                margin-bottom: 40px;
+                margin-bottom: 25px; /* 缩短与按钮的距离 */
+            }
+            
+            .button-container {
+                gap: 20px; /* 按钮之间的间距 */
+                margin-top: 10px; /* 减少容器顶部间距 */
+            }
+            
+            .home-button {
+                max-width: 250px;
+                padding: 15px 25px;
+                font-size: 1.1rem; /* 稍微减小字体大小 */
+            }
+            
+            .button-desc {
+                font-size: 0.85rem;
+                margin-top: 5px; /* 减少描述与按钮的距离 */
             }
             
             .main-title {
@@ -545,11 +559,6 @@
             .rating-level {
                 font-size: 0.7rem;
             }
-            
-            .home-button {
-                max-width: 250px;
-                padding: 15px 25px;
-            }
         }
         
         @media (max-width: 480px) {
@@ -563,8 +572,21 @@
                 margin-bottom: 20px;
             }
             
+            /* 更小屏幕的首页布局优化 */
             .home-title {
                 font-size: 1.8rem;
+                margin-bottom: 20px; /* 进一步缩短与按钮的距离 */
+            }
+            
+            .button-container {
+                gap: 18px; /* 进一步减小按钮间距 */
+                margin-top: 8px;
+            }
+            
+            .home-button {
+                max-width: 220px;
+                padding: 12px 20px;
+                font-size: 1.1rem;
             }
             
             .main-title {
@@ -582,12 +604,6 @@
             
             .service-text, .mood-text {
                 font-size: 0.8rem;
-            }
-            
-            .home-button {
-                max-width: 220px;
-                padding: 12px 20px;
-                font-size: 1.1rem;
             }
         }
         
