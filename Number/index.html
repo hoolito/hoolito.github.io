@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业务办理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "黑体", "Microsoft YaHei", "SimHei", sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        
+        /* 页面容器 */
+        .page-container {
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        /* 通用页面样式 - 16:9横版矩形 */
+        .page {
+            width: 100%;
+            aspect-ratio: 16/9; /* 16:9比例 */
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .page.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+        
+        /* 顶部装饰线 */
+        .header-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e6e6e6 0%, #d9d9d9 50%, #e6e6e6 100%);
+        }
+        
+        /* 加载页面 */
+        #loadingPage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #d93b86;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* 首页 */
+        .home-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 60px;
+            letter-spacing: -1px;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .home-button {
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            color: #d93b86; /* 按钮文字为主题色 */
+            background-color: rgba(217, 59, 134, 0.1); /* 10%透明度的主题色 */
+            border: 2px solid rgba(217, 59, 134, 0.2); /* 20%透明度的边框 */
+        }
+        
+        .home-button:hover {
+            background-color: rgba(217, 59, 134, 0.15); /* 悬停时增加透明度 */
+            border-color: rgba(217, 59, 134, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(217, 59, 134, 0.15);
+        }
+        
+        .home-button:active {
+            transform: translateY(0);
+        }
+        
+        .button-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        /* 取号单页面 - 保持原有比例 */
+        #ticketPage {
+            aspect-ratio: auto; /* 取消16:9限制 */
+            min-height: 800px; /* 保持足够高度显示内容 */
+            display: block; /* 恢复默认显示 */
+            justify-content: flex-start; /* 恢复顶部对齐 */
+            overflow-y: auto; /* 允许滚动 */
+        }
+        
+        /* 图片占位方格 */
+        .image-placeholder {
+            width: 400px;
+            height: 400px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 欢迎语 - 与行政办公室样式一致 */
+        .welcome-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        
+        /* 第一大字 - 取号单 */
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #222;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .main-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #333;
+            border-radius: 2px;
+        }
+        
+        /* 行政办公室区域 */
+        .office-section {
+            margin-bottom: 40px;
+        }
+        
+        .office-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .writing-text {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* 第二大字 - CO666 */
+        .ticket-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            font-family: "黑体", "Microsoft YaHei", "SimHei", monospace;
+        }
+        
+        /* 取号成功信息 */
+        .success-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .task-info {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .wait-time {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 60px;
+        }
+        
+        /* 评级条容器 */
+        .rating-container {
+            width: 500px;
+            margin: 70px auto 70px;
+            position: relative;
+            height: 100px;
+        }
+        
+        /* 评级条 */
+        .rating-bar {
+            display: flex;
+            width: 100%;
+            height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+        
+        .rating-level {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .rating-level:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 5级主题色区分 */
+        .level-1 {
+            background-color: #d93b86; /* 夯 - 最深 */
+        }
+        
+        .level-2 {
+            background-color: #e05298; /* 顶级 */
+        }
+        
+        .level-3 {
+            background-color: #e769aa; /* 人上人 */
+        }
+        
+        .level-4 {
+            background-color: #ee80bc; /* NPC */
+        }
+        
+        .level-5 {
+            background-color: #f597ce; /* 拉 - 最浅 */
+        }
+        
+        /* 服务水平标签 - 整体定位 */
+        .service-label {
+            position: absolute;
+            top: -0.8em; /* 调整为0.8em距离 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateX(-50%);
+        }
+        
+        .service-text {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 3px;
+            white-space: nowrap;
+        }
+        
+        /* 向下箭头 */
+        .down-arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #555;
+        }
+        
+        /* 今日心情标签 - 整体定位 */
+        .mood-label {
+            position: absolute;
+            bottom: -0.8em; /* 调整为0.8em距离 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateX(50%);
+        }
+        
+        /* 向上箭头 */
+        .up-arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid #555;
+            margin-bottom: 3px;
+        }
+        
+        .mood-text {
+            font-size: 0.9rem;
+            color: #555;
+            white-space: nowrap;
+        }
+        
+        /* 底部三行小字 - 始终居中 */
+        .bottom-info {
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .bottom-line {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 5px 0;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* "最像 AI 的一天" 特殊样式 */
+        .slogan {
+            font-style: italic;
+            color: #222; /* 与"取号单"颜色一致 */
+        }
+        
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        
+        .modal-button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #d93b86;
+            color: white;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .modal-button:hover {
+            background-color: #c43477;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 59, 134, 0.3);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .page {
+                padding: 30px 20px;
+                aspect-ratio: 16/9; /* 保持16:9比例 */
+            }
+            
+            #ticketPage {
+                aspect-ratio: auto;
+                min-height: 700px;
+            }
+            
+            .image-placeholder {
+                width: 300px;
+                height: 300px;
+                margin-bottom: 25px;
+            }
+            
+            .home-title {
+                font-size: 2rem;
+                margin-bottom: 40px;
+            }
+            
+            .main-title {
+                font-size: 2.8rem;
+            }
+            
+            .ticket-number {
+                font-size: 2.5rem;
+            }
+            
+            .rating-container {
+                width: 90%;
+                max-width: 500px;
+                margin: 50px auto 50px;
+            }
+            
+            .rating-level {
+                font-size: 0.7rem;
+            }
+            
+            .home-button {
+                max-width: 250px;
+                padding: 15px 25px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page {
+                aspect-ratio: 16/9; /* 保持16:9比例 */
+            }
+            
+            #ticketPage {
+                aspect-ratio: auto;
+                min-height: 600px;
+            }
+            
+            .image-placeholder {
+                width: 250px;
+                height: 250px;
+                margin-bottom: 20px;
+            }
+            
+            .home-title {
+                font-size: 1.8rem;
+            }
+            
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .ticket-number {
+                font-size: 2rem;
+            }
+            
+            .rating-level {
+                font-size: 0.6rem;
+                letter-spacing: 0;
+            }
+            
+            .service-text, .mood-text {
+                font-size: 0.8rem;
+            }
+            
+            .home-button {
+                max-width: 220px;
+                padding: 12px 20px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page > * {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- 弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-title">提示</div>
+            <div class="modal-content" id="modalContent">请直接取号</div>
+            <button class="modal-button" id="modalCloseBtn">确定</button>
+        </div>
+    </div>
+    
+    <!-- 页面容器 -->
+    <div class="page-container">
+        <!-- 加载页面 -->
+        <div class="page active" id="loadingPage">
+            <div class="header-line"></div>
+            <div class="loading-text">加载中</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+        </div>
+        
+        <!-- 首页 -->
+        <div class="page" id="homePage">
+            <div class="header-line"></div>
+            <h1 class="home-title">请取号</h1>
+            <div class="button-container">
+                <div>
+                    <button class="home-button" id="directTicketBtn">直接取号</button>
+                    <div class="button-desc">无需校园卡，快速取号</div>
+                </div>
+                <div>
+                    <button class="home-button" id="campusCardBtn">校园卡取号</button>
+                    <div class="button-desc">使用校园卡进行身份验证</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 取号单页面 -->
+        <div class="page" id="ticketPage">
+            <div class="header-line"></div>
+            
+            <!-- 400×400px图片占位方格 -->
+            <div class="image-placeholder" id="imagePlaceholder"></div>
+            
+            <!-- 欢迎语 -->
+            <div class="welcome-text">今天有什么可以帮到你？</div>
+            
+            <!-- 第一大字 -->
+            <h1 class="main-title">取号单</h1>
+            
+            <!-- 行政办公室区域 -->
+            <div class="office-section">
+                <div class="office-title">行政办公室</div>
+                <div class="writing-text">在写了。</div>
+            </div>
+            
+            <!-- 第二大字 -->
+            <div class="ticket-number">CO666</div>
+            
+            <!-- 取号成功信息 -->
+            <div class="success-text">取号成功，请耐心等候</div>
+            <div class="task-info">您前面还有6个工作任务待处理</div>
+            <div class="wait-time">预计等待时间：6个工作日</div>
+            
+            <!-- 评级条 -->
+            <div class="rating-container" id="ratingContainer">
+                <!-- 评级条 -->
+                <div class="rating-bar" id="ratingBar">
+                    <div class="rating-level level-1">夯</div>
+                    <div class="rating-level level-2">顶级</div>
+                    <div class="rating-level level-3">人上人</div>
+                    <div class="rating-level level-4">NPC</div>
+                    <div class="rating-level level-5">拉</div>
+                </div>
+                
+                <!-- 服务水平标签 - 整体定位 -->
+                <div class="service-label" id="serviceLabel">
+                    <div class="service-text">服务水平</div>
+                    <div class="down-arrow"></div>
+                </div>
+                
+                <!-- 今日心情标签 - 整体定位 -->
+                <div class="mood-label" id="moodLabel">
+                    <div class="up-arrow"></div>
+                    <div class="mood-text">今日心情</div>
+                </div>
+            </div>
+            
+            <!-- 底部三行小字 - 始终居中，顺序固定 -->
+            <div class="bottom-info">
+                <div class="bottom-line slogan">最像 AI 的一天</div>
+                <div class="bottom-line">营业时间：周一至周五9:00-17:00</div>
+                <div class="bottom-line">温馨提醒：投喂的可以插队</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 页面切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面元素
+            const loadingPage = document.getElementById('loadingPage');
+            const homePage = document.getElementById('homePage');
+            const ticketPage = document.getElementById('ticketPage');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            // 按钮元素
+            const directTicketBtn = document.getElementById('directTicketBtn');
+            const campusCardBtn = document.getElementById('campusCardBtn');
+            
+            // 弹窗元素
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            
+            // 模拟加载进度
+            let progress = 0;
+            const progressInterval = setInterval(function() {
+                progress += Math.random() * 10 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    // 加载完成后切换到首页
+                    setTimeout(function() {
+                        loadingPage.classList.remove('active');
+                        homePage.classList.add('active');
+                    }, 300);
+                }
+                
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.floor(progress) + '%';
+            }, 150);
+            
+            // 直接取号按钮点击事件
+            directTicketBtn.addEventListener('click', function() {
+                homePage.classList.remove('active');
+                ticketPage.classList.add('active');
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+            
+            // 校园卡取号按钮点击事件
+            campusCardBtn.addEventListener('click', function() {
+                // 显示弹窗提示
+                modalOverlay.classList.add('active');
+            });
+            
+            // 关闭弹窗按钮点击事件
+            modalCloseBtn.addEventListener('click', function() {
+                modalOverlay.classList.remove('active');
+                // 关闭弹窗后停留在首页
+            });
+            
+            // 点击弹窗背景关闭弹窗
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+            
+            // 取号单页面相关功能
+            const imagePlaceholder = document.getElementById('imagePlaceholder');
+            const ratingLevels = document.querySelectorAll('.rating-level');
+            
+            // 点击图片占位区域可上传图片
+            imagePlaceholder.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                
+                input.onchange = function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.objectFit = 'cover';
+                            img.style.borderRadius = '8px';
+                            
+                            // 清空占位区域并添加图片
+                            imagePlaceholder.innerHTML = '';
+                            imagePlaceholder.appendChild(img);
+                            
+                            // 移除虚线边框
+                            imagePlaceholder.style.border = '1px solid #ccc';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                
+                input.click();
+            });
+            
+            // 评级条交互效果
+            ratingLevels.forEach(level => {
+                level.addEventListener('mouseenter', function() {
+                    // 当鼠标悬停时，稍微加深颜色
+                    this.style.filter = 'brightness(0.9)';
+                });
+                
+                level.addEventListener('mouseleave', function() {
+                    // 当鼠标离开时，恢复原始颜色
+                    this.style.filter = 'brightness(1)';
+                });
+                
+                level.addEventListener('click', function() {
+                    // 当点击评级时，添加选中效果
+                    ratingLevels.forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // 显示选中状态
+                    const text = this.textContent;
+                    alert(`您选择了等级：${text}`);
+                });
+            });
+            
+            // 精确计算标签位置
+            function updateLabelPositions() {
+                const ratingBar = document.getElementById('ratingBar');
+                const serviceLabel = document.getElementById('serviceLabel');
+                const moodLabel = document.getElementById('moodLabel');
+                
+                if (ratingBar && serviceLabel && moodLabel) {
+                    const barWidth = ratingBar.offsetWidth;
+                    const levelWidth = barWidth / 5;
+                    
+                    // 计算"夯"的中心位置
+                    const firstLevelCenter = levelWidth / 2;
+                    // 计算"拉"的中心位置
+                    const lastLevelCenter = barWidth - (levelWidth / 2);
+                    
+                    // 设置服务水平标签位置
+                    serviceLabel.style.left = `${firstLevelCenter}px`;
+                    
+                    // 设置今日心情标签位置
+                    moodLabel.style.right = `${(barWidth - lastLevelCenter)}px`;
+                }
+            }
+            
+            // 初始计算位置
+            setTimeout(updateLabelPositions, 100);
+            
+            // 窗口大小变化时重新计算位置
+            window.addEventListener('resize', updateLabelPositions);
+            
+            // 图片加载后重新计算位置
+            window.addEventListener('load', updateLabelPositions);
+            
+            // 确保首页和加载页面保持16:9比例
+            function updatePageDimensions() {
+                const pages = document.querySelectorAll('.page:not(#ticketPage)');
+                const container = document.querySelector('.page-container');
+                const containerWidth = container.offsetWidth;
+                const targetHeight = containerWidth * 9 / 16; // 16:9比例计算高度
+                
+                pages.forEach(page => {
+                    // 仅对加载页面和首页应用固定高度
+                    if (page.id !== 'ticketPage') {
+                        page.style.height = `${targetHeight}px`;
+                    }
+                });
+            }
+            
+            // 初始设置和窗口调整时更新
+            updatePageDimensions();
+            window.addEventListener('resize', updatePageDimensions);
+        });
+    </script>
+</body>
+</html>
