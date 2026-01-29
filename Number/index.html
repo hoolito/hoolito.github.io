@@ -53,14 +53,14 @@
         
         /* 电脑端 - 横版16:9 */
         @media (min-width: 769px) {
-            #loadingPage, #homePage {
+            #loadingPage, #secondLoadingPage, #homePage {
                 aspect-ratio: 16/9; /* 电脑端横版16:9 */
             }
         }
         
         /* 手机端 - 竖版9:16 */
         @media (max-width: 768px) {
-            #loadingPage, #homePage {
+            #loadingPage, #secondLoadingPage, #homePage {
                 aspect-ratio: 9/16; /* 手机端竖版9:16 */
                 padding: 30px 20px;
             }
@@ -83,7 +83,7 @@
         }
         
         /* 加载页面 */
-        #loadingPage {
+        .loading-page {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -95,6 +95,29 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 40px;
+            max-width: 90%;
+        }
+        
+        /* 电脑端 - 一行显示完整文字 */
+        @media (min-width: 769px) {
+            #secondLoadingText {
+                font-size: 1.8rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        
+        /* 手机端 - 分两行显示 */
+        @media (max-width: 768px) {
+            #secondLoadingText {
+                font-size: 1.6rem;
+                line-height: 1.4;
+            }
+            
+            #secondLoadingText br {
+                display: block;
+            }
         }
         
         .progress-container {
@@ -134,7 +157,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: #222;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             letter-spacing: -1px;
         }
         
@@ -506,7 +529,7 @@
         
         /* 响应式设计 - 手机端 */
         @media (max-width: 768px) {
-            #loadingPage, #homePage {
+            #loadingPage, #secondLoadingPage, #homePage {
                 /* 手机端竖版9:16 */
             }
             
@@ -605,6 +628,11 @@
             .service-text, .mood-text {
                 font-size: 0.8rem;
             }
+            
+            /* 第二个加载页面的文字在小屏幕上调整 */
+            #secondLoadingText {
+                font-size: 1.4rem;
+            }
         }
         
         /* 动画效果 */
@@ -630,8 +658,8 @@
     
     <!-- 页面容器 -->
     <div class="page-container">
-        <!-- 加载页面 -->
-        <div class="page active" id="loadingPage">
+        <!-- 第一个加载页面 -->
+        <div class="page active loading-page" id="loadingPage">
             <div class="header-line"></div>
             <div class="loading-text">加载中</div>
             <div class="progress-container">
@@ -653,6 +681,16 @@
                     <button class="home-button" id="campusCardBtn">校园卡取号</button>
                     <div class="button-desc">使用校园卡进行身份验证</div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- 第二个加载页面 -->
+        <div class="page loading-page" id="secondLoadingPage">
+            <div class="header-line"></div>
+            <div class="loading-text" id="secondLoadingText">排着队拿着iCO的号码牌</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="secondProgressBar"></div>
+                <div class="progress-text" id="secondProgressText">0%</div>
             </div>
         </div>
         
@@ -725,9 +763,13 @@
             // 页面元素
             const loadingPage = document.getElementById('loadingPage');
             const homePage = document.getElementById('homePage');
+            const secondLoadingPage = document.getElementById('secondLoadingPage');
             const ticketPage = document.getElementById('ticketPage');
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
+            const secondProgressBar = document.getElementById('secondProgressBar');
+            const secondProgressText = document.getElementById('secondProgressText');
+            const secondLoadingText = document.getElementById('secondLoadingText');
             
             // 按钮元素
             const directTicketBtn = document.getElementById('directTicketBtn');
@@ -737,7 +779,23 @@
             const modalOverlay = document.getElementById('modalOverlay');
             const modalCloseBtn = document.getElementById('modalCloseBtn');
             
-            // 模拟加载进度
+            // 根据屏幕宽度调整第二个加载页面的文字显示
+            function adjustSecondLoadingText() {
+                if (window.innerWidth <= 768) {
+                    // 手机端：分两行显示
+                    secondLoadingText.innerHTML = "排着队<br>拿着iCO的号码牌";
+                } else {
+                    // 电脑端：一行显示完整
+                    secondLoadingText.innerHTML = "排着队拿着iCO的号码牌";
+                }
+            }
+            
+            // 初始调整
+            adjustSecondLoadingText();
+            // 窗口大小变化时重新调整
+            window.addEventListener('resize', adjustSecondLoadingText);
+            
+            // 模拟第一个加载进度
             let progress = 0;
             const progressInterval = setInterval(function() {
                 progress += Math.random() * 10 + 5;
@@ -759,9 +817,28 @@
             // 直接取号按钮点击事件
             directTicketBtn.addEventListener('click', function() {
                 homePage.classList.remove('active');
-                ticketPage.classList.add('active');
-                // 滚动到顶部
-                window.scrollTo(0, 0);
+                secondLoadingPage.classList.add('active');
+                
+                // 模拟第二个加载进度
+                let secondProgress = 0;
+                const secondProgressInterval = setInterval(function() {
+                    secondProgress += Math.random() * 15 + 10;
+                    if (secondProgress >= 100) {
+                        secondProgress = 100;
+                        clearInterval(secondProgressInterval);
+                        
+                        // 加载完成后切换到取号单页面
+                        setTimeout(function() {
+                            secondLoadingPage.classList.remove('active');
+                            ticketPage.classList.add('active');
+                            // 滚动到顶部
+                            window.scrollTo(0, 0);
+                        }, 300);
+                    }
+                    
+                    secondProgressBar.style.width = secondProgress + '%';
+                    secondProgressText.textContent = Math.floor(secondProgress) + '%';
+                }, 100);
             });
             
             // 校园卡取号按钮点击事件
