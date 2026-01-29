@@ -120,7 +120,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: #222;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
             letter-spacing: -1px;
         }
         
@@ -173,7 +173,7 @@
             overflow-y: auto; /* 允许滚动 */
         }
         
-        /* 图片占位方格 */
+        /* 图片方格 */
         .image-placeholder {
             width: 400px;
             height: 400px;
@@ -634,7 +634,7 @@
         <div class="page" id="ticketPage">
             <div class="header-line"></div>
             
-            <!-- 400×400px图片占位方格 -->
+            <!-- 400×400px图片方格 -->
         <div class="image-placeholder" id="imagePlaceholder">
             <img src="fabler_bjoern.png" alt="Fabler Bjoern">
         </div>
@@ -761,37 +761,7 @@
             const imagePlaceholder = document.getElementById('imagePlaceholder');
             const ratingLevels = document.querySelectorAll('.rating-level');
             
-            // 点击图片占位区域可上传图片
-            imagePlaceholder.addEventListener('click', function() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                
-                input.onchange = function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.objectFit = 'cover';
-                            img.style.borderRadius = '8px';
-                            
-                            // 清空占位区域并添加图片
-                            imagePlaceholder.innerHTML = '';
-                            imagePlaceholder.appendChild(img);
-                            
-                            // 移除虚线边框
-                            imagePlaceholder.style.border = '1px solid #ccc';
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                };
-                
-                input.click();
-            });
+
             
             // 评级条交互效果
             ratingLevels.forEach(level => {
