@@ -341,6 +341,7 @@
             font-size: 0.9rem;
             letter-spacing: 1px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .rating-level:hover {
@@ -377,6 +378,8 @@
             flex-direction: column;
             align-items: center;
             transform: translateX(-50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
         .service-text {
@@ -403,6 +406,8 @@
             flex-direction: column;
             align-items: center;
             transform: translateX(50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
         /* 向上箭头 */
@@ -419,6 +424,19 @@
             font-size: 0.9rem;
             color: #555;
             white-space: nowrap;
+        }
+        
+        /* 标签选中状态 */
+        .service-label.selected .service-text,
+        .mood-label.selected .mood-text {
+            color: #d93b86;
+            font-weight: 700;
+        }
+        
+        .service-label.selected .down-arrow,
+        .mood-label.selected .up-arrow {
+            border-top-color: #d93b86;
+            border-bottom-color: #d93b86;
         }
         
         /* 底部三行小字 - 始终居中 */
@@ -492,6 +510,10 @@
             width: 90%;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         .modal-title {
@@ -499,12 +521,47 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 20px;
+            width: 100%;
         }
         
         .modal-content {
             font-size: 1.1rem;
             color: #555;
             margin-bottom: 30px;
+            width: 100%;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        /* 评级弹窗内容样式 */
+        .rating-modal-content {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 30px;
+            width: 100%;
+            text-align: left;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .rating-modal-content .title {
+            font-weight: 700;
+            color: #d93b86;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .rating-modal-content .description {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .rating-modal-content .source {
+            font-style: italic;
+            color: #777;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
         
         .modal-button {
@@ -582,6 +639,10 @@
             .rating-level {
                 font-size: 0.7rem;
             }
+            
+            .rating-modal-content {
+                font-size: 0.9rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -633,6 +694,10 @@
             #secondLoadingText {
                 font-size: 1.4rem;
             }
+            
+            .rating-modal-content {
+                font-size: 0.85rem;
+            }
         }
         
         /* 动画效果 */
@@ -647,12 +712,21 @@
     </style>
 </head>
 <body>
-    <!-- 弹窗 -->
-    <div class="modal-overlay" id="modalOverlay">
+    <!-- 校园卡取号弹窗 -->
+    <div class="modal-overlay" id="campusCardModal">
         <div class="modal">
             <div class="modal-title">提示</div>
-            <div class="modal-content" id="modalContent">请直接取号</div>
-            <button class="modal-button" id="modalCloseBtn">确定</button>
+            <div class="modal-content" id="campusCardModalContent">请直接取号</div>
+            <button class="modal-button" id="campusCardModalCloseBtn">确定</button>
+        </div>
+    </div>
+    
+    <!-- 评级条弹窗 -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="modal">
+            <div class="modal-title" id="ratingModalTitle">服务能力说明</div>
+            <div class="rating-modal-content" id="ratingModalContent"></div>
+            <button class="modal-button" id="ratingModalCloseBtn">确定</button>
         </div>
     </div>
     
@@ -776,8 +850,20 @@
             const campusCardBtn = document.getElementById('campusCardBtn');
             
             // 弹窗元素
-            const modalOverlay = document.getElementById('modalOverlay');
-            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const campusCardModal = document.getElementById('campusCardModal');
+            const campusCardModalCloseBtn = document.getElementById('campusCardModalCloseBtn');
+            const ratingModal = document.getElementById('ratingModal');
+            const ratingModalTitle = document.getElementById('ratingModalTitle');
+            const ratingModalContent = document.getElementById('ratingModalContent');
+            const ratingModalCloseBtn = document.getElementById('ratingModalCloseBtn');
+            
+            // 评级条相关元素
+            const ratingLevels = document.querySelectorAll('.rating-level');
+            const serviceLabel = document.getElementById('serviceLabel');
+            const moodLabel = document.getElementById('moodLabel');
+            
+            // 状态变量
+            let selectedMode = null; // 'service' 或 'mood'
             
             // 根据屏幕宽度调整第二个加载页面的文字显示
             function adjustSecondLoadingText() {
@@ -844,24 +930,87 @@
             // 校园卡取号按钮点击事件
             campusCardBtn.addEventListener('click', function() {
                 // 显示弹窗提示
-                modalOverlay.classList.add('active');
+                campusCardModal.classList.add('active');
             });
             
-            // 关闭弹窗按钮点击事件
-            modalCloseBtn.addEventListener('click', function() {
-                modalOverlay.classList.remove('active');
+            // 关闭校园卡取号弹窗按钮点击事件
+            campusCardModalCloseBtn.addEventListener('click', function() {
+                campusCardModal.classList.remove('active');
                 // 关闭弹窗后停留在首页
             });
             
             // 点击弹窗背景关闭弹窗
-            modalOverlay.addEventListener('click', function(e) {
-                if (e.target === modalOverlay) {
-                    modalOverlay.classList.remove('active');
+            campusCardModal.addEventListener('click', function(e) {
+                if (e.target === campusCardModal) {
+                    campusCardModal.classList.remove('active');
                 }
             });
             
-            // 取号单页面相关功能
-            const ratingLevels = document.querySelectorAll('.rating-level');
+            // 关闭评级弹窗按钮点击事件
+            ratingModalCloseBtn.addEventListener('click', function() {
+                ratingModal.classList.remove('active');
+            });
+            
+            // 点击评级弹窗背景关闭弹窗
+            ratingModal.addEventListener('click', function(e) {
+                if (e.target === ratingModal) {
+                    ratingModal.classList.remove('active');
+                }
+            });
+            
+            // 服务能力标签点击事件
+            serviceLabel.addEventListener('click', function() {
+                // 切换选中状态
+                serviceLabel.classList.add('selected');
+                moodLabel.classList.remove('selected');
+                selectedMode = 'service';
+            });
+            
+            // 今日心情标签点击事件
+            moodLabel.addEventListener('click', function() {
+                // 切换选中状态
+                moodLabel.classList.add('selected');
+                serviceLabel.classList.remove('selected');
+                selectedMode = 'mood';
+            });
+            
+            // 服务能力弹窗文本
+            const serviceTexts = {
+                '夯': {
+                    title: 'L5（组织者）',
+                    description: '可完成组织层面的工作，包括目标分解、资源调度、人机协作管理，具备"数字管理者"能力。',
+                    source: 'OpenAI智能体分级框架（L1-L5）'
+                },
+                '顶级': {
+                    title: 'L4（创新者）',
+                    description: '能产生原创方案与新知识，成为"创新伙伴"，但需人类验证成果。',
+                    source: 'OpenAI智能体分级框架（L1-L5）'
+                },
+                '人上人': {
+                    title: 'L3（智能体）',
+                    description: '能思考、规划与行动，调用API、数据库等资源，具备短期和长期记忆，可任务分解与迭代优化。',
+                    source: 'OpenAI智能体分级框架（L1-L5）'
+                },
+                'NPC': {
+                    title: 'L2（推理者）',
+                    description: '具备逻辑推理链，可解决复杂问题，但局限于知识和文本领域，无法主动执行。',
+                    source: 'OpenAI智能体分级框架（L1-L5）'
+                },
+                '拉': {
+                    title: 'L1（对话机器人）',
+                    description: '能进行自然语言对话，完成简单任务，但无规划、记忆和自主性。',
+                    source: 'OpenAI智能体分级框架（L1-L5）'
+                }
+            };
+            
+            // 今日心情弹窗文本
+            const moodTexts = {
+                '夯': '开心到转圈圈',
+                '顶级': '撒花',
+                '人上人': '下班啦',
+                'NPC': '算了',
+                '拉': '易燃易爆炸'
+            };
             
             // 评级条交互效果
             ratingLevels.forEach(level => {
@@ -876,13 +1025,43 @@
                 });
                 
                 level.addEventListener('click', function() {
-                    // 当点击评级时，添加选中效果
-                    ratingLevels.forEach(l => l.classList.remove('selected'));
-                    this.classList.add('selected');
+                    // 当点击评级时，先检查是否已选择模式
+                    if (!selectedMode) {
+                        alert('请先选择"服务水平"或"今日心情"');
+                        return;
+                    }
                     
-                    // 显示选中状态
-                    const text = this.textContent;
-                    alert(`您选择了等级：${text}`);
+                    // 获取当前等级文本
+                    const levelText = this.textContent;
+                    
+                    // 根据模式显示相应的弹窗内容
+                    if (selectedMode === 'service') {
+                        // 服务能力模式
+                        ratingModalTitle.textContent = '服务能力';
+                        const serviceData = serviceTexts[levelText];
+                        
+                        let contentHTML = `
+                            <div class="title">${levelText}</div>
+                            <div class="description">${serviceData.title}：${serviceData.description}</div>
+                            <div class="source">${serviceData.source}</div>
+                        `;
+                        
+                        ratingModalContent.innerHTML = contentHTML;
+                    } else if (selectedMode === 'mood') {
+                        // 今日心情模式
+                        ratingModalTitle.textContent = '今日心情';
+                        const moodText = moodTexts[levelText];
+                        
+                        let contentHTML = `
+                            <div class="title">选择"${levelText}"</div>
+                            <div class="description">${moodText}</div>
+                        `;
+                        
+                        ratingModalContent.innerHTML = contentHTML;
+                    }
+                    
+                    // 显示弹窗
+                    ratingModal.classList.add('active');
                 });
             });
             
