@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔法衣橱</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d1b0d;
+            color: #f0f7f0;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            overflow: hidden;
+        }
+        
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #d0eac8;
+            text-shadow: 0 0 15px #6cbe54;
+            letter-spacing: 3px;
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #b0d0a8;
+        }
+        
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+        
+        .category-box {
+            background-color: rgba(108, 190, 84, 0.1);
+            border: 2px solid #6cbe54;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #d0eac8;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-box:hover {
+            background-color: rgba(108, 190, 84, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .category-box.selected {
+            background-color: #6cbe54;
+            color: #0d1b0d;
+            font-weight: bold;
+        }
+        
+        /* 颜色选项样式 - 只保留文字标签 */
+        .color-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            max-width: 800px;
+        }
+        
+        .color-option {
+            background-color: rgba(108, 190, 84, 0.1);
+            border: 2px solid #6cbe54;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #d0eac8;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .color-option:hover {
+            background-color: rgba(108, 190, 84, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .color-option.selected {
+            background-color: #6cbe54;
+            color: #0d1b0d;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background-color: #6cbe54;
+            color: #0d1b0d;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(108, 190, 84, 0.4);
+        }
+        
+        .btn:hover {
+            background-color: #d0eac8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 190, 84, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .cauldron-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin-bottom: 30px;
+        }
+        
+        .cauldron {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #1a2a1a;
+            border-radius: 50%;
+            border: 8px solid #6cbe54;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            background-color: #6cbe54;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: bubbleUp 4s infinite ease-in-out;
+        }
+        
+        .square {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 8px;
+            opacity: 0.8;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @keyframes bubbleUp {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-200px) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-80px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-160px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-80px) rotate(270deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        .result-container {
+            display: flex;
+            width: auto;
+            max-width: 1200px;
+            height: 75%;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .outfit-image {
+            height: 100%;
+            width: auto;
+            aspect-ratio: 3 / 4;
+            background-color: #1a2a1a;
+            border-radius: 20px;
+            border: 4px solid #6cbe54;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .outfit-info {
+            height: 100%;
+            aspect-ratio: 3 / 4;
+            width: auto;
+            background-color: #1a2a1a;
+            border-radius: 20px;
+            border: 4px solid #6cbe54;
+            padding: 20px;
+            overflow-y: auto;
+            flex: none;
+        }
+        
+        .info-table {
+            width: 100%;
+        }
+        
+        .info-row {
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .info-type {
+            font-weight: bold;
+            color: #6cbe54;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-item-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .info-item {
+            background-color: #e8f7e4; /* 比浅绿更浅的绿色，无透明度 */
+            color: #0d1b0d;
+            padding: 3px 10px; /* 减少高度4px: 原为8px，现为3px */
+            border-radius: 5px; /* 倒角5px */
+            font-weight: normal;
+            font-size: 0.95rem;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 22px; /* 确保最小高度 */
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-item:hover {
+            background-color: #f0fbe9;
+            white-space: normal;
+            overflow: visible;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-text {
+            font-size: 1.8rem;
+            color: #d0eac8;
+            margin-top: 20px;
+            text-align: center;
+            height: 40px;
+        }
+        
+        .fog-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0);
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .fog-overlay.active {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 1);
+        }
+        
+        .fog-particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #a0c098;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            color: #6cbe54;
+            margin-bottom: 15px;
+        }
+        
+        .magic-text {
+            font-size: 1.8rem;
+            color: #d0eac8;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #6cbe54;
+        }
+        
+        .loading-dots {
+            display: inline-block;
+            width: 80px;
+            text-align: left;
+        }
+        
+        .loading-dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #6cbe54;
+            margin: 0 3px;
+            animation: dotPulse 1.5s infinite ease-in-out;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(108, 190, 84, 0.2);
+            color: #d0eac8;
+            border: 1px solid #6cbe54;
+            border-radius: 50px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            z-index: 5;
+        }
+        
+        .back-btn:hover {
+            background-color: rgba(108, 190, 84, 0.4);
+        }
+        
+        /* 迷雾动画 */
+        @keyframes fogIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fogOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .title {
+                font-size: 2.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .subtitle {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            
+            .category-box, .color-option {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .cauldron-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .screen.active {
+                justify-content: flex-start;
+                padding-top: 30px;
+                padding-bottom: 30px;
+                overflow-y: auto;
+            }
+            
+            .result-container {
+                flex-direction: column;
+                width: 95%;
+                height: auto;
+                flex: 1;
+                gap: 20px;
+                margin-bottom: 10px;
+            }
+            
+            .outfit-image {
+                width: 100%;
+                flex: none;
+                height: auto;
+                aspect-ratio: 3 / 4;
+                max-height: 60vh;
+                min-height: 300px;
+                position: relative;
+                border-radius: 20px; /* 保持圆角 */
+            }
+            
+            .outfit-image::before {
+                display: none;
+            }
+            
+            .outfit-info {
+                width: 100%;
+                flex: none;
+                height: auto;
+                max-height: 40vh;
+                border-radius: 20px; /* 四个角都是圆角 */
+                margin-bottom: 15px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+            }
+            
+            .category-box, .color-option {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .cauldron-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .magic-text {
+                font-size: 1.4rem;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 1.1rem;
+            }
+            
+            .info-type {
+                font-size: 1rem;
+            }
+            
+            .info-item {
+                font-size: 0.9rem;
+                padding: 2px 8px;
+                min-height: 20px;
+            }
+            
+            /* 调整最终页面布局 */
+            #result-screen .result-container {
+                flex: 1;
+                overflow-y: auto;
+                margin-bottom: 10px;
+            }
+            
+            #restart-btn {
+                margin-top: 25px; /* 与文字和穿搭图片的间隔一致 */
+                margin-bottom: 10px;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .title {
+                font-size: 2.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+            
+            .category-container {
+                margin-bottom: 15px;
+            }
+            
+            .color-container {
+                margin-bottom: 20px;
+            }
+            
+            .cauldron-container {
+                width: 250px;
+                height: 250px;
+                margin-bottom: 15px;
+            }
+            
+            .instructions {
+                margin-top: 10px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* 最终页面标题和按钮间距调整 */
+        #result-screen .title {
+            margin-bottom: 15px;
+        }
+        
+        #result-screen .subtitle {
+            margin-bottom: 25px; /* 与按钮和穿搭图片的间隔一致 */
+        }
+        
+        #restart-btn {
+            margin-top: 25px; /* 使按钮与信息表的距离和文字与穿搭图片的距离一致 */
+        }
+        
+        /* 在手机上调整最终页面按钮间距 */
+        @media (max-width: 768px) {
+            #result-screen .subtitle {
+                margin-bottom: 20px;
+            }
+            
+            #restart-btn {
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* 确保所有内容在手机端都能完整显示 */
+        @media (max-width: 768px) and (max-height: 900px) {
+            .screen.active {
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            .outfit-image {
+                max-height: 50vh;
+                min-height: 250px;
+            }
+            
+            .outfit-info {
+                max-height: 30vh;
+                padding: 15px;
+            }
+            
+            #restart-btn {
+                margin-top: 15px;
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 768px) and (max-height: 700px) {
+            .title {
+                font-size: 1.6rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+            
+            .outfit-image {
+                max-height: 45vh;
+                min-height: 200px;
+            }
+            
+            .outfit-info {
+                max-height: 25vh;
+                padding: 10px;
+            }
+            
+            .info-type {
+                font-size: 0.9rem;
+            }
+            
+            .info-item {
+                font-size: 0.8rem;
+                padding: 1px 6px;
+            }
+            
+            #restart-btn {
+                margin-top: 10px;
+                padding: 8px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 欢迎页面 -->
+    <div class="screen active" id="welcome-screen">
+        <div class="icon">
+            <i class="fas fa-hat-wizard"></i>
+        </div>
+        <h1 class="title">魔法衣橱</h1>
+        <p class="subtitle">欢迎来到抠老师的魔法世界</p>
+        <button class="btn" id="start-btn">开启魔法之旅</button>
+        <p class="instructions">在这里，你可以通过选择服饰元素，让魔法坩锅为你生成独特的穿搭！</p>
+    </div>
+    
+    <!-- 点亮咒语页面 -->
+    <div class="screen" id="spell-screen">
+        <button class="back-btn" id="back-to-welcome">返回</button>
+        <h1 class="title">点亮咒语</h1>
+        <p class="subtitle">选择你想要的服饰分类和颜色</p>
+        
+        <div class="category-container">
+            <div class="category-box" data-category="top">上衣</div>
+            <div class="category-box" data-category="skirt">下装 - 半裙</div>
+            <div class="category-box" data-category="pants">下装 - 裤子</div>
+            <div class="category-box" data-category="dress">连衣裙</div>
+            <div class="category-box" data-category="accessory">配饰</div>
+            <div class="category-box" data-category="socks">袜子</div>
+            <div class="category-box" data-category="shoes">鞋子</div>
+        </div>
+        
+        <p class="subtitle" style="font-size: 1.5rem; margin-top: 10px;">选择颜色</p>
+        <div class="color-container" id="color-container">
+            <!-- 颜色选项按彩虹排序，再排黑色、白色、灰色、彩色、其他 -->
+            <!-- 彩虹色：红、橙、黄、绿、青、蓝、紫 -->
+            <div class="color-option" data-color="red">红色</div>
+            <div class="color-option" data-color="orange">橙色</div>
+            <div class="color-option" data-color="yellow">黄色</div>
+            <div class="color-option" data-color="green">绿色</div>
+            <div class="color-option" data-color="cyan">青色</div>
+            <div class="color-option" data-color="blue">蓝色</div>
+            <div class="color-option" data-color="purple">紫色</div>
+            <div class="color-option" data-color="black">黑色</div>
+            <div class="color-option" data-color="white">白色</div>
+            <div class="color-option" data-color="gray">灰色</div>
+            <div class="color-option" data-color="pink">彩色</div>
+            <div class="color-option" data-color="brown">其他</div>
+        </div>
+        
+        <button class="btn" id="to-cauldron-btn">丢进坩锅</button>
+    </div>
+    
+    <!-- 注入魔法页面 -->
+    <div class="screen" id="magic-screen">
+        <button class="back-btn" id="back-to-spell">返回</button>
+        <h1 class="title">注入魔法</h1>
+        <p class="magic-text">魔法坩锅正在为你调配穿搭</p>
+        
+        <div class="cauldron-container">
+            <div class="cauldron" id="cauldron">
+                <!-- 泡泡和方块将通过JS生成 -->
+            </div>
+        </div>
+        
+        <button class="btn" id="stir-btn">搅一搅</button>
+        <div class="progress-text" id="progress-text"></div>
+    </div>
+    
+    <!-- 过渡迷雾 -->
+    <div class="fog-overlay" id="fog-overlay"></div>
+    
+    <!-- 最终穿搭页面 -->
+    <div class="screen" id="result-screen">
+        <button class="back-btn" id="back-to-magic">返回</button>
+        <h1 class="title">魔法穿搭完成</h1>
+        <p class="subtitle">坩锅为你精心调配的今日穿搭</p>
+        
+        <div class="result-container">
+            <div class="outfit-image">
+                <img src="OOTD_01.png" alt="今日穿搭" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            
+            <div class="outfit-info">
+                <div class="info-table">
+                    <div class="info-row">
+                        <div class="info-type">内搭</div>
+                        <div class="info-item-container">
+                            <div class="info-item">上衣_糖果绿小高领打底衫</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-type">叠穿</div>
+                        <div class="info-item-container">
+                            <div class="info-item">上衣_黑色_圆领T恤_我不是机器人</div>
+                            <div class="info-item">上衣_黑色_圆领加绒卫衣_lost-ctrl</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-type">下装</div>
+                        <div class="info-item-container">
+                            <div class="info-item">下装_原色牛仔薯条裤</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-type">袜子</div>
+                        <div class="info-item-container">
+                            <div class="info-item">袜子_桃花袜袜</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-type">鞋子</div>
+                        <div class="info-item-container">
+                            <div class="info-item">鞋子_黑松露_系带德训鞋</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-type">发型</div>
+                        <div class="info-item-container">
+                            <div class="info-item">拳击辫（配饰_镭射银丝发绳+配饰_骷髅头麻花辫*2）</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn" id="restart-btn">重新开始</button>
+    </div>
+
+    <script>
+        // 页面切换控制
+        const screens = document.querySelectorAll('.screen');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const spellScreen = document.getElementById('spell-screen');
+        const magicScreen = document.getElementById('magic-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const fogOverlay = document.getElementById('fog-overlay');
+        
+        // 按钮
+        const startBtn = document.getElementById('start-btn');
+        const toCauldronBtn = document.getElementById('to-cauldron-btn');
+        const stirBtn = document.getElementById('stir-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // 返回按钮
+        const backToWelcomeBtn = document.getElementById('back-to-welcome');
+        const backToSpellBtn = document.getElementById('back-to-spell');
+        const backToMagicBtn = document.getElementById('back-to-magic');
+        
+        // 进度文本
+        const progressText = document.getElementById('progress-text');
+        
+        // 坩锅元素
+        const cauldron = document.getElementById('cauldron');
+        
+        // 用户选择的数据
+        let selectedCategories = [];
+        let selectedColors = [];
+        
+        // 切换屏幕函数
+        function switchScreen(toScreen) {
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            toScreen.classList.add('active');
+        }
+        
+        // 开始按钮点击事件
+        startBtn.addEventListener('click', () => {
+            switchScreen(spellScreen);
+        });
+        
+        // 返回欢迎页面
+        backToWelcomeBtn.addEventListener('click', () => {
+            switchScreen(welcomeScreen);
+        });
+        
+        // 返回咒语页面
+        backToSpellBtn.addEventListener('click', () => {
+            switchScreen(spellScreen);
+        });
+        
+        // 返回魔法页面
+        backToMagicBtn.addEventListener('click', () => {
+            switchScreen(magicScreen);
+        });
+        
+        // 初始化分类选择
+        const categoryBoxes = document.querySelectorAll('.category-box');
+        categoryBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                const category = box.getAttribute('data-category');
+                
+                if (selectedCategories.includes(category)) {
+                    // 取消选择
+                    selectedCategories = selectedCategories.filter(c => c !== category);
+                    box.classList.remove('selected');
+                } else {
+                    // 选择
+                    selectedCategories.push(category);
+                    box.classList.add('selected');
+                }
+            });
+        });
+        
+        // 初始化颜色选择
+        const colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const color = option.getAttribute('data-color');
+                
+                if (selectedColors.includes(color)) {
+                    // 取消选择
+                    selectedColors = selectedColors.filter(c => c !== color);
+                    option.classList.remove('selected');
+                } else {
+                    // 选择
+                    selectedColors.push(color);
+                    option.classList.add('selected');
+                }
+            });
+        });
+        
+        // 丢进坩锅按钮点击事件
+        toCauldronBtn.addEventListener('click', () => {
+            // 检查是否有选择
+            if (selectedCategories.length === 0 && selectedColors.length === 0) {
+                alert('请至少选择一个分类或颜色！');
+                return;
+            }
+            
+            switchScreen(magicScreen);
+            
+            // 创建坩锅动画元素
+            createCauldronElements();
+        });
+        
+        // 创建坩锅动画元素
+        function createCauldronElements() {
+            // 清空坩锅
+            cauldron.innerHTML = '';
+            
+            // 创建泡泡
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // 随机大小和位置
+                const size = Math.random() * 30 + 10;
+                const left = Math.random() * 80 + 10;
+                const delay = Math.random() * 3;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${left}%`;
+                bubble.style.bottom = '0';
+                bubble.style.animationDelay = `${delay}s`;
+                
+                cauldron.appendChild(bubble);
+            }
+            
+            // 创建白色方块
+            for (let i = 0; i < 8; i++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                
+                // 随机大小和位置
+                const size = Math.random() * 40 + 20;
+                const left = Math.random() * 70 + 15;
+                const delay = Math.random() * 4;
+                
+                square.style.width = `${size}px`;
+                square.style.height = `${size}px`;
+                square.style.left = `${left}%`;
+                square.style.bottom = '0';
+                square.style.animationDelay = `${delay}s`;
+                
+                cauldron.appendChild(square);
+            }
+        }
+        
+        // 创建迷雾粒子
+        function createFogParticles() {
+            fogOverlay.innerHTML = '';
+            
+            // 创建迷雾粒子
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('fog-particle');
+                
+                // 随机大小和位置
+                const size = Math.random() * 150 + 50;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const opacity = Math.random() * 0.4 + 0.3;
+                const blur = Math.random() * 10 + 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.top = `${top}%`;
+                particle.style.opacity = opacity;
+                particle.style.filter = `blur(${blur}px)`;
+                
+                // 随机动画
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                
+                fogOverlay.appendChild(particle);
+            }
+        }
+        
+        // 搅一搅按钮点击事件
+        stirBtn.addEventListener('click', () => {
+            // 禁用按钮
+            stirBtn.disabled = true;
+            stirBtn.textContent = "魔法进行中...";
+            
+            // 显示"数个一二三四五……"
+            progressText.textContent = "数个一二三四五……";
+            
+            // 创建迷雾效果
+            createFogParticles();
+            
+            // 3秒后显示"已完成"
+            setTimeout(() => {
+                // 修改：去掉三个圆点动画效果，只显示"已完成"
+                progressText.textContent = "已完成";
+                
+                // 再过1秒触发迷雾过渡
+                setTimeout(() => {
+                    // 激活迷雾效果
+                    fogOverlay.classList.add('active');
+                    
+                    // 迷雾完全显现后隐藏魔法页面
+                    setTimeout(() => {
+                        // 隐藏魔法页面
+                        magicScreen.classList.remove('active');
+                        
+                        // 显示结果页面
+                        resultScreen.classList.add('active');
+                        
+                        // 逐渐去除迷雾效果
+                        setTimeout(() => {
+                            fogOverlay.classList.remove('active');
+                            
+                            // 重置按钮状态
+                            stirBtn.disabled = false;
+                            stirBtn.textContent = "搅一搅";
+                            progressText.textContent = "";
+                        }, 1000);
+                    }, 1500);
+                }, 1000);
+            }, 3000);
+        });
+        
+        // 重新开始按钮
+        restartBtn.addEventListener('click', () => {
+            // 重置选择
+            selectedCategories = [];
+            selectedColors = [];
+            
+            // 移除选中的样式
+            categoryBoxes.forEach(box => {
+                box.classList.remove('selected');
+            });
+            
+            colorOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 返回欢迎页面
+            switchScreen(welcomeScreen);
+        });
+        
+        // 调整屏幕高度以适应内容
+        function adjustScreenHeight() {
+            const screenHeight = window.innerHeight;
+            const screenWidth = window.innerWidth;
+            
+            // 根据屏幕尺寸调整字体大小和间距
+            if (screenHeight < 700) {
+                document.documentElement.style.fontSize = '14px';
+            } else if (screenHeight < 800) {
+                document.documentElement.style.fontSize = '15px';
+            } else {
+                document.documentElement.style.fontSize = '16px';
+            }
+            
+            // 如果是移动设备且高度较小，进一步调整
+            if (screenWidth < 768 && screenHeight < 700) {
+                const titles = document.querySelectorAll('.title');
+                titles.forEach(title => {
+                    title.style.fontSize = '1.8rem';
+                });
+                
+                const subtitles = document.querySelectorAll('.subtitle');
+                subtitles.forEach(subtitle => {
+                    subtitle.style.fontSize = '1rem';
+                });
+            }
+            
+            // 对于最终页面，确保所有内容都能完整显示
+            if (screenWidth < 768) {
+                const resultScreen = document.getElementById('result-screen');
+                if (resultScreen.classList.contains('active')) {
+                    // 计算可用高度
+                    const titleHeight = document.querySelector('#result-screen .title').offsetHeight;
+                    const subtitleHeight = document.querySelector('#result-screen .subtitle').offsetHeight;
+                    const outfitImage = document.querySelector('#result-screen .outfit-image');
+                    const outfitInfo = document.querySelector('#result-screen .outfit-info');
+                    const restartBtn = document.getElementById('restart-btn');
+                    
+                    // 设置穿搭图片和信息表的最大高度
+                    const availableHeight = screenHeight - titleHeight - subtitleHeight - restartBtn.offsetHeight - 100; // 100px为边距和填充
+                    
+                    // 分配高度：图片占60%，信息表占40%
+                    outfitImage.style.maxHeight = (availableHeight * 0.6) + 'px';
+                    outfitInfo.style.maxHeight = (availableHeight * 0.4) + 'px';
+                }
+            }
+        }
+        
+        // 初始化坩锅动画元素和调整高度
+        window.addEventListener('load', () => {
+            createCauldronElements();
+            adjustScreenHeight();
+        });
+        
+        // 窗口大小变化时调整高度
+        window.addEventListener('resize', adjustScreenHeight);
+    </script>
+</body>
+</html>
