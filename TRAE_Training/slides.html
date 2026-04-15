@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>✅搞定！TRAE固定格式PPT排版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f7f9fc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, sans-serif;
+            padding: 32px 20px;
+            color: #1f2a3e;
+            line-height: 1.4;
+        }
+        .notion-card {
+            max-width: 780px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 44px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 620;
+            letter-spacing: -0.01em;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sub {
+            font-size: 0.9rem;
+            color: #5b6e8c;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eef2f6;
+            padding-bottom: 1rem;
+        }
+        .step {
+            margin: 2rem 0;
+        }
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: 620;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+        .step-number {
+            background: #eef2ff;
+            width: 30px;
+            height: 30px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+        .step-content {
+            margin-left: 42px;
+            font-size: 0.92rem;
+            color: #2c3e50;
+            line-height: 1.45;
+        }
+        .step-content p, .step-content ul, .step-content .folder-path {
+            margin-bottom: 0.6rem;
+        }
+        .step-content ul {
+            margin-left: 1.2rem;
+            margin-top: 0.2rem;
+        }
+        .font-grid {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            margin: 0.9rem 0;
+            border: 1px solid #edf2f7;
+        }
+        .font-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .font-tag {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            padding: 0.2rem 0.9rem;
+            font-family: 'SF Mono', 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #1e4a76;
+        }
+        .folder-path {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 0.3rem 1rem;
+            font-family: 'SF Mono', ui-monospace, monospace;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 0.3rem 0;
+            word-break: break-all;
+        }
+        .prompt-box {
+            background: #fafcff;
+            border: 1px solid #e2edf7;
+            border-radius: 20px;
+            padding: 1rem 1.3rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            font-family: 'SF Mono', ui-monospace, monospace;
+            line-height: 1.5;
+            color: #0c4a6e;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .prompt-box pre {
+            margin: 0;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: 0;
+            border-top: 1px solid #edf2f7;
+        }
+        .check-footer {
+            background: #eef6ff;
+            border-radius: 24px;
+            padding: 0.9rem 1.2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+        .script-card {
+            background: #f8fbff;
+            border: 1px solid #e2edf7;
+            border-radius: 18px;
+            padding: 0.85rem 1rem;
+            font-size: 0.82rem;
+            color: #2f4a68;
+            line-height: 1.55;
+        }
+        @media (max-width: 640px) {
+            .notion-card { padding: 24px 20px; }
+            .step-content { margin-left: 28px; }
+            .step-title { gap: 8px; }
+            .script-card { font-size: 0.78rem; }
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .badge-icon {
+            font-size: 0.75rem;
+            background: #eef2ff;
+            padding: 2px 8px;
+            border-radius: 30px;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+        .file-structure {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 0.8rem 1.2rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+            border: 1px solid #e9edf2;
+        }
+    </style>
+</head>
+<body>
+<div class="notion-card">
+    <h1>
+        ✅ 搞定！TRAE固定格式PPT排版
+    </h1>
+    <div class="sub">三步生成标准PPT · 自动提取规范 + 核验skill · 告别样式漂移</div>
+
+    <!-- ========= 步骤1 ========= -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">1</span>
+            <span>下载 TRAE & 安装字体</span>
+        </div>
+        <div class="step-content">
+            <p>🔗 打开 <a href="https://www.trae.ai" target="_blank">www.trae.ai</a> 下载并安装 <strong>TRAE 海外版（SOLO模式）</strong>。</p>
+            <div class="font-grid">
+                <div><strong>📌 必备字体（中文PPT规范字体家族）</strong></div>
+                <div class="font-row">
+                    <span class="font-tag">微软雅黑 Regular (msyh.ttc)</span>
+                    <span class="font-tag">微软雅黑 Bold (msyhbd.ttc)</span>
+                    <span class="font-tag">微软雅黑 Light (msyhl.ttc)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= 步骤2 ========= -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">2</span>
+            <span>新建项目文件夹</span>
+        </div>
+        <div class="step-content">
+            <p>📁 在 TRAE 工作区中创建项目文件夹（英文命名），并建立 <code>slides</code> 目录：</p>
+            <div class="folder-path">/你的仓库/slides/中文幻灯片母版_报告.pptx</div>
+        </div>
+    </div>
+
+    <!-- ========= 步骤3 ========= -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">3</span>
+            <span>打开 TRAE SOLO 模式，发送以下指令</span>
+        </div>
+        <div class="step-content">
+            <p>在 TRAE 对话框中粘贴下方 <code>/spec</code> 命令，AI 将自动完成规范提取、skill生成以及20页PPT的固定格式排版。</p>
+            <div class="prompt-box">
+<pre>/spec 
+（1）参考 slides/中文幻灯片母版_报告.pptx，生成一份《中文幻灯片母版规范_报告.md》（详细描述版式、字体、配色、固定元素坐标）；
+（2）根据生成的《中文幻灯片母版规范_报告.md》文档，生成一个核验 PPT 格式的 skill（包含字体检查、母版来源、表格样式、页码logo位置等核验项）；
+（3）将以下文字内容按《中文幻灯片母版规范_报告.md》进行严格排版，生成20页PPT，并在每页注明使用的模板来源（基于中文幻灯片母版_报告.pptx），最后调用第(2)步生成的skill进行格式核验并输出报告：
+【《生成式AI时代的设计范式转型》的20页PPT，注明使用的模板。（内容略）】</pre>
+            </div>
+            <p class="script-card">【附】幻灯片脚本提示词：<br>
+            生成20页PPT提纲。并注明版式：<br>
+            模板01 封面<br>
+            模板02 金句页<br>
+            模板03 目录<br>
+            模板04 左文右图<br>
+            模板05 双栏文字<br>
+            模板06 三栏文字大字<br>
+            模板07 表格为主<br>
+            模板08 左表格右大字数据<br>
+            模板09 表格突出表头<br>
+            模板10 总结</p>
+        </div>
+    </div>
+
+    <!-- 简洁完成提示（仅保留三步闭环，无任何额外清单/速查/交付规范） -->
+    <hr>
+    <div class="check-footer">
+        ✅ 完成以上三步 → TRAE 自动输出规范PPT + 完整核验报告
+    </div>
+    <div style="font-size: 0.7rem; text-align: center; margin-top: 1.5rem; color: #8b9ab0;">
+        ⚡ TRAE固定格式PPT排版 | 基于母版闭环 + AI核验
+    </div>
+</div>
+</body>
+</html>
