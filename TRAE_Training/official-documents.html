@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅搞定！TRAE公文排版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f7f9fc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, sans-serif;
+            padding: 32px 20px;
+            color: #1f2a3e;
+            line-height: 1.4;
+        }
+        .notion-card {
+            max-width: 780px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 44px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02);
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        .sub {
+            font-size: 0.9rem;
+            color: #5b6e8c;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eef2f6;
+            padding-bottom: 1rem;
+        }
+        .step {
+            margin: 2rem 0;
+        }
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+        .step-number {
+            background: #eef2ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2563eb;
+        }
+        .step-content {
+            margin-left: 38px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        .font-grid {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            margin: 0.8rem 0;
+            border: 1px solid #edf2f7;
+        }
+        .font-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .font-tag {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            padding: 0.2rem 0.9rem;
+            font-family: 'SF Mono', 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #1e4a76;
+        }
+        .folder-path {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 0.4rem 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+        .prompt-box {
+            background: #fafcff;
+            border: 1px solid #e2edf7;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            font-family: 'SF Mono', ui-monospace, monospace;
+            line-height: 1.5;
+            color: #0c4a6e;
+        }
+        .prompt-box pre {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            text-indent: 0;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: 0;
+            border-top: 1px solid #edf2f7;
+        }
+        .check-footer {
+            background: #fefce8;
+            border-radius: 20px;
+            padding: 0.8rem 1.2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .notion-card { padding: 24px 20px; }
+            .step-content { margin-left: 28px; }
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="notion-card">
+    <h1>✅搞定！TRAE公文排版</h1>
+    <div class="sub">八岁和八十岁都能看懂 · 照着做就对了</div>
+
+    <!-- 步骤1 -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">1</span>
+            <span>下载 TRAE & 安装字体</span>
+        </div>
+        <div class="step-content">
+            <p>打开 <a href="https://www.trae.ai" target="_blank">www.trae.ai</a> 下载并安装 <strong>TRAE 海外版</strong>。</p>
+            <div class="font-grid">
+                <div><strong>📌 规范A（常用国标）</strong></div>
+                <div class="font-row">
+                    <span class="font-tag">方正小标宋_GBK</span>
+                    <span class="font-tag">仿宋_GB2312</span>
+                    <span class="font-tag">黑体</span>
+                    <span class="font-tag">楷体_GB2312</span>
+                </div>
+                <div style="margin-top: 12px;"><strong>📌 规范B（全方正字库）</strong></div>
+                <div class="font-row">
+                    <span class="font-tag">方正小标宋_GBK</span>
+                    <span class="font-tag">方正仿宋GBK</span>
+                    <span class="font-tag">方正黑体GBK</span>
+                    <span class="font-tag">方正楷体GBK</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 步骤2 -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">2</span>
+            <span>新建项目文件夹</span>
+        </div>
+        <div class="step-content">
+            <p>在电脑里新建一个英文名字的文件夹，例如：<span class="folder-path">official-documents</span></p>
+            <p>把下面两份规范文件放进去：</p>
+            <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+                <li>📄 GBT 9704-2012党政机关公文格式.pdf</li>
+                <li>📄 党政机关公文格式模板.docx</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 步骤3 -->
+    <div class="step">
+        <div class="step-title">
+            <span class="step-number">3</span>
+            <span>打开 TRAE SOLO 模式，发送下面这段话</span>
+        </div>
+        <div class="step-content">
+            <div class="prompt-box">
+<pre>/spec 
+（1）参考 GBT 9704-2012.pdf 和 党政机关公文格式模板.docx，生成一份《国标公文格式文档.md》；
+（2）根据 国标公文格式文档.md 文档，生成一个核验 Word 公文格式的 skill；
+（3）将以下文字内容按国标排版，并调用 skill 核验：
+【《生成式AI时代的设计范式转型》的万字主题报告。（内容略）】</pre>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="check-footer">
+        ✅ 完成这三步，TRAE 就会生成排好版的公文，并给出核验报告（哪里合格，哪里要改）。
+    </div>
+    <div style="font-size: 0.7rem; text-align: center; margin-top: 1.5rem; color: #8b9ab0;">
+        🖨️ 打印这张纸，做完一步打一个 ✓
+    </div>
+</div>
+</body>
+</html>
