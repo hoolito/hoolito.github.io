@@ -40,8 +40,8 @@
         .selected-area { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
         .selected-area .selected-label { font-size: 14px; opacity: 0.9; }
         .selected-area .selected-date-text { font-weight: 700; font-size: 15px; }
-        .date-picker-btn, .official-btn, .today-activity-btn { background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5); color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s; backdrop-filter: blur(4px); text-decoration: none; }
-        .date-picker-btn:hover, .official-btn:hover, .today-activity-btn:hover { background: rgba(255,255,255,0.4); }
+        .date-picker-btn, .official-btn, .today-activity-btn, .intro-btn { background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5); color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s; backdrop-filter: blur(4px); text-decoration: none; }
+        .date-picker-btn:hover, .official-btn:hover, .today-activity-btn:hover, .intro-btn:hover { background: rgba(255,255,255,0.4); }
         .main-content { padding: 16px 24px 24px; }
         .calendar-collapse { margin-bottom: 12px; }
         .calendar-panel { background: #FFFAFB; border: 1px solid var(--sakura-200); border-radius: var(--radius); padding: 8px 10px; display: none; margin-top: 8px; max-width: 420px; margin-left: auto; margin-right: auto; }
@@ -183,6 +183,7 @@
                 <button class="date-picker-btn" id="toggleCalendarBtn">📅 选择日期</button>
                 <button class="today-activity-btn" id="openTodayActivityBtn">✨ 今日活动</button>
                 <a href="https://psh-auth.pokemon.com.cn/event_reg/index.html" target="_blank" class="official-btn">🔗 官方预约</a>
+                <a href="https://www.pokemon.cn/tcg/campaign/21513.html" target="_blank" class="intro-btn">📖 活动简介</a>
             </div>
         </div>
     </div>
@@ -194,7 +195,7 @@
 
         <div class="rule-box"><strong>📌 最晚入场说明：</strong><br><span id="ruleText"></span></div>
 
-        <div class="section-title-row"><div class="title-left">🎫 场次预约</div><div class="title-actions"><button class="rule-btn" id="openGuideBtn">📷 预约指引</button><button class="rule-btn" id="openRuleBtn">📋 预约规则</button></div></div>
+        <div class="section-title-row"><div class="title-left">🎫 场次预约</div><div class="title-actions"><button class="rule-btn" id="openRuleBtn">📋 预约规则</button></div></div>
         <div class="gantt-wrapper"><div class="gantt" id="ganttChart"><div class="time-axis"><div class="time-axis-spacer"></div><div class="time-axis-ticks" id="timeAxisTicks"></div></div><div class="gantt-rows" id="ganttRows"></div></div></div>
 
         <div class="section-title-row"><div class="title-left">📋 场内活动详情</div></div>
@@ -216,7 +217,6 @@
 <div class="footer-signature">🌸 狐狸头妈妈</div>
 
 <div class="modal-overlay hidden" id="ruleModal"><div class="modal-dialog"><button class="modal-close" id="closeRuleModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📋 预约规则</div><table class="rule-table" id="ruleTable"><thead><tr><th>预约开放时间</th><th>可预约入场日</th></tr></thead><tbody><tr data-date="2026-04-19"><td>2026年4月19日（周日）10:00</td><td>2026年4月24日~4月30日</td></tr><tr data-date="2026-04-28"><td>2026年4月28日（周二）15:00</td><td>2026年5月1日~5月7日</td></tr><tr data-date="2026-04-30"><td>2026年4月30日（周四）15:00</td><td>2026年5月8日~5月14日</td></tr><tr data-date="2026-05-08"><td>2026年5月8日（周五）15:00</td><td>2026年5月15日~5月24日</td></tr></tbody></table></div></div>
-<div class="modal-overlay hidden" id="guideModal"><div class="modal-dialog" style="max-width:400px;"><button class="modal-close" id="closeGuideModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📷 预约指引</div><div class="guide-image-container"><img src="Guides.jpg" alt="预约指引" onerror="this.parentNode.innerHTML='<div style=\'padding:20px;color:#888;\'>图片未能加载，请将Guides.jpg放入项目文件夹</div>'"></div></div></div>
 <div class="modal-overlay hidden" id="rewardModal"><div class="modal-dialog"><button class="modal-close" id="closeRewardModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:18px;">🎁 花径漫游集章活动说明</div><div style="font-size:13px;line-height:1.7;color:#3D2C33;"><p style="margin-bottom:10px;"><span style="color:var(--sakura-600);">欢迎各位训练家参与城市漫游！</span>除中山公园主会场外，愚园路沿线及长宁区的部分商场内也设有<span style="color:var(--sakura-600);">丰富多样的宝可梦打卡点</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🕒 活动时间</strong><br>2026年4月24日～5月24日<br>主会场运营时间：<span style="color:var(--green-highlight);font-weight:600;">9:00～19:00</span><br>各分会场集章处运营时间请以活动地图信息为准。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">📋 活动内容</strong><br>在集章处<span style="color:var(--green-highlight);font-weight:600;">扫码关注宝可梦天猫旗舰店或宝可梦抖音旗舰店</span>，即可<span style="color:var(--sakura-600);">领取集章手册</span>。领取后即可盖上<span style="color:var(--green-highlight);font-weight:600;">"start"章</span>，以及一个与集章处对应的<span style="color:var(--sakura-600);">宝可梦印章</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🎖️ 活动奖励</strong><br>1. 收集到<span style="color:var(--green-highlight);font-weight:700;">5枚</span>印章，可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游透卡1张</span>（共<span style="color:var(--green-highlight);">90,000张</span>，每人每次限领1张）。<br>2. 收集到<span style="color:var(--green-highlight);font-weight:700;">全11枚</span>印章，在集章处找到工作人员核销后即可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游金属徽章1个</span>（共<span style="color:var(--green-highlight);">60,000个</span>，每人限领1个）。</p></div></div></div>
 <div class="modal-overlay hidden" id="allMeetingsModal"><div class="modal-dialog" style="max-height:60vh;overflow-y:auto;"><button class="modal-close" id="closeAllMeetingsModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📋 全部宝可梦见面会</div><div id="allMeetingsContainer"></div></div></div>
 
@@ -449,11 +449,6 @@
     document.getElementById('closeRuleModal').addEventListener('click', ()=> ruleModal.classList.add('hidden'));
     ruleModal.addEventListener('click', e=> { if(e.target===ruleModal) ruleModal.classList.add('hidden'); });
 
-    const guideModal = document.getElementById('guideModal');
-    document.getElementById('openGuideBtn').addEventListener('click', ()=> guideModal.classList.remove('hidden'));
-    document.getElementById('closeGuideModal').addEventListener('click', ()=> guideModal.classList.add('hidden'));
-    guideModal.addEventListener('click', e=> { if(e.target===guideModal) guideModal.classList.add('hidden'); });
-
     // 今日活动弹窗
     const todayActivityModal = document.getElementById('todayActivityModal');
     document.getElementById('openTodayActivityBtn').addEventListener('click', ()=>{
@@ -520,82 +515,41 @@
             const displayName = cb.parentNode.querySelector('span')?.textContent?.trim() || cb.value;
             selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName});
         });
-        if(selectedValues.length===0){
-            document.getElementById('recommendationResult').innerHTML = '<p>请至少选择一项活动</p>';
-            return;
-        }
+        if(selectedValues.length===0){ document.getElementById('recommendationResult').innerHTML = '<p>请至少选择一项活动</p>'; return; }
         if(!weekend){
             let html = '<strong>工作日活动全天覆盖，任意场次均可参加。</strong><br>推荐场次：';
             sessions.forEach(s=> html += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span> `);
-            document.getElementById('recommendationResult').innerHTML = html;
-            return;
+            document.getElementById('recommendationResult').innerHTML = html; return;
         }
 
-        function splitTimeRanges(timeStr) {
-            if(timeStr.includes('每日') || timeStr.includes('全天')) return [{start:0, end:1440}];
-            return timeStr.split('/').map(s=>s.trim()).filter(s=>s).map(part=>{
-                const m = part.match(/(\d{1,2}):(\d{2})\s*[-~]\s*(\d{1,2}):(\d{2})/);
-                if(m) return {start: parseInt(m[1])*60+parseInt(m[2]), end: parseInt(m[3])*60+parseInt(m[4])};
-                return null;
-            }).filter(r=>r);
-        }
+        function splitTimeRanges(timeStr) { if(timeStr.includes('每日') || timeStr.includes('全天')) return [{start:0, end:1440}]; return timeStr.split('/').map(s=>s.trim()).filter(s=>s).map(part=>{ const m = part.match(/(\d{1,2}):(\d{2})\s*[-~]\s*(\d{1,2}):(\d{2})/); if(m) return {start: parseInt(m[1])*60+parseInt(m[2]), end: parseInt(m[3])*60+parseInt(m[4])}; return null; }).filter(r=>r); }
 
         const hasHandcraft = selectedValues.some(i=>i.value === 'handcraft');
-        const hasPatrol = selectedValues.some(i=>i.value === '宝可梦巡游');
         let allowedSessions = sessions;
-        if(hasHandcraft) {
-            allowedSessions = sessions.filter(s=> [2,4,5].includes(s.id));
-        } else if(hasPatrol) {
-            allowedSessions = sessions.filter(s=> [4,6].includes(s.id));
-        }
+        if(hasHandcraft) allowedSessions = sessions.filter(s=> [2,4,5].includes(s.id));
 
         let html = '';
         allowedSessions.forEach(s=>{
-            const sessionStart = timeToMinutes(s.playStart);
-            const sessionEnd = timeToMinutes(s.playEnd);
+            const sessionStart = timeToMinutes(s.playStart); const sessionEnd = timeToMinutes(s.playEnd);
             const suitableActivities = [];
             selectedValues.forEach(item=>{
                 const ranges = splitTimeRanges(item.time);
                 if(item.value === 'handcraft') {
                     const matched = ranges.some(r => sessionStart <= r.start && sessionEnd >= r.end);
-                    if(matched) {
-                        const matchingSlots = ranges.filter(r => sessionStart <= r.start && sessionEnd >= r.end);
-                        suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) });
-                    }
+                    if(matched) { const matchingSlots = ranges.filter(r => sessionStart <= r.start && sessionEnd >= r.end); suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); }
                 } else {
                     const isAllDay = ranges.length===1 && ranges[0].end===1440;
-                    if(isAllDay) {
-                        suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) });
-                    } else {
-                        const matchingSlots = ranges.filter(r=> r.start >= sessionStart && r.start <= sessionEnd);
-                        if(matchingSlots.length > 0){
-                            suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) });
-                        }
-                    }
+                    if(isAllDay) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); }
+                    else { const matchingSlots = ranges.filter(r=> r.start >= sessionStart && r.start <= sessionEnd); if(matchingSlots.length > 0){ suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } }
                 }
             });
-            if(suitableActivities.length > 0){
-                html += `<div style="margin:8px 0;padding:8px;background:#FFF5F9;border-radius:10px;"><span style="color:#B33A56;font-weight:700;">🌸 场次${s.id} (${s.playStart}-${s.playEnd})</span><br>`;
-                suitableActivities.forEach(act=>{
-                    html += `<span style="margin-left:12px;">🎈 ${act.name}</span><br>`;
-                    act.slots.forEach(slot=> html += `<span class="time-tag">${slot}</span> `);
-                    html += `<br>`;
-                });
-                html += `</div>`;
-            }
+            if(suitableActivities.length > 0){ html += `<div style="margin:8px 0;padding:8px;background:#FFF5F9;border-radius:10px;"><span style="color:#B33A56;font-weight:700;">🌸 场次${s.id} (${s.playStart}-${s.playEnd})</span><br>`; suitableActivities.forEach(act=>{ html += `<span style="margin-left:12px;">🎈 ${act.name}</span><br>`; act.slots.forEach(slot=> html += `<span class="time-tag">${slot}</span> `); html += `<br>`; }); html += `</div>`; }
         });
         if(html === '') html = '没有场次可以参加选中的活动。';
         document.getElementById('recommendationResult').innerHTML = html;
     });
 
-    function generate30MinSlots(startMin, endMin) {
-        const slots = [];
-        for(let t = startMin; t < endMin; t += 30) {
-            const slotEnd = Math.min(t + 30, endMin);
-            slots.push(`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}-${String(Math.floor(slotEnd/60)).padStart(2,'0')}:${String(slotEnd%60).padStart(2,'0')}`);
-        }
-        return slots;
-    }
+    function generate30MinSlots(startMin, endMin) { const slots = []; for(let t = startMin; t < endMin; t += 30) { const slotEnd = Math.min(t + 30, endMin); slots.push(`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}-${String(Math.floor(slotEnd/60)).padStart(2,'0')}:${String(slotEnd%60).padStart(2,'0')}`); } return slots; }
 
     const today=new Date(); let def=today>=new Date(2026,3,24)&&today<=new Date(2026,4,24)?today:new Date(2026,3,30);
     currentDisplayMonth={year:def.getFullYear(),month:def.getMonth()}; updateAll(def);
