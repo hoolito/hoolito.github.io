@@ -128,32 +128,23 @@
         .rule-table .current-row { background: #FFFBF5; }
 
         .stamp-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 400px; }
-        .stamp-table-outer {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            min-width: 800px;
-        }
-        .stamp-table-outer th {
-            background: #FFF0F5; color: #B33A56; padding: 8px 10px; text-align: center;
-            font-weight: 700; font-size: 11px; border-bottom: 2px solid #FFD6E0; white-space: nowrap;
-        }
-        .stamp-table-outer td {
-            padding: 8px 10px; border-bottom: 1px solid #F0E4E8; color: #555;
-            vertical-align: middle; font-size: 11px; white-space: nowrap;
-        }
-        .stamp-table-outer td:first-child { text-align: left; font-weight: 500; width: 300px; }
-        .stamp-table-outer td:nth-child(2) { text-align: left; width: 300px; }
+        .stamp-table th { background: #FFF0F5; color: #B33A56; padding: 8px 10px; text-align: center; font-weight: 700; font-size: 11px; border-bottom: 2px solid #FFD6E0; white-space: nowrap; }
+        .stamp-table td { padding: 8px 10px; border-bottom: 1px solid #F0E4E8; color: #555; vertical-align: middle; font-size: 11px; white-space: nowrap; }
+        .stamp-table td:first-child { text-align: left; font-weight: 500; width: 140px; }
+        .stamp-table td:nth-child(2) { text-align: center; font-family: var(--font-mono); width: 130px; }
+        .stamp-table td:nth-child(3) { text-align: center; width: 130px; }
+        .stamp-table tr:last-child td { border-bottom: none; }
+
+        .stamp-table-outer { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 740px; }
+        .stamp-table-outer th { background: #FFF0F5; color: #B33A56; padding: 8px 10px; text-align: center; font-weight: 700; font-size: 11px; border-bottom: 2px solid #FFD6E0; white-space: nowrap; }
+        .stamp-table-outer td { padding: 8px 10px; border-bottom: 1px solid #F0E4E8; color: #555; vertical-align: middle; font-size: 11px; white-space: nowrap; }
+        .stamp-table-outer td:first-child { text-align: left; font-weight: 500; width: 240px; }
+        .stamp-table-outer td:nth-child(2) { text-align: left; width: 240px; }
         .stamp-table-outer td:nth-child(3) { text-align: center; font-family: var(--font-mono); width: 60px; }
         .stamp-table-outer td:nth-child(4) { text-align: center; width: 100px; }
         .stamp-table-outer td:nth-child(5) { text-align: center; font-family: var(--font-mono); width: 80px; }
         .stamp-table-outer td:nth-child(6) { text-align: center; width: 70px; }
         .stamp-table-outer tr:last-child td { border-bottom: none; }
-        .stamp-table th { background: #FFF0F5; color: #B33A56; padding: 8px 10px; text-align: center; font-weight: 700; font-size: 11px; border-bottom: 2px solid #FFD6E0; white-space: nowrap; }
-        .stamp-table td { padding: 8px 10px; border-bottom: 1px solid #F0E4E8; color: #555; vertical-align: middle; font-size: 11px; }
-        .stamp-table td:first-child { text-align: left; font-weight: 500; }
-        .stamp-table td:nth-child(2) { text-align: center; font-family: var(--font-mono); }
-        .stamp-table td:nth-child(3) { text-align: center; }
 
         .guide-image-container { aspect-ratio: 1080 / 1916; max-width: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border: 1px solid var(--sakura-200); border-radius: 10px; overflow: hidden; }
         .guide-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -168,8 +159,15 @@
             .time-axis-spacer { width: 85px; min-width: 85px; }
             .activity-cards { grid-template-columns: 1fr; }
             .calendar-panel { max-width: 100%; margin: 0; }
-            .stamp-table, .stamp-table-outer { font-size: 10px; min-width: 800px; }
-            .stamp-table th, .stamp-table td, .stamp-table-outer th, .stamp-table-outer td { padding: 6px 8px; }
+            .stamp-table { font-size: 10px; min-width: 320px; }
+            .stamp-table-outer { font-size: 10px; min-width: 620px; }
+            .stamp-table th, .stamp-table td { padding: 6px 8px; }
+            .stamp-table-outer th, .stamp-table-outer td { padding: 6px 8px; }
+            .stamp-table td:first-child { width: 110px; }
+            .stamp-table td:nth-child(2) { width: 100px; }
+            .stamp-table td:nth-child(3) { width: 100px; }
+            .stamp-table-outer td:first-child { width: 200px; }
+            .stamp-table-outer td:nth-child(2) { width: 200px; }
         }
     </style>
 </head>
@@ -204,53 +202,17 @@
         <p style="font-weight:700;color:var(--sakura-800);margin:12px 0 6px;">🏟️ 中山公园主会场集章处</p>
         <div style="overflow-x:auto;"><table class="stamp-table"><thead><tr><th>集章处</th><th>宝可梦编号</th><th>宝可梦名称</th></tr></thead><tbody><tr><td>🐟 鲤鱼王，跳高！</td><td>No.0406</td><td>含羞苞 (Budew)</td></tr><tr><td>💐 华丽街区</td><td>No.0764</td><td>花疗环环 (Comfey)</td></tr><tr><td>📺 《宝可梦地平线》动画展区</td><td>No.0549</td><td>裙儿小姐 (Lilligant)</td></tr><tr><td>💤 卡比兽 酣睡一刻</td><td>No.0003</td><td>妙蛙花 (Venusaur)</td></tr><tr><td>🏪 花径漫游主题快闪</td><td>No.0669</td><td>花蓓蓓 (Flabébé)</td></tr></tbody></table></div>
         <p style="font-weight:700;color:var(--sakura-800);margin:16px 0 6px;">📍 主会场外集章处</p>
-        <div style="overflow-x:auto;">
-            <table class="stamp-table-outer">
-                <thead><tr><th>集章处</th><th>地址</th><th>宝可梦编号</th><th>宝可梦名称</th><th>集章处运营时间</th><th>日期</th></tr></thead>
-                <tbody>
-                    <tr><td>🃏 宝可梦官方卡牌道馆（古月鸟）</td><td>长宁路1018号龙之梦3楼<br><span style="font-size:10px;color:#888;">中山公园1号门出发，步行7分钟</span></td><td>No.0548</td><td>百合根娃娃 (Petillil)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr>
-                    <tr><td>🚇 江苏路地铁站集章处</td><td>江苏路地铁站1号口<br><span style="font-size:10px;color:#888;">地铁2号线：1站，中山公园站（5口）-江苏路站（1号）</span></td><td>No.0182</td><td>美丽花 (Bellossom)</td><td>09:00~19:00</td><td>4/24~5/24</td></tr>
-                    <tr><td>🏪 花径漫游主题快闪（虹桥南丰城）</td><td>遵义路100号南区1F<br><span style="font-size:10px;color:#888;">地铁2号线：2站，江苏路站（1号）-娄山关路站（2口）</span></td><td>No.0315</td><td>毒蔷薇 (Roselia)</td><td>10:00~22:00</td><td>4/30~5/24</td></tr>
-                    <tr><td>🌿 新叶喵的春日花坛</td><td>仙霞西路88号百联西郊1楼<br><span style="font-size:10px;color:#888;">地铁2号线：2站，娄山关路站（2口）-北新泾站（2口）；骑行1.2公里（5分钟）</span></td><td>No.0407</td><td>罗丝雷朵 (Roserade)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr>
-                    <tr><td>🛒 宝可梦官方慢闪店（上海荟聚）</td><td>金钟路788号LG1<br><span style="font-size:10px;color:#888;">骑行2.1公里（12分钟）</span></td><td>No.0421</td><td>樱花宝 (Cherrim)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <div style="overflow-x:auto;"><table class="stamp-table-outer"><thead><tr><th>集章处</th><th>地址</th><th>宝可梦编号</th><th>宝可梦名称</th><th>集章处运营时间</th><th>日期</th></tr></thead><tbody><tr><td>🃏 宝可梦官方卡牌道馆（古月鸟）</td><td>长宁路1018号龙之梦3楼<br><span style="font-size:10px;color:#888;">中山公园1号门出发，步行7分钟</span></td><td>No.0548</td><td>百合根娃娃 (Petillil)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr><tr><td>🚇 江苏路地铁站集章处</td><td>江苏路地铁站1号口<br><span style="font-size:10px;color:#888;">地铁2号线：1站，中山公园站（5口）-江苏路站（1号）</span></td><td>No.0182</td><td>美丽花 (Bellossom)</td><td>09:00~19:00</td><td>4/24~5/24</td></tr><tr><td>🏪 花径漫游主题快闪（虹桥南丰城）</td><td>遵义路100号南区1F<br><span style="font-size:10px;color:#888;">地铁2号线：2站，江苏路站（1号）-娄山关路站（2口）</span></td><td>No.0315</td><td>毒蔷薇 (Roselia)</td><td>10:00~22:00</td><td>4/30~5/24</td></tr><tr><td>🌿 新叶喵的春日花坛</td><td>仙霞西路88号百联西郊1楼<br><span style="font-size:10px;color:#888;">地铁2号线：2站，娄山关路站（2口）-北新泾站（2口）；骑行1.2公里（5分钟）</span></td><td>No.0407</td><td>罗丝雷朵 (Roserade)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr><tr><td>🛒 宝可梦官方慢闪店（上海荟聚）</td><td>金钟路788号LG1<br><span style="font-size:10px;color:#888;">骑行2.1公里（12分钟）</span></td><td>No.0421</td><td>樱花宝 (Cherrim)</td><td>10:00~22:00</td><td>4/24~5/24</td></tr></tbody></table></div>
         <p style="font-size:10px;color:#9B8B93;margin-top:6px;">活动可能调整，以现场为准。</p>
     </div>
 </div>
 <div class="footer-signature">🌸 狐狸头妈妈</div>
 
 <div class="modal-overlay hidden" id="ruleModal"><div class="modal-dialog"><button class="modal-close" id="closeRuleModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📋 预约规则</div><table class="rule-table" id="ruleTable"><thead><tr><th>预约开放时间</th><th>可预约入场日</th></tr></thead><tbody><tr data-date="2026-04-19"><td>2026年4月19日（周日）10:00</td><td>2026年4月24日~4月30日</td></tr><tr data-date="2026-04-28"><td>2026年4月28日（周二）15:00</td><td>2026年5月1日~5月7日</td></tr><tr data-date="2026-04-30"><td>2026年4月30日（周四）15:00</td><td>2026年5月8日~5月14日</td></tr><tr data-date="2026-05-08"><td>2026年5月8日（周五）15:00</td><td>2026年5月15日~5月24日</td></tr></tbody></table></div></div>
-<div class="modal-overlay hidden" id="rewardModal">
-    <div class="modal-dialog">
-        <button class="modal-close" id="closeRewardModal">✕</button>
-        <div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:18px;">🎁 花径漫游集章活动说明</div>
-        <div style="font-size:13px;line-height:1.7;color:#3D2C33;">
-            <p style="margin-bottom:10px;"><span style="color:var(--sakura-600);">欢迎各位训练家参与城市漫游！</span>除中山公园主会场外，愚园路沿线及长宁区的部分商场内也设有<span style="color:var(--sakura-600);">丰富多样的宝可梦打卡点</span>。</p>
-            <p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🕒 活动时间</strong><br>2026年4月24日～5月24日<br>主会场运营时间：<span style="color:var(--green-highlight);font-weight:600;">9:00～19:00</span><br>各分会场集章处运营时间请以活动地图信息为准。</p>
-            <p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">📋 活动内容</strong><br>在集章处<span style="color:var(--green-highlight);font-weight:600;">扫码关注宝可梦天猫旗舰店或宝可梦抖音旗舰店</span>，即可<span style="color:var(--sakura-600);">领取集章手册</span>。领取后即可盖上<span style="color:var(--green-highlight);font-weight:600;">"start"章</span>，以及一个与集章处对应的<span style="color:var(--sakura-600);">宝可梦印章</span>。</p>
-            <p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🎖️ 活动奖励</strong><br>1. 收集到<span style="color:var(--green-highlight);font-weight:700;">5枚</span>印章，可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游透卡1张</span>（共<span style="color:var(--green-highlight);">90,000张</span>，每人每次限领1张）。<br>2. 收集到<span style="color:var(--green-highlight);font-weight:700;">全11枚</span>印章，在集章处找到工作人员核销后即可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游金属徽章1个</span>（共<span style="color:var(--green-highlight);">60,000个</span>，每人限领1个）。</p>
-            <p style="font-size:11px;color:#888;">※ 花径漫游各类集章处均可兑换礼品。图片仅供参考，请以实物为准。</p>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay hidden" id="rewardModal"><div class="modal-dialog"><button class="modal-close" id="closeRewardModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:18px;">🎁 花径漫游集章活动说明</div><div style="font-size:13px;line-height:1.7;color:#3D2C33;"><p style="margin-bottom:10px;"><span style="color:var(--sakura-600);">欢迎各位训练家参与城市漫游！</span>除中山公园主会场外，愚园路沿线及长宁区的部分商场内也设有<span style="color:var(--sakura-600);">丰富多样的宝可梦打卡点</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🕒 活动时间</strong><br>2026年4月24日～5月24日<br>主会场运营时间：<span style="color:var(--green-highlight);font-weight:600;">9:00～19:00</span><br>各分会场集章处运营时间请以活动地图信息为准。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">📋 活动内容</strong><br>在集章处<span style="color:var(--green-highlight);font-weight:600;">扫码关注宝可梦天猫旗舰店或宝可梦抖音旗舰店</span>，即可<span style="color:var(--sakura-600);">领取集章手册</span>。领取后即可盖上<span style="color:var(--green-highlight);font-weight:600;">"start"章</span>，以及一个与集章处对应的<span style="color:var(--sakura-600);">宝可梦印章</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🎖️ 活动奖励</strong><br>1. 收集到<span style="color:var(--green-highlight);font-weight:700;">5枚</span>印章，可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游透卡1张</span>（共<span style="color:var(--green-highlight);">90,000张</span>，每人每次限领1张）。<br>2. 收集到<span style="color:var(--green-highlight);font-weight:700;">全11枚</span>印章，在集章处找到工作人员核销后即可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游金属徽章1个</span>（共<span style="color:var(--green-highlight);">60,000个</span>，每人限领1个）。</p><p style="font-size:11px;color:#888;">※ 花径漫游各类集章处均可兑换礼品。图片仅供参考，请以实物为准。</p></div></div></div>
 <div class="modal-overlay hidden" id="allMeetingsModal"><div class="modal-dialog" style="max-height:60vh;overflow-y:auto;"><button class="modal-close" id="closeAllMeetingsModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📋 全部宝可梦见面会</div><div id="allMeetingsContainer"></div></div></div>
 
-<!-- 今日活动弹窗 -->
-<div class="modal-overlay hidden" id="todayActivityModal">
-    <div class="modal-dialog" style="max-width:650px;font-size:12px;line-height:1.8;">
-        <button class="modal-close" id="closeTodayActivityModal">✕</button>
-        <div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">今日活动 <span id="todayActivityDateLabel" style="font-size:14px;background:#FFF0F5;padding:2px 10px;border-radius:20px;margin-left:8px;"></span></div>
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🎪 场内活动</p><div id="indoorActivityCheckboxes"></div></div>
-            <div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🤝 宝可梦见面会</p><div id="meetingCheckboxes"></div></div>
-        </div>
-        <div id="todaySessionsHint" style="margin-top:12px;font-size:12px;"></div>
-        <button class="rule-btn" id="generateRecommendationBtn" style="margin-top:12px;width:100%;">🔍 生成场次建议</button>
-        <div id="recommendationResult" style="margin-top:15px;font-size:12px;"></div>
-    </div>
-</div>
+<div class="modal-overlay hidden" id="todayActivityModal"><div class="modal-dialog" style="max-width:650px;font-size:12px;line-height:1.8;"><button class="modal-close" id="closeTodayActivityModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">今日活动 <span id="todayActivityDateLabel" style="font-size:14px;background:#FFF0F5;padding:2px 10px;border-radius:20px;margin-left:8px;"></span></div><div style="display:flex;gap:20px;flex-wrap:wrap;"><div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🎪 场内活动</p><div id="indoorActivityCheckboxes"></div></div><div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🤝 宝可梦见面会</p><div id="meetingCheckboxes"></div></div></div><div id="todaySessionsHint" style="margin-top:12px;font-size:12px;"></div><button class="rule-btn" id="generateRecommendationBtn" style="margin-top:12px;width:100%;">🔍 生成场次建议</button><div id="recommendationResult" style="margin-top:15px;font-size:12px;"></div></div></div>
 
 <script>
 (function() {
@@ -292,13 +254,7 @@
         activities.forEach(act=>{
             const card=document.createElement('div'); card.className='activity-card';
             let open=true; if(act.weekendOnly && !isWeekend) open=false; if(act.id==='flower') open=true;
-            let badge='';
-            if(act.needReservation==='need') badge='<span class="reservation-badge need">需预约</span>';
-            else if(act.needReservation==='mixed') {
-                if(act.id === 'snorlax') badge='<span class="reservation-badge mixed">小课堂需预约/现场排队</span>';
-                else badge='<span class="reservation-badge mixed">需预约/现场排队</span>';
-            }
-            else badge='<span class="reservation-badge free">无需预约</span>';
+            let badge=''; if(act.needReservation==='need') badge='<span class="reservation-badge need">需预约</span>'; else if(act.needReservation==='mixed') { if(act.id === 'snorlax') badge='<span class="reservation-badge mixed">小课堂需预约/现场排队</span>'; else badge='<span class="reservation-badge mixed">需预约/现场排队</span>'; } else badge='<span class="reservation-badge free">无需预约</span>';
             const tagHtml = act.weekendOnly ? '<span class="weekend-tag">周末及节假日</span>' : (act.id==='flower' ? '<span class="weekend-tag">部分周末</span>' : '');
             let subHtml='';
             if(act.subItems){
@@ -306,9 +262,11 @@
                 act.subItems.forEach(sub=>{
                     let active=false; if(sub.range){ if(sub.range.length === 2 && sub.range[0] <= dateStr && sub.range[1] >= dateStr) active=true; else if(sub.range.includes(dateStr)) active=true; }
                     const note = sub.notes ? `<br><span style="font-size:9px;color:#888;">${sub.notes}</span>` : '';
-                    const desc = sub.desc ? `<br><span style="font-size:9px;color:#666;">${sub.desc}</span>` : '';
+                    const desc = sub.desc ? `<br><span style="font-size:9px;color:#D4687C;">${sub.desc}</span>` : '';
                     const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed" style="margin-left:4px;">需预约/现场排队</span>' : '';
-                    subHtml+=`<div class="sub-item" style="background:${active?'#FFF0F5':'#f9f9f9'};${active?'border-left:3px solid var(--sakura-400)':''}"><strong>${sub.name}</strong>${subBadge} ${desc}<span style="font-size:9px;color:#888;">(${sub.dates||sub.period||sub.time||''})</span> ${active?'<span style="color:#C94A68;font-weight:600;">✅ 今日进行</span>':''}${note}</div>`;
+                    let bgColor = (active || act.id === 'snorlax') ? '#FFF0F5' : '#f9f9f9';
+                    let borderStyle = active ? 'border-left:3px solid var(--sakura-400)' : '';
+                    subHtml+=`<div class="sub-item" style="background:${bgColor};${borderStyle}"><strong>${sub.name}</strong>${subBadge} ${desc}<span style="font-size:9px;color:#888;">(${sub.dates||sub.period||sub.time||''})</span> ${active?'<span style="color:#C94A68;font-weight:600;">✅ 今日进行</span>':''}${note}</div>`;
                 });
                 subHtml+='</div>';
             }
@@ -360,11 +318,7 @@
         let tags = ''; sessions.forEach(s=> tags += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span>`);
         hintsDiv.innerHTML = '今日场次：' + tags;
 
-        const orderedActivityIds = [
-            'handcraft','flower','dreamhouse','magikarp',
-            'snorlax_宝可梦卡牌小课堂','snorlax_休闲区','snorlax_宝可梦卡牌对战区',
-            'draw','paper'
-        ];
+        const orderedActivityIds = ['handcraft','flower','dreamhouse','magikarp','snorlax_宝可梦卡牌小课堂','snorlax_休闲区','snorlax_宝可梦卡牌对战区','draw','paper'];
         const activityMap = {};
         activities.forEach(act=> { if(act.id === 'snorlax') { act.subItems.forEach(sub=> { const subId = `snorlax_${sub.name}`; activityMap[subId] = { act, sub, id: subId }; }); } else { activityMap[act.id] = { act, id: act.id }; } });
 
@@ -384,8 +338,7 @@
             if(act.id === 'snorlax') { const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : ''; const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${id}" data-time="${act.time}"> <span>卡比兽酣睡一刻 (${sub.name})</span> ${subBadge} <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); return; }
             const slots = parseTimeSlots(act.time); const tagsHtml = slots.map(slot => `<span class="time-tag">${slot}</span>`).join('');
             let subInfo = ''; if(act.subItems){ const activeSubs = act.subItems.filter(s=> s.range && ( (s.range.length === 2 && s.range[0] <= dateStr && s.range[1] >= dateStr) || s.range.includes(dateStr) )); if(activeSubs.length) subInfo = ' (' + activeSubs.map(s=>s.name).join('、') + ')'; }
-            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px';
-            label.innerHTML = `<input type="checkbox" value="${act.id}" data-time="${act.time}"> <span>${act.name}${subInfo}</span> ${weekendTagHtml} ${reservationBadge} ${tagsHtml}`;
+            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${act.id}" data-time="${act.time}"> <span>${act.name}${subInfo}</span> ${weekendTagHtml} ${reservationBadge} ${tagsHtml}`;
             indoorDiv.appendChild(label);
         });
         meetings.forEach(m=>{
@@ -407,17 +360,13 @@
         const weekend = isWeekendOrHoliday(new Date(dateStr+'T00:00:00'));
         const sessions = generateSessions(new Date(dateStr+'T00:00:00'));
         const selectedValues = [];
-        document.querySelectorAll('#indoorActivityCheckboxes input:checked, #meetingCheckboxes input:checked').forEach(cb=>{
-            const displayName = cb.parentNode.querySelector('span')?.textContent?.trim() || cb.value;
-            selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName});
-        });
+        document.querySelectorAll('#indoorActivityCheckboxes input:checked, #meetingCheckboxes input:checked').forEach(cb=>{ const displayName = cb.parentNode.querySelector('span')?.textContent?.trim() || cb.value; selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName}); });
         if(selectedValues.length===0){ document.getElementById('recommendationResult').innerHTML = '<p>请至少选择一项活动</p>'; return; }
         if(!weekend){ let html = '<strong>工作日活动全天覆盖，任意场次均可参加。</strong><br>推荐场次：'; sessions.forEach(s=> html += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span> `); document.getElementById('recommendationResult').innerHTML = html; return; }
 
         function splitTimeRanges(timeStr) { if(timeStr.includes('每日') || timeStr.includes('全天')) return [{start:0, end:1440}]; return timeStr.split('/').map(s=>s.trim()).filter(s=>s).map(part=>{ const m = part.match(/(\d{1,2}):(\d{2})\s*[-~]\s*(\d{1,2}):(\d{2})/); if(m) return {start: parseInt(m[1])*60+parseInt(m[2]), end: parseInt(m[3])*60+parseInt(m[4])}; return null; }).filter(r=>r); }
         const hasHandcraft = selectedValues.some(i=>i.value === 'handcraft');
         let allowedSessions = sessions; if(hasHandcraft) allowedSessions = sessions.filter(s=> [2,4,5].includes(s.id));
-
         const needReservationFullDayIds = ['flower_zan', 'flower_bao', 'dreamhouse', 'magikarp', 'snorlax_宝可梦卡牌小课堂'];
 
         let html = '';
@@ -426,16 +375,9 @@
             const suitableActivities = [];
             selectedValues.forEach(item=>{
                 const ranges = splitTimeRanges(item.time);
-                if(item.value === 'handcraft') {
-                    const matched = ranges.some(r => sessionStart <= r.start && sessionEnd >= r.end);
-                    if(matched) { const matchingSlots = ranges.filter(r => sessionStart <= r.start && sessionEnd >= r.end); suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); }
-                } else if(needReservationFullDayIds.includes(item.value)) {
-                    suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) });
-                } else {
-                    const isAllDay = ranges.length===1 && ranges[0].end===1440;
-                    if(isAllDay) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); }
-                    else { const matchingSlots = ranges.filter(r=> r.start >= sessionStart && r.start <= sessionEnd); if(matchingSlots.length > 0){ suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } }
-                }
+                if(item.value === 'handcraft') { const matched = ranges.some(r => sessionStart <= r.start && sessionEnd >= r.end); if(matched) { const matchingSlots = ranges.filter(r => sessionStart <= r.start && sessionEnd >= r.end); suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } }
+                else if(needReservationFullDayIds.includes(item.value)) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); }
+                else { const isAllDay = ranges.length===1 && ranges[0].end===1440; if(isAllDay) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); } else { const matchingSlots = ranges.filter(r=> r.start >= sessionStart && r.start <= sessionEnd); if(matchingSlots.length > 0){ suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } } }
             });
             if(suitableActivities.length > 0){ html += `<div style="margin:8px 0;padding:8px;background:#FFF5F9;border-radius:10px;"><span style="color:#B33A56;font-weight:700;">🌸 场次${s.id} (${s.playStart}-${s.playEnd})</span><br>`; suitableActivities.forEach(act=>{ html += `<span style="margin-left:12px;">🎈 ${act.name}</span><br>`; act.slots.forEach(slot=> html += `<span class="time-tag">${slot}</span> `); html += `<br>`; }); html += `</div>`; }
         });
