@@ -42,6 +42,7 @@
         .selected-area .selected-date-text { font-weight: 700; font-size: 15px; }
         .date-picker-btn, .official-btn, .today-activity-btn, .intro-btn { background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.5); color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s; backdrop-filter: blur(4px); text-decoration: none; }
         .date-picker-btn:hover, .official-btn:hover, .today-activity-btn:hover, .intro-btn:hover { background: rgba(255,255,255,0.4); }
+        .date-picker-btn:active, .official-btn:active, .today-activity-btn:active, .intro-btn:active { background: rgba(255,140,160,0.6) !important; border-color: #F89EB4; }
         .main-content { padding: 16px 24px 24px; }
         .calendar-collapse { margin-bottom: 12px; }
         .calendar-panel { background: #FFFAFB; border: 1px solid var(--sakura-200); border-radius: var(--radius); padding: 8px 10px; display: none; margin-top: 8px; max-width: 420px; margin-left: auto; margin-right: auto; }
@@ -50,6 +51,7 @@
         .calendar-month-label { font-weight: 700; font-size: 15px; color: var(--sakura-800); }
         .calendar-nav { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--sakura-300); background: #fff; color: var(--sakura-600); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; }
         .calendar-nav:disabled { opacity: 0.3; pointer-events: none; }
+        .calendar-nav:active { background: #F89EB4 !important; color: #fff !important; border-color: #E05E7E !important; }
         .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 10px; font-weight: 700; color: #A8959C; margin-bottom: 2px; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
         .calendar-cell { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: default; color: #C0B0B5; background: transparent; transition: all 0.15s; }
@@ -68,6 +70,7 @@
         .section-title-row .title-left { font-size: 17px; font-weight: 700; color: var(--sakura-800); display: flex; align-items: center; gap: 6px; }
         .section-title-row .title-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .rule-btn { padding: 5px 13px; border-radius: 20px; border: 1.5px solid var(--sakura-400); background: #fff; color: var(--sakura-600); font-weight: 700; font-size: 11px; cursor: pointer; }
+        .rule-btn:active { background: #F89EB4 !important; color: #fff !important; border-color: #E05E7E !important; }
 
         .gantt-wrapper { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: #FFFCFD; }
         .gantt { min-width: 680px; }
@@ -119,6 +122,7 @@
         .modal-overlay.hidden { display: none; }
         .modal-dialog { background: #fff; border-radius: 18px; padding: 20px 22px; max-width: 600px; width: 90%; box-shadow: 0 12px 35px rgba(120,60,80,0.3); position: relative; max-height: 80vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 12px; right: 16px; width: 30px; height: 30px; border-radius: 50%; border: none; background: #F5F0F2; cursor: pointer; font-size: 16px; z-index: 10; }
+        .modal-close:active { background: #F89EB4 !important; color: #fff !important; }
         .rule-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         .rule-table th { background: #FFF0F5; color: #B33A56; padding: 10px 12px; text-align: center; font-weight: 700; font-size: 12px; border-bottom: 2px solid #FFD6E0; }
         .rule-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #FFD6E0; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: #555; }
@@ -150,6 +154,51 @@
         .guide-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .footer-signature { text-align: center; padding: 32px 0 16px; font-size: 14px; font-weight: 600; color: var(--sakura-800); width: 100%; }
+
+        /* 自定义复选框样式 */
+        .custom-checkbox-label {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .custom-checkbox-label input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .check-visual {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #E05E7E;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .check-visual::after {
+            content: '✓';
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+        .custom-checkbox-label input:checked + .check-visual {
+            background: #F89EB4;
+            border-color: #E05E7E;
+        }
+        .custom-checkbox-label input:checked + .check-visual::after {
+            opacity: 1;
+        }
 
         @media (max-width: 640px) {
             .header h1 { font-size: 19px; }
@@ -372,15 +421,15 @@
             const reservationBadge = act.needReservation==='need' ? '<span class="reservation-badge need">需预约</span>' : (act.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : '');
             if(act.id === 'flower') {
                 const zanhun = act.subItems.find(s=>s.name==='簪花体验'); const zanOpen = zanhun && zanhun.range.includes(dateStr);
-                if(zanOpen) { const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="flower_zan" data-time="${act.time}"> <span>华丽街区 · 治愈花环 (簪花体验)</span> <span class="weekend-tag" style="font-size:9px;">周末及节假日</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); }
-                const label2 = document.createElement('label'); label2.style.display='flex'; label2.style.flexWrap='wrap'; label2.style.alignItems='center'; label2.style.gap='6px'; label2.style.marginBottom='8px'; label2.innerHTML = `<input type="checkbox" value="flower_bao" data-time="${act.time}"> <span>华丽街区 · 治愈花环 (宝可梦簪花)</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label2);
+                if(zanOpen) { const label = document.createElement('label'); label.className = 'custom-checkbox-label'; label.innerHTML = `<input type="checkbox" value="flower_zan" data-time="${act.time}"><span class="check-visual"></span><span>华丽街区 · 治愈花环 (簪花体验)</span> <span class="weekend-tag" style="font-size:9px;">周末及节假日</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); }
+                const label2 = document.createElement('label'); label2.className = 'custom-checkbox-label'; label2.innerHTML = `<input type="checkbox" value="flower_bao" data-time="${act.time}"><span class="check-visual"></span><span>华丽街区 · 治愈花环 (宝可梦簪花)</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label2);
                 return;
             }
-            if(act.id === 'snorlax') { const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : ''; const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${id}" data-time="${act.time}"> <span>卡比兽酣睡一刻 (${sub.name})</span> ${subBadge} <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); return; }
+            if(act.id === 'snorlax') { const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : ''; const label = document.createElement('label'); label.className = 'custom-checkbox-label'; label.innerHTML = `<input type="checkbox" value="${id}" data-time="${act.time}"><span class="check-visual"></span><span>卡比兽酣睡一刻 (${sub.name})</span> ${subBadge} <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); return; }
             const slots = parseTimeSlots(act.time); const tagsHtml = slots.map(slot => `<span class="time-tag">${slot}</span>`).join('');
             let subInfo = ''; if(act.subItems){ const activeSubs = act.subItems.filter(s=> s.range && ( (s.range.length === 2 && s.range[0] <= dateStr && s.range[1] >= dateStr) || s.range.includes(dateStr) )); if(activeSubs.length) subInfo = ' (' + activeSubs.map(s=>s.name).join('、') + ')'; }
-            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px';
-            label.innerHTML = `<input type="checkbox" value="${act.id}" data-time="${act.time}"> <span>${act.name}${subInfo}</span> ${weekendTagHtml} ${reservationBadge} ${tagsHtml}`;
+            const label = document.createElement('label'); label.className = 'custom-checkbox-label';
+            label.innerHTML = `<input type="checkbox" value="${act.id}" data-time="${act.time}"><span class="check-visual"></span><span>${act.name}${subInfo}</span> ${weekendTagHtml} ${reservationBadge} ${tagsHtml}`;
             indoorDiv.appendChild(label);
         });
         meetings.forEach(m=>{
@@ -388,7 +437,8 @@
             if(!active) return;
             const slots = parseTimeSlots(m.time); const tagsHtml = slots.map(slot => `<span class="time-tag">${slot}</span>`).join('');
             let extraTag = ''; if(m.type === 'weekend') extraTag = '<span class="weekend-tag" style="font-size:9px;">仅周末</span>'; else if(m.type === 'weekday') extraTag = '<span class="weekday-tag" style="font-size:9px;">仅工作日</span>'; else if(m.range) extraTag = '<span class="weekend-tag" style="font-size:9px;">特定日期</span>';
-            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${m.name}" data-time="${m.time}"> <span>${m.name}</span> ${extraTag} ${tagsHtml}`;
+            const label = document.createElement('label'); label.className = 'custom-checkbox-label';
+            label.innerHTML = `<input type="checkbox" value="${m.name}" data-time="${m.time}"><span class="check-visual"></span><span>${m.name}</span> ${extraTag} ${tagsHtml}`;
             meetDiv.appendChild(label);
         });
         document.getElementById('recommendationResult').innerHTML = '';
@@ -402,7 +452,7 @@
         const weekend = isWeekendOrHoliday(new Date(dateStr+'T00:00:00'));
         const sessions = generateSessions(new Date(dateStr+'T00:00:00'));
         const selectedValues = [];
-        document.querySelectorAll('#indoorActivityCheckboxes input:checked, #meetingCheckboxes input:checked').forEach(cb=>{ const displayName = cb.parentNode.querySelector('span')?.textContent?.trim() || cb.value; selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName}); });
+        document.querySelectorAll('#indoorActivityCheckboxes input:checked, #meetingCheckboxes input:checked').forEach(cb=>{ const displayName = cb.parentNode.querySelector('span.check-visual')?.nextElementSibling?.textContent?.trim() || cb.value; selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName}); });
         if(selectedValues.length===0){ document.getElementById('recommendationResult').innerHTML = '<p>请至少选择一项活动</p>'; return; }
         if(!weekend){ let html = '<strong>工作日活动全天覆盖，任意场次均可参加。</strong><br>推荐场次：'; sessions.forEach(s=> html += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span> `); document.getElementById('recommendationResult').innerHTML = html; return; }
 
