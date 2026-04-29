@@ -216,7 +216,19 @@
 <div class="modal-overlay hidden" id="ruleModal"><div class="modal-dialog"><button class="modal-close" id="closeRuleModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">📋 预约规则</div><table class="rule-table" id="ruleTable"><thead><tr><th>预约开放时间</th><th>可预约入场日</th></tr></thead><tbody><tr data-date="2026-04-19"><td>2026年4月19日（周日）10:00</td><td>2026年4月24日~4月30日</td></tr><tr data-date="2026-04-28"><td>2026年4月28日（周二）15:00</td><td>2026年5月1日~5月7日</td></tr><tr data-date="2026-04-30"><td>2026年4月30日（周四）15:00</td><td>2026年5月8日~5月14日</td></tr><tr data-date="2026-05-08"><td>2026年5月8日（周五）15:00</td><td>2026年5月15日~5月24日</td></tr></tbody></table></div></div>
 <div class="modal-overlay hidden" id="rewardModal"><div class="modal-dialog"><button class="modal-close" id="closeRewardModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:18px;">🎁 花径漫游集章活动说明</div><div style="font-size:13px;line-height:1.7;color:#3D2C33;"><p style="margin-bottom:10px;"><span style="color:var(--sakura-600);">欢迎各位训练家参与城市漫游！</span>除中山公园主会场外，愚园路沿线及长宁区的部分商场内也设有<span style="color:var(--sakura-600);">丰富多样的宝可梦打卡点</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🕒 活动时间</strong><br>2026年4月24日～5月24日<br>主会场运营时间：<span style="color:var(--green-highlight);font-weight:600;">9:00～19:00</span><br>各分会场集章处运营时间请以活动地图信息为准。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">📋 活动内容</strong><br>在集章处<span style="color:var(--green-highlight);font-weight:600;">扫码关注宝可梦天猫旗舰店或宝可梦抖音旗舰店</span>，即可<span style="color:var(--sakura-600);">领取集章手册</span>。领取后即可盖上<span style="color:var(--green-highlight);font-weight:600;">"start"章</span>，以及一个与集章处对应的<span style="color:var(--sakura-600);">宝可梦印章</span>。</p><p style="margin-bottom:10px;"><strong style="color:var(--sakura-700);">🎖️ 活动奖励</strong><br>1. 收集到<span style="color:var(--green-highlight);font-weight:700;">5枚</span>印章，可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游透卡1张</span>（共<span style="color:var(--green-highlight);">90,000张</span>，每人每次限领1张）。<br>2. 收集到<span style="color:var(--green-highlight);font-weight:700;">全11枚</span>印章，在集章处找到工作人员核销后即可获得<span style="color:var(--sakura-600);font-weight:600;">宝可梦花径漫游金属徽章1个</span>（共<span style="color:var(--green-highlight);">60,000个</span>，每人限领1个）。</p><p style="font-size:11px;color:#888;">※ 花径漫游各类集章处均可兑换礼品。图片仅供参考，请以实物为准。</p></div></div></div>
 
-<div class="modal-overlay hidden" id="todayActivityModal"><div class="modal-dialog" style="max-width:650px;font-size:12px;line-height:1.8;"><button class="modal-close" id="closeTodayActivityModal">✕</button><div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">今日活动 <span id="todayActivityDateLabel" style="font-size:14px;background:#FFF0F5;padding:2px 10px;border-radius:20px;margin-left:8px;"></span></div><div style="display:flex;gap:20px;flex-wrap:wrap;"><div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🎪 场内活动</p><div id="indoorActivityCheckboxes"></div></div><div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🤝 宝可梦见面会</p><div id="meetingCheckboxes"></div></div></div><div id="todaySessionsHint" style="margin-top:12px;font-size:12px;"></div><button class="rule-btn" id="generateRecommendationBtn" style="margin-top:12px;width:100%;">🔍 生成场次建议</button><div id="recommendationResult" style="margin-top:15px;font-size:12px;"></div></div></div>
+<div class="modal-overlay hidden" id="todayActivityModal">
+    <div class="modal-dialog" style="max-width:650px;font-size:12px;line-height:1.8;">
+        <button class="modal-close" id="closeTodayActivityModal">✕</button>
+        <div style="font-weight:700;color:#B33A56;margin-bottom:12px;font-size:16px;">今日活动 <span id="todayActivityDateLabel" style="font-size:14px;background:#FFF0F5;padding:2px 10px;border-radius:20px;margin-left:8px;"></span></div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🎪 场内活动</p><div id="indoorActivityCheckboxes"></div></div>
+            <div style="flex:1;min-width:200px;"><p style="font-weight:700;margin-bottom:8px;">🤝 宝可梦见面会</p><div id="meetingCheckboxes"></div></div>
+        </div>
+        <div id="todaySessionsHint" style="margin-top:12px;font-size:12px;"></div>
+        <button class="rule-btn" id="generateRecommendationBtn" style="margin-top:12px;width:100%;">🔍 生成场次建议</button>
+        <div id="recommendationResult" style="margin-top:15px;font-size:12px;"></div>
+    </div>
+</div>
 
 <script>
 (function() {
@@ -318,21 +330,105 @@
     }
 
     function renderMainAllMeetings(dateStr, isWeekend, containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
+        const container = document.getElementById(containerId); container.innerHTML = '';
         meetings.forEach(m=>{
             if(m.location !== '主会场') return;
             let status='closed',icon='❌',txt='未开放',cls='closed';
             if(m.type==='weekday'&&!isWeekend){ status='active'; icon='✅'; txt='今天举办'; cls='active'; }
             else if(m.type==='weekend'&&isWeekend){ status='active'; icon='✅'; txt='今天举办'; cls='active'; }
             else if(m.range){ if(m.range.includes(dateStr)){ status='active'; icon='✅'; txt='今天举办'; cls='active'; } else if(m.range.every(d=>d<dateStr)){ status='past'; icon='⏳'; txt='已结束'; cls='past'; } else if(m.range.every(d=>d>dateStr)){ status='future'; icon='🔜'; txt='即将开始'; cls='future'; } }
-            if(status === 'active') return; // 只显示非今日活动
+            if(status === 'active') return;
             const typeTag = m.type==='weekday' ? '<span class="weekday-tag" style="font-size:9px;">工作日</span>' : (m.type==='weekend' ? '<span class="weekend-tag" style="font-size:9px;">周末及节假日</span>' : '<span class="weekend-tag" style="font-size:9px;">特定日期</span>');
             const card=document.createElement('div'); card.className='meet-card';
             card.innerHTML=`<div style="font-size:18px;">${icon}</div><div style="flex:1;min-width:140px;"><strong>${m.name}</strong> ${typeTag}<br><span style="font-size:11px;color:var(--sakura-600);">${m.time}</span><br><span style="font-size:10px;color:#888;">📅 ${m.dates||''}</span><br><span style="font-size:10px;color:#888;">🐾 ${m.pokemon||''}</span></div><div class="meet-status ${cls}">${txt}</div>`;
             container.appendChild(card);
         });
     }
+
+    // 今日活动弹窗事件
+    const todayActivityModal = document.getElementById('todayActivityModal');
+    document.getElementById('openTodayActivityBtn').addEventListener('click', ()=>{
+        const dateStr = document.getElementById('selectedDateText').textContent;
+        const weekend = isWeekendOrHoliday(new Date(dateStr+'T00:00:00'));
+        const sessions = generateSessions(new Date(dateStr+'T00:00:00'));
+        const indoorDiv = document.getElementById('indoorActivityCheckboxes');
+        const meetDiv = document.getElementById('meetingCheckboxes');
+        const hintsDiv = document.getElementById('todaySessionsHint');
+        document.getElementById('todayActivityDateLabel').textContent = weekend ? '周末/节假日' : '工作日';
+        indoorDiv.innerHTML = ''; meetDiv.innerHTML = '';
+        let tags = ''; sessions.forEach(s=> tags += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span>`);
+        hintsDiv.innerHTML = '今日场次：' + tags;
+
+        const orderedActivityIds = ['handcraft','flower','dreamhouse','magikarp','snorlax_宝可梦卡牌小课堂','snorlax_休闲区','snorlax_宝可梦卡牌对战区','draw','paper'];
+        const activityMap = {};
+        activities.forEach(act=> { if(act.id === 'snorlax') { act.subItems.forEach(sub=> { const subId = `snorlax_${sub.name}`; activityMap[subId] = { act, sub, id: subId }; }); } else { activityMap[act.id] = { act, id: act.id }; } });
+
+        orderedActivityIds.forEach(id=>{
+            const item = activityMap[id]; if(!item) return;
+            const { act, sub } = item;
+            let open = true; if(act.weekendOnly && !weekend) open = false; if(act.id==='flower') open = true;
+            if(!open) return;
+            const weekendTagHtml = act.weekendOnly ? '<span class="weekend-tag" style="font-size:9px;">周末及节假日</span>' : '';
+            const reservationBadge = act.needReservation==='need' ? '<span class="reservation-badge need">需预约</span>' : (act.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : '');
+            if(act.id === 'flower') {
+                const zanhun = act.subItems.find(s=>s.name==='簪花体验'); const zanOpen = zanhun && zanhun.range.includes(dateStr);
+                if(zanOpen) { const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="flower_zan" data-time="${act.time}"> <span>华丽街区 · 治愈花环 (簪花体验)</span> <span class="weekend-tag" style="font-size:9px;">周末及节假日</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); }
+                const label2 = document.createElement('label'); label2.style.display='flex'; label2.style.flexWrap='wrap'; label2.style.alignItems='center'; label2.style.gap='6px'; label2.style.marginBottom='8px'; label2.innerHTML = `<input type="checkbox" value="flower_bao" data-time="${act.time}"> <span>华丽街区 · 治愈花环 (宝可梦簪花)</span> <span class="reservation-badge need">需预约</span> <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label2);
+                return;
+            }
+            if(act.id === 'snorlax') { const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed">需预约/现场排队</span>' : ''; const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${id}" data-time="${act.time}"> <span>卡比兽酣睡一刻 (${sub.name})</span> ${subBadge} <span class="time-tag">09:00-18:00</span>`; indoorDiv.appendChild(label); return; }
+            const slots = parseTimeSlots(act.time); const tagsHtml = slots.map(slot => `<span class="time-tag">${slot}</span>`).join('');
+            let subInfo = ''; if(act.subItems){ const activeSubs = act.subItems.filter(s=> s.range && ( (s.range.length === 2 && s.range[0] <= dateStr && s.range[1] >= dateStr) || s.range.includes(dateStr) )); if(activeSubs.length) subInfo = ' (' + activeSubs.map(s=>s.name).join('、') + ')'; }
+            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px';
+            label.innerHTML = `<input type="checkbox" value="${act.id}" data-time="${act.time}"> <span>${act.name}${subInfo}</span> ${weekendTagHtml} ${reservationBadge} ${tagsHtml}`;
+            indoorDiv.appendChild(label);
+        });
+        meetings.forEach(m=>{
+            let active = false; if(m.type==='weekday'&&!weekend) active=true; else if(m.type==='weekend'&&weekend) active=true; else if(m.range && m.range.includes(dateStr)) active=true;
+            if(!active) return;
+            const slots = parseTimeSlots(m.time); const tagsHtml = slots.map(slot => `<span class="time-tag">${slot}</span>`).join('');
+            let extraTag = ''; if(m.type === 'weekend') extraTag = '<span class="weekend-tag" style="font-size:9px;">仅周末</span>'; else if(m.type === 'weekday') extraTag = '<span class="weekday-tag" style="font-size:9px;">仅工作日</span>'; else if(m.range) extraTag = '<span class="weekend-tag" style="font-size:9px;">特定日期</span>';
+            const label = document.createElement('label'); label.style.display='flex'; label.style.flexWrap='wrap'; label.style.alignItems='center'; label.style.gap='6px'; label.style.marginBottom='8px'; label.innerHTML = `<input type="checkbox" value="${m.name}" data-time="${m.time}"> <span>${m.name}</span> ${extraTag} ${tagsHtml}`;
+            meetDiv.appendChild(label);
+        });
+        document.getElementById('recommendationResult').innerHTML = '';
+        todayActivityModal.classList.remove('hidden');
+    });
+    document.getElementById('closeTodayActivityModal').addEventListener('click', ()=> todayActivityModal.classList.add('hidden'));
+    todayActivityModal.addEventListener('click', e=> { if(e.target===todayActivityModal) todayActivityModal.classList.add('hidden'); });
+
+    document.getElementById('generateRecommendationBtn').addEventListener('click', ()=>{
+        const dateStr = document.getElementById('selectedDateText').textContent;
+        const weekend = isWeekendOrHoliday(new Date(dateStr+'T00:00:00'));
+        const sessions = generateSessions(new Date(dateStr+'T00:00:00'));
+        const selectedValues = [];
+        document.querySelectorAll('#indoorActivityCheckboxes input:checked, #meetingCheckboxes input:checked').forEach(cb=>{ const displayName = cb.parentNode.querySelector('span')?.textContent?.trim() || cb.value; selectedValues.push({value: cb.value, time: cb.getAttribute('data-time'), displayName: displayName}); });
+        if(selectedValues.length===0){ document.getElementById('recommendationResult').innerHTML = '<p>请至少选择一项活动</p>'; return; }
+        if(!weekend){ let html = '<strong>工作日活动全天覆盖，任意场次均可参加。</strong><br>推荐场次：'; sessions.forEach(s=> html += `<span class="time-tag">场次${s.id} ${s.playStart}-${s.playEnd}</span> `); document.getElementById('recommendationResult').innerHTML = html; return; }
+
+        function splitTimeRanges(timeStr) { if(timeStr.includes('每日') || timeStr.includes('全天')) return [{start:0, end:1440}]; return timeStr.split('/').map(s=>s.trim()).filter(s=>s).map(part=>{ const m = part.match(/(\d{1,2}):(\d{2})\s*[-~]\s*(\d{1,2}):(\d{2})/); if(m) return {start: parseInt(m[1])*60+parseInt(m[2]), end: parseInt(m[3])*60+parseInt(m[4])}; return null; }).filter(r=>r); }
+        const hasHandcraft = selectedValues.some(i=>i.value === 'handcraft');
+        let allowedSessions = sessions; if(hasHandcraft) allowedSessions = sessions.filter(s=> [2,4,5].includes(s.id));
+        const needReservationFullDayIds = ['flower_zan', 'flower_bao', 'dreamhouse', 'magikarp', 'snorlax_宝可梦卡牌小课堂'];
+
+        let html = '';
+        allowedSessions.forEach(s=>{
+            const sessionStart = timeToMinutes(s.playStart); const sessionEnd = timeToMinutes(s.playEnd);
+            const suitableActivities = [];
+            selectedValues.forEach(item=>{
+                const ranges = splitTimeRanges(item.time);
+                if(item.value === 'handcraft') { const matched = ranges.some(r => sessionStart <= r.start && sessionEnd >= r.end); if(matched) { const matchingSlots = ranges.filter(r => sessionStart <= r.start && sessionEnd >= r.end); suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } }
+                else if(needReservationFullDayIds.includes(item.value)) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); }
+                else { const isAllDay = ranges.length===1 && ranges[0].end===1440; if(isAllDay) { suitableActivities.push({ name: item.displayName, slots: generate30MinSlots(sessionStart, sessionEnd) }); } else { const matchingSlots = ranges.filter(r=> r.start >= sessionStart && r.start <= sessionEnd); if(matchingSlots.length > 0){ suitableActivities.push({ name: item.displayName, slots: matchingSlots.map(r=> `${String(Math.floor(r.start/60)).padStart(2,'0')}:${String(r.start%60).padStart(2,'0')}-${String(Math.floor(r.end/60)).padStart(2,'0')}:${String(r.end%60).padStart(2,'0')}`) }); } } }
+            });
+            if(suitableActivities.length > 0){ html += `<div style="margin:8px 0;padding:8px;background:#FFF5F9;border-radius:10px;"><span style="color:#B33A56;font-weight:700;">🌸 场次${s.id} (${s.playStart}-${s.playEnd})</span><br>`; suitableActivities.forEach(act=>{ html += `<span style="margin-left:12px;">🎈 ${act.name}</span><br>`; act.slots.forEach(slot=> html += `<span class="time-tag">${slot}</span> `); html += `<br>`; }); html += `</div>`; }
+        });
+        if(html === '') html = '没有场次可以参加选中的活动。';
+        document.getElementById('recommendationResult').innerHTML = html;
+    });
+
+    function generate30MinSlots(startMin, endMin) { const slots = []; for(let t = startMin; t < endMin; t += 30) { const slotEnd = Math.min(t + 30, endMin); slots.push(`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}-${String(Math.floor(slotEnd/60)).padStart(2,'0')}:${String(slotEnd%60).padStart(2,'0')}`); } return slots; }
+    function parseTimeSlots(timeStr) { if(timeStr.includes('每日') || timeStr.includes('全天')) return ['全日']; return timeStr.split('/').map(s=>s.trim()).filter(s=>s); }
 
     let currentDisplayMonth=null;
     function renderCalendar(selectedDate){ const grid=document.getElementById('calendarGrid'), label=document.getElementById('calMonthLabel'); const today=new Date(), todayStr=formatDate(today); if(!currentDisplayMonth) currentDisplayMonth={year:selectedDate.getFullYear(),month:selectedDate.getMonth()}; const y=currentDisplayMonth.year, m=currentDisplayMonth.month; label.textContent=`${y}年${m+1}月`; document.getElementById('calPrev').disabled=(y===2026&&m===3); document.getElementById('calNext').disabled=(y===2026&&m===4); grid.innerHTML=''; const firstDay=new Date(y,m,1).getDay(), daysInMonth=new Date(y,m+1,0).getDate(); const startOffset=firstDay===0?6:firstDay-1; const selectedStr = formatDate(selectedDate); for(let i=0;i<Math.ceil((startOffset+daysInMonth)/7)*7;i++){ const cell=document.createElement('div'); cell.className='calendar-cell'; const dayNum=i-startOffset+1; if(dayNum<1||dayNum>daysInMonth){ cell.textContent=''; } else{ const d=new Date(y,m,dayNum), ds=formatDate(d); cell.textContent=dayNum; if(ds>='2026-04-24'&&ds<='2026-05-24'){ cell.classList.add('selectable'); if(isWeekendOrHoliday(d) || isGoldenPeriod(ds)) cell.classList.add('weekend-cell'); cell.addEventListener('click',()=>onDateSelect(d)); if(ds===selectedStr){ if(isWeekendOrHoliday(d)) cell.classList.add('selected-weekend'); else cell.classList.add('selected'); } if(ds===todayStr) cell.classList.add('today-ring'); if(reservationDates.includes(ds) && ds!==todayStr) cell.classList.add('reservation-date'); } if(reservationDates.includes(ds) && !cell.classList.contains('selectable')){ cell.classList.add('reservation-date'); } } grid.appendChild(cell); } }
@@ -347,27 +443,13 @@
         renderGantt(generateSessions(date));
         renderActivities(dateStr,weekend, showAllActivities);
         const meetContainer = document.getElementById('meetList');
-        // 保存按钮引用，再清空容器
         const moreBtn = document.getElementById('moreMeetingsBtn');
         meetContainer.innerHTML = '';
-        const mainTitle = document.createElement('p');
-        mainTitle.style.cssText = 'font-weight:700;color:#B33A56;margin-bottom:4px;';
-        mainTitle.textContent = '🏟️ 主会场见面会';
-        meetContainer.appendChild(mainTitle);
+        const mainTitle = document.createElement('p'); mainTitle.style.cssText = 'font-weight:700;color:#B33A56;margin-bottom:4px;'; mainTitle.textContent = '🏟️ 主会场见面会'; meetContainer.appendChild(mainTitle);
         renderMeetings(dateStr,weekend,'meetList', true, '主会场');
-        const allMainDiv = document.createElement('div');
-        allMainDiv.id = 'allMainMeetingsDiv';
-        allMainDiv.style.display = 'none';
-        meetContainer.appendChild(allMainDiv);
-        if(moreBtn) {
-            moreBtn.style.display = 'inline-block';
-            moreBtn.textContent = '🔍 查看更多见面会';
-            meetContainer.appendChild(moreBtn);
-        }
-        const extTitle = document.createElement('p');
-        extTitle.style.cssText = 'font-weight:700;color:#B33A56;margin-top:12px;margin-bottom:4px;';
-        extTitle.textContent = '📍 场外见面会';
-        meetContainer.appendChild(extTitle);
+        const allMainDiv = document.createElement('div'); allMainDiv.id = 'allMainMeetingsDiv'; allMainDiv.style.display = 'none'; meetContainer.appendChild(allMainDiv);
+        if(moreBtn){ moreBtn.style.display = 'inline-block'; moreBtn.textContent = '🔍 查看更多见面会'; meetContainer.appendChild(moreBtn); }
+        const extTitle = document.createElement('p'); extTitle.style.cssText = 'font-weight:700;color:#B33A56;margin-top:12px;margin-bottom:4px;'; extTitle.textContent = '📍 场外见面会'; meetContainer.appendChild(extTitle);
         meetings.forEach(m=>{
             if(m.location === '百联西郊' || m.location === '上海荟聚'){
                 let status='closed',icon='❌',txt='未开放',cls='closed';
@@ -381,8 +463,7 @@
             }
         });
         if(!currentDisplayMonth) currentDisplayMonth={year:date.getFullYear(),month:date.getMonth()};
-        renderCalendar(date);
-        updateRuleTableHighlight(dateStr);
+        renderCalendar(date); updateRuleTableHighlight(dateStr);
     }
 
     document.getElementById('toggleCalendarBtn').addEventListener('click',()=>{ document.getElementById('calendarPanel').classList.toggle('open'); });
@@ -397,12 +478,8 @@
         const btn = document.getElementById('moreMeetingsBtn');
         if(inlineDiv.style.display === 'none'){
             renderMainAllMeetings(dateStr, weekend, 'allMainMeetingsDiv');
-            inlineDiv.style.display = 'block';
-            btn.textContent = '收起更多见面会';
-        } else {
-            inlineDiv.style.display = 'none';
-            btn.textContent = '🔍 查看更多见面会';
-        }
+            inlineDiv.style.display = 'block'; btn.textContent = '收起更多见面会';
+        } else { inlineDiv.style.display = 'none'; btn.textContent = '🔍 查看更多见面会'; }
     });
 
     const rewardModal = document.getElementById('rewardModal');
