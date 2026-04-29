@@ -260,13 +260,17 @@
             if(act.subItems){
                 subHtml='<div style="margin-top:6px;">';
                 act.subItems.forEach(sub=>{
-                    let active=false; if(sub.range){ if(sub.range.length === 2 && sub.range[0] <= dateStr && sub.range[1] >= dateStr) active=true; else if(sub.range.includes(dateStr)) active=true; }
+                    let active=false;
+                    if(act.id === 'snorlax') {
+                        active = true; // 卡比兽三项全天开放，始终视为今日进行
+                    } else if(sub.range) {
+                        if(sub.range.length === 2 && sub.range[0] <= dateStr && sub.range[1] >= dateStr) active=true;
+                        else if(sub.range.includes(dateStr)) active=true;
+                    }
                     const note = sub.notes ? `<br><span style="font-size:9px;color:#888;">${sub.notes}</span>` : '';
-                    const desc = sub.desc ? `<br><span style="font-size:9px;color:#D4687C;">${sub.desc}</span>` : '';
+                    const desc = sub.desc ? `<br><span style="font-size:9px;color:#666;">${sub.desc}</span>` : '';
                     const subBadge = sub.needReservation==='mixed' ? '<span class="reservation-badge mixed" style="margin-left:4px;">需预约/现场排队</span>' : '';
-                    let bgColor = (active || act.id === 'snorlax') ? '#FFF0F5' : '#f9f9f9';
-                    let borderStyle = active ? 'border-left:3px solid var(--sakura-400)' : '';
-                    subHtml+=`<div class="sub-item" style="background:${bgColor};${borderStyle}"><strong>${sub.name}</strong>${subBadge} ${desc}<span style="font-size:9px;color:#888;">(${sub.dates||sub.period||sub.time||''})</span> ${active?'<span style="color:#C94A68;font-weight:600;">✅ 今日进行</span>':''}${note}</div>`;
+                    subHtml+=`<div class="sub-item" style="background:${active?'#FFF0F5':'#f9f9f9'};${active?'border-left:3px solid var(--sakura-400)':''}"><strong>${sub.name}</strong>${subBadge} ${desc}<span style="font-size:9px;color:#888;">(${sub.dates||sub.period||sub.time||''})</span> ${active?'<span style="color:#C94A68;font-weight:600;">✅ 今日进行</span>':''}${note}</div>`;
                 });
                 subHtml+='</div>';
             }
@@ -304,7 +308,6 @@
     document.getElementById('closeRuleModal').addEventListener('click', ()=> ruleModal.classList.add('hidden'));
     ruleModal.addEventListener('click', e=> { if(e.target===ruleModal) ruleModal.classList.add('hidden'); });
 
-    // 今日活动弹窗
     const todayActivityModal = document.getElementById('todayActivityModal');
     document.getElementById('openTodayActivityBtn').addEventListener('click', ()=>{
         const dateStr = document.getElementById('selectedDateText').textContent;
